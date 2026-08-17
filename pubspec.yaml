@@ -37,6 +37,11 @@ dependencies:
   iconsax_plus: ^1.0.0
   google_fonts: ^8.2.1
   flutter_bloc: ^9.1.1
+  flutter_secure_storage: ^10.3.1
+  shared_preferences: ^2.5.5
+  meta: ^1.17.0
+  bloc: ^9.2.1
+  bloc_concurrency: ^0.3.0
 
 dev_dependencies:
   flutter_test:
