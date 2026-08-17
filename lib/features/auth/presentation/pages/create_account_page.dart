@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:juniorflutterroadmap/core/constants/app_spacing.dart';
+import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
+import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/app_primary_button.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
-import 'package:juniorflutterroadmap/features/home/presentation/pages/home_page.dart';
-
 import '../widgets/already_have_account_button.dart';
 import '../widgets/auth_background_widget.dart';
 import '../widgets/auth_text_field.dart';
@@ -35,9 +34,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   void _submit() {
     if (_confirmPasswordController.text != _passwordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('passwords are not compatible')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('passwords are not compatible')));
       return;
     }
     if (_formKey.currentState!.validate()) {
@@ -121,125 +120,122 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        }
-        if (state is AuthSignUpSuccess) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const HomePage()),
-          );
-        }
-      },
-      builder: (context, state) {
-        final isLoading = state is AuthLoading;
-        final hasError = state is AuthError;
-        return Scaffold(
-          body: AuthBackgroundWidget(
-            title: 'Create Account',
-            content: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight,
-                        ),
-                        child: IntrinsicHeight(
-                          child: Column(
-                            spacing: AppSpacing.xl,
-                            children: [
-                              Spacer(flex: 3),
-                              AuthTextField(
-                                controller: _emailController,
-                                isAccepted: emailIsAccepted,
-                                onChanged: _onEmailChanged,
-                                onFieldSubmitted: _onEmailSubmitted,
-                                validator: _validateEmail,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                autofocus: true,
-                                hintText: 'Email',
-                                prefixIcon: IconsaxPlusLinear.sms,
-                              ),
-                              AuthTextField(
-                                controller: _passwordController,
-                                onChanged: _onPasswordChanged,
-                                isAccepted: passwordIsAccepted,
-                                focusNode: _passwordFocus,
-                                onFieldSubmitted: _onPasswordSubmitted,
-                                keyboardType: TextInputType.visiblePassword,
-                                validator: _validatePassword,
-                                textInputAction: TextInputAction.next,
-                                autofocus: false,
-                                obscureText: showPassword,
-                                hintText: 'password',
-                                prefixIcon: IconsaxPlusLinear.password_check,
-                                suffixIcon: IconButton(
-                                  onPressed: () => _togglePassword(),
-                                  icon: Icon(
-                                    showPassword
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
-                                  ),
+    return BlocProvider(
+      create: (context) => getIt<AuthBloc>(),
+      child: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+          if (state is AuthSignUpSuccess) {
+            context.go(AppRoutes.home);
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is AuthLoading;
+          final hasError = state is AuthError;
+          return Scaffold(
+            body: AuthBackgroundWidget(
+              title: 'Create Account',
+              content: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: constraints.maxHeight,
+                          ),
+                          child: IntrinsicHeight(
+                            child: Column(
+                              spacing: AppSpacing.xl,
+                              children: [
+                                Spacer(flex: 3),
+                                AuthTextField(
+                                  controller: _emailController,
+                                  isAccepted: emailIsAccepted,
+                                  onChanged: _onEmailChanged,
+                                  onFieldSubmitted: _onEmailSubmitted,
+                                  validator: _validateEmail,
+                                  keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  autofocus: true,
+                                  hintText: 'Email',
+                                  prefixIcon: IconsaxPlusLinear.sms,
                                 ),
-                              ),
-                              AuthTextField(
-                                controller: _confirmPasswordController,
-                                onChanged: _onConfirmPasswordChanged,
-                                onFieldSubmitted: _onConfirmPasswordSubmitted,
-                                isAccepted: confirmPasswordIsAccepted,
-                                focusNode: _confirmPasswordFocus,
-                                keyboardType: TextInputType.visiblePassword,
-                                validator: _validateConfirmPassword,
-                                autofocus: false,
-                                obscureText: showConfirmPassword,
-                                hintText: 'confirm password',
-                                prefixIcon: IconsaxPlusLinear.password_check,
-                                suffixIcon: IconButton(
-                                  onPressed: () => _toggleConfirmPassword(),
-                                  icon: Icon(
-                                    showConfirmPassword
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              AppPrimaryButton(
-                                label: 'Create account',
-                                isLoading: isLoading,
-                                hasError: hasError,
-                                onPressed: _submit,
-                              ),
-                              Spacer(),
-                              AlreadyHaveAccountButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => const SignInPage(),
+                                AuthTextField(
+                                  controller: _passwordController,
+                                  onChanged: _onPasswordChanged,
+                                  isAccepted: passwordIsAccepted,
+                                  focusNode: _passwordFocus,
+                                  onFieldSubmitted: _onPasswordSubmitted,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  validator: _validatePassword,
+                                  textInputAction: TextInputAction.next,
+                                  autofocus: false,
+                                  obscureText: showPassword,
+                                  hintText: 'password',
+                                  prefixIcon: IconsaxPlusLinear.password_check,
+                                  suffixIcon: IconButton(
+                                    onPressed: () => _togglePassword(),
+                                    icon: Icon(
+                                      showPassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
                                     ),
-                                  );
-                                },
-                              ),
-                            ],
+                                  ),
+                                ),
+                                AuthTextField(
+                                  controller: _confirmPasswordController,
+                                  onChanged: _onConfirmPasswordChanged,
+                                  onFieldSubmitted: _onConfirmPasswordSubmitted,
+                                  isAccepted: confirmPasswordIsAccepted,
+                                  focusNode: _confirmPasswordFocus,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  validator: _validateConfirmPassword,
+                                  autofocus: false,
+                                  obscureText: showConfirmPassword,
+                                  hintText: 'confirm password',
+                                  prefixIcon: IconsaxPlusLinear.password_check,
+                                  suffixIcon: IconButton(
+                                    onPressed: () => _toggleConfirmPassword(),
+                                    icon: Icon(
+                                      showConfirmPassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                    ),
+                                  ),
+                                ),
+                                Spacer(),
+                                AppPrimaryButton(
+                                  label: 'Create account',
+                                  isLoading: isLoading,
+                                  hasError: hasError,
+                                  onPressed: _submit,
+                                ),
+                                Spacer(),
+                                AlreadyHaveAccountButton(
+                                  onPressed: () {
+                                    context.go(AppRoutes.signIn);
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -1,16 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
-import 'package:juniorflutterroadmap/core/constants/app_spacing.dart';
+import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
+import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/app_primary_button.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
-import 'package:juniorflutterroadmap/features/home/presentation/pages/home_page.dart';
 
 import '../widgets/auth_background_widget.dart';
 import '../widgets/auth_text_field.dart';
@@ -88,105 +85,102 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
-        }
-        if (state is AuthSignInSuccess) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const HomePage()),
-          );
-        }
-      },
-      builder: (context, state) {
-        final isLoading = state is AuthLoading;
-        final hasError = state is AuthError;
-        return Scaffold(
-          body: AuthBackgroundWidget(
-            title: 'Sign In',
-            content: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight,
-                        ),
-                        child: IntrinsicHeight(
-                          child: Column(
-                            spacing: AppSpacing.xl,
-                            children: [
-                              Spacer(flex: 3),
-                              AuthTextField(
-                                controller: _emailController,
-                                isAccepted: emailIsAccepted,
-                                onChanged: _onEmailChanged,
-                                onFieldSubmitted: _onEmailSubmitted,
-                                validator: _validateEmail,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                autofocus: true,
-                                hintText: 'Email',
-                                prefixIcon: IconsaxPlusLinear.sms,
-                              ),
-                              AuthTextField(
-                                controller: _passwordController,
-                                onChanged: _onPasswordChanged,
-                                onFieldSubmitted: _onPasswordSubmitted,
-                                isAccepted: passwordIsAccepted,
-                                focusNode: _passwordFocus,
-                                keyboardType: TextInputType.visiblePassword,
-                                validator: _validatePassword,
-                                autofocus: false,
-                                obscureText: showPassword,
-                                hintText: 'password',
-                                prefixIcon: IconsaxPlusLinear.password_check,
-                                suffixIcon: IconButton(
-                                  onPressed: () => _togglePassword(),
-                                  icon: Icon(
-                                    showPassword
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                    color: context.textSecondary,
+    return BlocProvider(
+     create: (context) => getIt<AuthBloc>(),
+      child: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+          if (state is AuthSignInSuccess) {
+            context.go(AppRoutes.home);
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is AuthLoading;
+          final hasError = state is AuthError;
+          return Scaffold(
+            body: AuthBackgroundWidget(
+              title: 'Sign In',
+              content: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: constraints.maxHeight,
+                          ),
+                          child: IntrinsicHeight(
+                            child: Column(
+                              spacing: AppSpacing.xl,
+                              children: [
+                                Spacer(flex: 3),
+                                AuthTextField(
+                                  controller: _emailController,
+                                  isAccepted: emailIsAccepted,
+                                  onChanged: _onEmailChanged,
+                                  onFieldSubmitted: _onEmailSubmitted,
+                                  validator: _validateEmail,
+                                  keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  autofocus: true,
+                                  hintText: 'Email',
+                                  prefixIcon: IconsaxPlusLinear.sms,
+                                ),
+                                AuthTextField(
+                                  controller: _passwordController,
+                                  onChanged: _onPasswordChanged,
+                                  onFieldSubmitted: _onPasswordSubmitted,
+                                  isAccepted: passwordIsAccepted,
+                                  focusNode: _passwordFocus,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  validator: _validatePassword,
+                                  autofocus: false,
+                                  obscureText: showPassword,
+                                  hintText: 'password',
+                                  prefixIcon: IconsaxPlusLinear.password_check,
+                                  suffixIcon: IconButton(
+                                    onPressed: () => _togglePassword(),
+                                    icon: Icon(
+                                      showPassword
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      color: context.textSecondary,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              ForgotPasswordButton(onPressed: () {}),
-                              Spacer(),
-                              AppPrimaryButton(
-                                label: 'Sign in',
-                                isLoading: isLoading,
-                                hasError: hasError,
-                                onPressed: _submit,
-                              ),
-                              Spacer(),
-                              CreateAccountButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => const CreateAccountPage(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
+                                ForgotPasswordButton(onPressed: () {}),
+                                Spacer(),
+                                AppPrimaryButton(
+                                  label: 'Sign in',
+                                  isLoading: isLoading,
+                                  hasError: hasError,
+                                  onPressed: _submit,
+                                ),
+                                Spacer(),
+                                CreateAccountButton(
+                                  onPressed: () {
+                                    context.push(AppRoutes.signup);
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
