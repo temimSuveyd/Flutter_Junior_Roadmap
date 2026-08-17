@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
+import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
 
 class AuthTextField extends StatelessWidget {
   const AuthTextField({
@@ -7,11 +9,11 @@ class AuthTextField extends StatelessWidget {
     required this.prefixIcon,
     this.obscureText = false,
     this.autofocus = false,
-    this.hintStyleColor = Colors.blueGrey,
-    this.textStyleColor = Colors.redAccent,
-    this.iconColor = Colors.redAccent,
-    this.borderColor = Colors.redAccent,
-    this.focusedBorderColor = Colors.redAccent,
+    this.hintStyleColor,
+    this.textStyleColor,
+    this.iconColor,
+    this.borderColor,
+    this.focusedBorderColor,
     this.suffixIcon,
     this.suffixIconColor,
     this.keyboardType,
@@ -21,18 +23,19 @@ class AuthTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.onChanged,
     this.isAccepted = false,
+    this.controller,
   });
 
   final String hintText;
   final IconData prefixIcon;
   final bool obscureText;
   final bool autofocus;
-  final Color hintStyleColor;
-  final Color textStyleColor;
-  final Color iconColor;
-  final Color borderColor;
-  final Color focusedBorderColor;
-  final IconData? suffixIcon;
+  final Color? hintStyleColor;
+  final Color? textStyleColor;
+  final Color? iconColor;
+  final Color? borderColor;
+  final Color? focusedBorderColor;
+  final Widget? suffixIcon;
   final Color? suffixIconColor;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
@@ -41,9 +44,19 @@ class AuthTextField extends StatelessWidget {
   final void Function(String)? onFieldSubmitted;
   final void Function(String)? onChanged;
   final bool isAccepted;
+  final TextEditingController? controller;
+
   @override
   Widget build(BuildContext context) {
+    final hintColor = hintStyleColor ?? context.textSecondary;
+    final textColor = textStyleColor ?? context.textPrimary;
+    final activeColor = iconColor ?? context.primary;
+    final borderColor = this.borderColor ?? context.primary;
+    final focusedColor = focusedBorderColor ?? context.primary;
+
     return TextFormField(
+    
+      controller: controller,
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
       focusNode: focusNode,
@@ -52,7 +65,7 @@ class AuthTextField extends StatelessWidget {
       validator: validator,
       obscureText: obscureText,
       autofocus: autofocus,
-      style: TextStyle(color: textStyleColor, fontSize: 14),
+      style: AppTypography.bodyMedium.copyWith(color: textColor),
       decoration: InputDecoration(
         border: UnderlineInputBorder(
           borderSide: BorderSide(color: borderColor),
@@ -64,18 +77,13 @@ class AuthTextField extends StatelessWidget {
           borderSide: BorderSide(color: borderColor.withValues(alpha: 0.5)),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: focusedBorderColor),
+          borderSide: BorderSide(color: focusedColor),
         ),
         hintText: hintText,
-        hintStyle: TextStyle(fontSize: 12, color: hintStyleColor),
-        prefixIcon: Icon(prefixIcon, color: iconColor),
-        suffixIcon: suffixIcon != null
-            ? Icon(
-                suffixIcon,
-                color: isAccepted ? iconColor:Colors.blueGrey ,
-              )
-            : null,
-        contentPadding: EdgeInsets.all(10),
+        hintStyle: AppTypography.bodySmall.copyWith(color: hintColor),
+        prefixIcon: Icon(prefixIcon, color: activeColor),
+        suffixIcon: suffixIcon,
+        contentPadding: const EdgeInsets.all(10),
       ),
     );
   }

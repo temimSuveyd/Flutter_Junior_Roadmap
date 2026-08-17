@@ -1,16 +1,18 @@
-# juniorflutterroadmap
+# متجر الأحذية
 
-A new Flutter project.
+تطبيق تسوّق بسيط مبني بـ Flutter.
 
-## Getting Started
+## المميزات
+- صفحة تسجيل الدخول وإنشاء حساب
+- صفحة رئيسية تعرض البانرات والتصنيفات والمنتجات
+- Mock data للصور والتصنيفات
 
-This project is a starting point for a Flutter application.
+## التقنيات
+- Flutter / Dart
+- تصميم نظيف مقسم إلى Widgets صغيرة
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## التشغيل
+```bash
+flutter pub get
+flutter run
+```

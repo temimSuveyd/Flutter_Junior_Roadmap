@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
+import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
 
 class CreateAccountSubmitButton extends StatelessWidget {
   const CreateAccountSubmitButton({super.key, this.onPressed});
@@ -17,14 +19,11 @@ class CreateAccountSubmitButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide.none,
             ),
-            color: Colors.redAccent,
+            color: context.primary,
             height: 55,
             child: Text(
               'Create account',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
+              style: AppTypography.buttonLarge.copyWith(color: Colors.white),
             ),
           ),
         ),

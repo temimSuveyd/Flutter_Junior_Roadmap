@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
+import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
 
 class SignInButton extends StatelessWidget {
   const SignInButton({super.key, this.onPressed});
@@ -17,14 +19,11 @@ class SignInButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide.none,
             ),
-            color: Colors.redAccent,
+            color: context.primary,
             height: 55,
             child: Text(
               'Sign in',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
+              style: AppTypography.buttonLarge.copyWith(color: Colors.white),
             ),
           ),
         ),

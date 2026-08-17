@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:juniorflutterroadmap/core/constants/app_spacing.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:juniorflutterroadmap/features/home/presentation/pages/home_page.dart';
@@ -22,6 +23,88 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   bool emailIsAccepted = false;
   bool passwordIsAccepted = false;
   bool confirmPasswordIsAccepted = false;
+
+  bool showPassrod = false;
+  bool showConfirmPassword = false;
+  final TextEditingController _passrodController = .new();
+  final TextEditingController _confirmPasswordController = .new();
+
+  void _createAccount() {
+    if (_confirmPasswordController.value != _passrodController.value) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('passwords are not compatible')));
+    }
+    if (_formKey.currentState!.validate() &&
+        _confirmPasswordController.value == _passrodController.value) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Account created')));
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
+    }
+  }
+
+  void _togglePassword() {
+    setState(() {
+      showPassrod = !showPassrod;
+    });
+  }
+
+  void _toggleConfirmPassword() {
+    setState(() {
+      showConfirmPassword = !showConfirmPassword;
+    });
+  }
+
+  void _onEmailChanged(String value) {
+    setState(() {
+      emailIsAccepted = AppValidators.validateEmail(value) == null;
+    });
+  }
+
+  void _onEmailSubmitted(String value) {
+    if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).requestFocus(_passwordFocus);
+    }
+  }
+
+  String? _validateEmail(String? value) => AppValidators.validateEmail(value);
+
+  void _onPasswordChanged(String value) {
+    setState(() {
+      passwordIsAccepted = AppValidators.validatePassword(value) == null;
+    });
+  }
+
+  void _onPasswordSubmitted(String value) {
+    if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).requestFocus(_confirmPasswordFocus);
+    }
+  }
+
+  String? _validatePassword(String? value) =>
+      AppValidators.validatePassword(value);
+
+  void _onConfirmPasswordChanged(String value) {
+    setState(() {
+      confirmPasswordIsAccepted = AppValidators.validatePassword(value) == null;
+    });
+  }
+
+  void _onConfirmPasswordSubmitted(String value) {
+    if (value == _passrodController.text) {
+      _createAccount();
+    }
+  }
+
+  String? _validateConfirmPassword(String? value) {
+    if (value != _passrodController.text) {
+      return 'passwords are not compatible';
+    }
+    return null;
+  }
 
   @override
   void dispose() {
@@ -48,100 +131,65 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     ),
                     child: IntrinsicHeight(
                       child: Column(
-                        spacing: 20,
+                        spacing: AppSpacing.xl,
                         children: [
                           Spacer(flex: 3),
                           AuthTextField(
                             isAccepted: emailIsAccepted,
-                            onChanged: (value) {
-                              setState(() {
-                                emailIsAccepted =
-                                    AppValidators.validateEmail(value) == null;
-                              });
-                            },
-                            onFieldSubmitted: (value) {
-                              if (_formKey.currentState!.validate()) {
-                                FocusScope.of(
-                                  context,
-                                ).requestFocus(_passwordFocus);
-                              }
-                            },
-                            validator: (value) =>
-                                AppValidators.validateEmail(value),
+                            onChanged: _onEmailChanged,
+                            onFieldSubmitted: _onEmailSubmitted,
+                            validator: _validateEmail,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             autofocus: true,
                             hintText: 'Email',
                             prefixIcon: Icons.email_outlined,
-                            focusedBorderColor: Colors.red,
-                            suffixIcon: Icons.check,
                           ),
                           AuthTextField(
-                            onChanged: (value) {
-                              setState(() {
-                                passwordIsAccepted =
-                                    AppValidators.validatePassword(value) ==
-                                    null;
-                              });
-                            },
+                            controller: _passrodController,
+                            onChanged: _onPasswordChanged,
                             isAccepted: passwordIsAccepted,
                             focusNode: _passwordFocus,
-                            onFieldSubmitted: (value) {
-                              if (_formKey.currentState!.validate()) {
-                                FocusScope.of(
-                                  context,
-                                ).requestFocus(_confirmPasswordFocus);
-                              }
-                            },
+                            onFieldSubmitted: _onPasswordSubmitted,
                             keyboardType: TextInputType.visiblePassword,
-                            validator: (value) =>
-                                AppValidators.validatePassword(value),
+                            validator: _validatePassword,
                             textInputAction: TextInputAction.next,
                             autofocus: false,
-                            obscureText: true,
+                            obscureText: showPassrod,
                             hintText: 'password',
                             prefixIcon: Icons.password_rounded,
-                            iconColor: Colors.red,
-                            suffixIcon: Icons.check,
-                            suffixIconColor: Colors.red,
+                            suffixIcon: IconButton(
+                              onPressed: () => _togglePassword(),
+                              icon: Icon(
+                                showPassrod
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                            ),
                           ),
                           AuthTextField(
-                            onChanged: (value) {
-                              setState(() {
-                                confirmPasswordIsAccepted =
-                                    AppValidators.validatePassword(value) ==
-                                    null;
-                              });
-                            },
+                            onChanged: _onConfirmPasswordChanged,
+                            onFieldSubmitted: _onConfirmPasswordSubmitted,
                             isAccepted: confirmPasswordIsAccepted,
                             focusNode: _confirmPasswordFocus,
                             keyboardType: TextInputType.visiblePassword,
-                            validator: (value) =>
-                                AppValidators.validatePassword(value),
+                            validator: _validateConfirmPassword,
                             autofocus: false,
-                            obscureText: true,
+                            obscureText: showConfirmPassword,
                             hintText: 'confirm password',
                             prefixIcon: Icons.password_rounded,
-                            iconColor: Colors.red,
-                            suffixIcon: Icons.check,
-                            suffixIconColor: Colors.red,
+                            suffixIcon: IconButton(
+                              onPressed: () => _toggleConfirmPassword(),
+                              icon: Icon(
+                                showConfirmPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                            ),
                           ),
                           Spacer(),
                           CreateAccountSubmitButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Account created'),
-                                  ),
-                                );
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (_) => const HomePage(),
-                                  ),
-                                );
-                              }
-                            },
+                            onPressed: () => _createAccount(),
                           ),
                           Spacer(),
                           AlreadyHaveAccountButton(

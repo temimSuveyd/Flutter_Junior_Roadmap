@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({super.key});
@@ -12,7 +13,7 @@ class ProductCard extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.withValues(alpha: 0.2),
+            color: context.surface,
           ),
           child: Column(
             children: [
@@ -21,22 +22,24 @@ class ProductCard extends StatelessWidget {
                 'https://clipart-library.com/images_k/shoe-transparent-background/shoe-transparent-background-12.jpg',
               ),
               const Spacer(),
-              const Text(
+              Text(
                 'Shoe, Sneakers, Nike, Blue, Cobalt Blue PNG',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
+                  color: context.textPrimary,
                 ),
                 maxLines: 1,
               ),
               const SizedBox(height: 5),
               Row(
                 children: [
-                  const Text(
+                  Text(
                     '120.00',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
+                      color: context.textPrimary,
                     ),
                     maxLines: 1,
                   ),
@@ -50,7 +53,7 @@ class ProductCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: colorIndex == 0
-                              ? Colors.black
+                              ? context.textPrimary
                               : Colors.transparent,
                           width: 0.5,
                         ),
@@ -82,7 +85,7 @@ class ProductCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.red,
+              color: context.primary,
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 topRight: Radius.circular(20),

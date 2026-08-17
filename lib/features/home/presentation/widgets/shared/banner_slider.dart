@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/mock_data.dart';
+import '../../../data/mock_data.dart';
 
 class BannerSlider extends StatelessWidget {
   const BannerSlider({super.key});
@@ -17,7 +17,7 @@ class BannerSlider extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           margin: const EdgeInsets.only(right: 5),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(15),
             image: DecorationImage(
               fit: BoxFit.cover,
               image: NetworkImage(bannerImages[index].imageUrl),

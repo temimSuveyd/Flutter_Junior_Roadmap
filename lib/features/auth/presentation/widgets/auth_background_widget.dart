@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
+import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
 
 class AuthBackgroundWidget extends StatelessWidget {
   const AuthBackgroundWidget({
@@ -28,8 +30,8 @@ class AuthBackgroundWidget extends StatelessWidget {
                   width: double.infinity,
                   height: screenHeight * 0.4,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.3),
-                    image: DecorationImage(
+                    color: context.background.withValues(alpha: 0.3),
+                    image: const DecorationImage(
                       image: AssetImage(
                         'assets/images/auth_background_image.png',
                       ),
@@ -44,10 +46,8 @@ class AuthBackgroundWidget extends StatelessWidget {
                   color: Colors.black.withValues(alpha: 0.3),
                   child: Text(
                     title,
-                    style: TextStyle(
+                    style: AppTypography.headlineMedium.copyWith(
                       color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -64,8 +64,8 @@ class AuthBackgroundWidget extends StatelessWidget {
                 width: double.infinity,
                 height: screenHeight * 0.8,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                  color: context.background,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(100),
                     topRight: Radius.circular(0),
                   ),

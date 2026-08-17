@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/mock_data.dart';
+import '../../../data/mock_data.dart';
 
 class CategoryList extends StatelessWidget {
   const CategoryList({super.key});

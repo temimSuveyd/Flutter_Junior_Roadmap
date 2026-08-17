@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
 
 class HomeSearchBar extends StatelessWidget {
   const HomeSearchBar({super.key});
@@ -9,7 +10,7 @@ class HomeSearchBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 237, 232, 232),
+        color: context.surface,
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
@@ -20,12 +21,12 @@ class HomeSearchBar extends StatelessWidget {
             'Search..',
             style: TextStyle(
               fontSize: 12,
-              color: Colors.black45,
+              color: context.textSecondary,
             ),
           ),
           const Spacer(),
-          const VerticalDivider(
-            color: Colors.black87,
+          VerticalDivider(
+            color: context.border,
             thickness: 0.6,
             width: 20,
             indent: 2,
@@ -58,6 +59,6 @@ class HomeSearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(covariant HomeSearchBarHeaderDelegate oldDelegate) {
-    return false;
+    return true;
   }
 }

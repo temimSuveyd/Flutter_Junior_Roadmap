@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:juniorflutterroadmap/core/constants/app_spacing.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/home/presentation/pages/home_page.dart';
@@ -21,6 +22,47 @@ class _SignInPageState extends State<SignInPage> {
   final _passwordFocus = FocusNode();
   bool passwordIsAccepted = false;
   bool emailIsAccepted = false;
+
+  void _signIn() {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Log in successful')));
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
+    }
+  }
+
+  void _onEmailChanged(String value) {
+    setState(() {
+      emailIsAccepted = AppValidators.validateEmail(value) == null;
+    });
+  }
+
+  void _onEmailSubmitted(String value) {
+    if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).requestFocus(_passwordFocus);
+    }
+  }
+
+  String? _validateEmail(String? value) =>
+      AppValidators.validateEmail(value);
+
+  void _onPasswordChanged(String value) {
+    setState(() {
+      passwordIsAccepted = AppValidators.validatePassword(value) == null;
+    });
+  }
+
+  void _onPasswordSubmitted(String value) {
+    if (_formKey.currentState!.validate()) {
+      _signIn();
+    }
+  }
+
+  String? _validatePassword(String? value) =>
+      AppValidators.validatePassword(value);
 
   @override
   void dispose() {
@@ -46,73 +88,39 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     child: IntrinsicHeight(
                       child: Column(
-                        spacing: 20,
+                        spacing: AppSpacing.xl,
                         children: [
                           Spacer(flex: 3),
                           AuthTextField(
                             isAccepted: emailIsAccepted,
-                            onChanged: (value) {
-                              setState(() {
-                                emailIsAccepted =
-                                    AppValidators.validateEmail(value) == null;
-                              });
-                            },
-                            onFieldSubmitted: (value) {
-                              if (_formKey.currentState!.validate()) {
-                                FocusScope.of(
-                                  context,
-                                ).requestFocus(_passwordFocus);
-                              }
-                            },
-                            validator: (value) =>
-                                AppValidators.validateEmail(value),
+                            onChanged: _onEmailChanged,
+                            onFieldSubmitted: _onEmailSubmitted,
+                            validator: _validateEmail,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             autofocus: true,
                             hintText: 'Email',
                             prefixIcon: Icons.email_outlined,
-                            focusedBorderColor: Colors.red,
-                            suffixIcon: Icons.check,
+                            // suffixIcon: Icons.check,
                           ),
                           AuthTextField(
-                            onChanged: (value) {
-                              setState(() {
-                                passwordIsAccepted =
-                                    AppValidators.validatePassword(value) ==
-                                    null;
-                              });
-                            },
-                            
+                            onChanged: _onPasswordChanged,
+                            onFieldSubmitted: _onPasswordSubmitted,
                             isAccepted: passwordIsAccepted,
                             focusNode: _passwordFocus,
                             keyboardType: TextInputType.visiblePassword,
-                            validator: (value) =>
-                                AppValidators.validatePassword(value),
-
+                            validator: _validatePassword,
                             autofocus: false,
                             obscureText: true,
                             hintText: 'password',
                             prefixIcon: Icons.password_rounded,
-                            iconColor: Colors.red,
-                            suffixIcon: Icons.check,
-                            suffixIconColor: Colors.red,
+                            suffixIcon: IconButton(onPressed: () {
+                              
+                            }, icon: Icon(Icons.remove_red_eye_outlined))
                           ),
                           ForgotPasswordButton(onPressed: () {}),
                           Spacer(),
-                          SignInButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Log in successful')),
-                                );
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (_) => const HomePage(),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
+                          SignInButton(onPressed: () => _signIn()),
                           Spacer(),
                           CreateAccountButton(
                             onPressed: () {

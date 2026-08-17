@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/banner_slider.dart';
-import '../widgets/category_list.dart';
-import '../widgets/home_header.dart';
-import '../widgets/home_search_bar.dart';
-import '../widgets/product_grid.dart';
+import 'package:juniorflutterroadmap/core/constants/app_breakpoints.dart';
+import 'package:juniorflutterroadmap/features/home/presentation/widgets/mobile_home_body.dart';
+import 'package:juniorflutterroadmap/features/home/presentation/widgets/tablet_home_body.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,35 +10,21 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: const HomeHeader(),
-                ),
-              ),
-
-              const SliverPersistentHeader(
-                pinned: true,
-                delegate: HomeSearchBarHeaderDelegate(),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 30)),
-
-              const SliverToBoxAdapter(child: BannerSlider()),
-              const SliverToBoxAdapter(child: SizedBox(height: 30)),
-
-              const SliverToBoxAdapter(child: CategoryList()),
-
-              const ProductGrid(),
-            ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (AppBreakpoints.isMobile(constraints)) {
+              return MobileContant();
+            }
+            if (AppBreakpoints.isTablet(constraints)) {
+              return TabletContant();
+            }
+            return TabletContant();
+          },
           ),
-        ),
       ),
     );
   }
 }
+
+
