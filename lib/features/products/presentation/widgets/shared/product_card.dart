@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import '../../../../../core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final ProductModel product;
+
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -17,33 +20,36 @@ class ProductCard extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Image.network(
-                width: 100,
-                'https://clipart-library.com/images_k/shoe-transparent-background/shoe-transparent-background-12.jpg',
-              ),
+              Image.network(width: 100, product.image),
               const Spacer(),
               Text(
-                'Shoe, Sneakers, Nike, Blue, Cobalt Blue PNG',
+                product.title,
+
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: context.textPrimary,
                 ),
                 maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 5),
               Row(
                 children: [
-                  Text(
-                    '120.00',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: context.textPrimary,
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      '${product.price}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: context.textPrimary,
+                      ),
+                      maxLines: 1,
                     ),
-                    maxLines: 1,
                   ),
                   const Spacer(),
+
                   ...List.generate(
                     3,
                     (colorIndex) => Container(

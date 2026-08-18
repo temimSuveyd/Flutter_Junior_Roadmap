@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 /// ShellRoute'un şablonu: alt route'ları (Home, Products, Cart, Profile)
@@ -40,24 +41,18 @@ class _MainNavigationBarState extends State<_MainNavigationBar> {
       },
       destinations: const [
         NavigationDestination(
-          icon: Icon(Icons.home_outlined),
-          selectedIcon: Icon(Icons.home,),
+          icon: Icon(IconsaxPlusLinear.home_2),
+          selectedIcon: Icon(IconsaxPlusBold.home_2),
           label: 'Home',
-          
         ),
         NavigationDestination(
-          icon: Icon(Icons.shopping_bag_outlined),
-          selectedIcon: Icon(Icons.shopping_bag),
-          label: 'Products',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.shopping_cart_outlined),
-          selectedIcon: Icon(Icons.shopping_cart),
+          icon: Icon(IconsaxPlusLinear.bag_2),
+          selectedIcon: Icon(IconsaxPlusBold.bag_2),
           label: 'Cart',
         ),
         NavigationDestination(
-          icon: Icon(Icons.person_outline),
-          selectedIcon: Icon(Icons.person),
+          icon: Icon(IconsaxPlusLinear.profile),
+          selectedIcon: Icon(IconsaxPlusBold.profile),
           label: 'Profile',
         ),
       ],

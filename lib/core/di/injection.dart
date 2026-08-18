@@ -8,6 +8,9 @@ import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
+import 'package:juniorflutterroadmap/features/products/data/services/product_services.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -29,6 +32,9 @@ Future<void> setupLocator() async {
 
   // ── Services ──
   getIt.registerLazySingleton<AuthService>(AuthServiceImpl.new);
+  getIt.registerLazySingleton<ProductServices>(
+    () => ProductServicesImpl(getIt<DioClient>()),
+  );
 
   // ── Repositories ──
   getIt.registerLazySingleton<AuthRepository>(
@@ -36,6 +42,9 @@ Future<void> setupLocator() async {
       getIt<AuthService>(),
       getIt<SecureStorage>(),
     ),
+  );
+  getIt.registerLazySingleton<ProductRepository>(
+    () => ProductRepositoryImpl(getIt<ProductServices>()),
   );
 
   // ── Routing ──
@@ -48,4 +57,7 @@ Future<void> setupLocator() async {
     () => AuthBloc(getIt<AuthRepository>()),
   );
   getIt.registerFactory<ThemeCubit>(ThemeCubit.new);
+  getIt.registerFactory<ProductBloc>(
+    () => ProductBloc(getIt<ProductRepository>()),
+  );
 }

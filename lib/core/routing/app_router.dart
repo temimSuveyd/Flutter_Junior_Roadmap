@@ -4,10 +4,11 @@ import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
 import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
-import 'package:juniorflutterroadmap/features/home/presentation/pages/home_page.dart';
-import 'package:juniorflutterroadmap/features/home/presentation/pages/main_shell.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/pages/home_page.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/pages/main_shell.dart';
 
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/products/presentation/bloc/product_bloc.dart';
 import '../di/injection.dart';
 
 final class AppRouter {
@@ -15,7 +16,7 @@ final class AppRouter {
 
   static GoRouter create(SecureStorage secureStorage) {
     return GoRouter(
-      initialLocation: AppRoutes.signIn,
+      initialLocation: AppRoutes.home,
       routes: [
         GoRoute(
           path: AppRoutes.signIn,
@@ -27,7 +28,7 @@ final class AppRouter {
         GoRoute(
           path: AppRoutes.signup,
           builder: (context, state) => BlocProvider(
-             create: (context) => getIt<AuthBloc>(),
+            create: (context) => getIt<AuthBloc>(),
             child: const CreateAccountPage(),
           ),
         ),
@@ -36,7 +37,10 @@ final class AppRouter {
           routes: [
             GoRoute(
               path: AppRoutes.home,
-              builder: (context, state) => const HomePage(),
+              builder: (context, state) => BlocProvider(
+                    create: (context) => getIt<ProductBloc>()..add(ProductsRequested()),
+                child: const HomePage(),
+              ),
             ),
           ],
         ),
