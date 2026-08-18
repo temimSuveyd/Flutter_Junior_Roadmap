@@ -2,12 +2,11 @@ import 'package:juniorflutterroadmap/core/services/network/failure.dart';
 import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
-import 'package:juniorflutterroadmap/features/auth/data/mappers/auth_mapper.dart';
 import 'package:juniorflutterroadmap/features/auth/data/models/user_model.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
 
 abstract class AuthRepository {
-  Future<(Failure? failure, UserModel? user)> loginUser(
+  Future<(Failure? failure, bool? isSuccess)> loginUser(
     SignInRequestDto loginDto,
   );
 
@@ -22,14 +21,13 @@ class AuthRepositoryImpl extends AuthRepository {
   AuthRepositoryImpl(this._authService, this._secureStorage);
 
   @override
-  Future<(Failure? failure, UserModel? user)> loginUser(
+  Future<(Failure? failure, bool? isSuccess)> loginUser(
     SignInRequestDto loginDto,
   ) async {
     try {
-      final response = _authService.signIn(loginDto);
+      final response = await _authService.signIn(loginDto);
       await _secureStorage.saveToken(response.token);
-      final userModel = AuthMapper.toUserModel(response.userRawData);
-      return (null, userModel);
+      return (null, true);
     } on Failure catch (customFailure) {
       return (customFailure, null);
     } catch (unexpectedError) {
@@ -45,9 +43,13 @@ class AuthRepositoryImpl extends AuthRepository {
     SignUpRequestDto signUpDto,
   ) async {
     try {
-      final response = _authService.signUp(signUpDto);
+      final response = await _authService.signUp(signUpDto);
       await _secureStorage.saveToken(response.token);
-      final userModel = AuthMapper.toUserModel(response.userRawData);
+      final userModel = UserModel(
+        id: response.id.toString(),
+        name: signUpDto.username,
+        email: signUpDto.email,
+      );
       return (null, userModel);
     } on Failure catch (customFailure) {
       return (customFailure, null);

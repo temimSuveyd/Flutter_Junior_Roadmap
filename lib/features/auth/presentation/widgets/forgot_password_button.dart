@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 class ForgotPasswordButton extends StatelessWidget {
   const ForgotPasswordButton({super.key, this.onPressed});

@@ -1,11 +1,20 @@
 class SignUpRequestDto {
+  final int id;
+  final String username;
   final String email;
   final String password;
 
-  SignUpRequestDto({required this.email, required this.password});
+  SignUpRequestDto({
+    this.id = 0,
+    required this.username,
+    required this.email,
+    required this.password,
+  });
 
   Map<String, dynamic> toJson() => {
-    'auth_email': email,
-    'auth_password': password,
+    'id': id,
+    'username': username,
+    'email': email,
+    'password': password,
   };
 }

@@ -1,13 +1,13 @@
 class SignUpResponseDto {
+  final int id;
   final String token;
-  final Map<String, dynamic> userRawData;
 
-  SignUpResponseDto({required this.token, required this.userRawData});
+  SignUpResponseDto({required this.id, required this.token});
 
   factory SignUpResponseDto.fromJson(Map<String, dynamic> json) {
     return SignUpResponseDto(
-      token: json['access_token'],
-      userRawData: json['user_details'],
+      id: json['id'],
+      token: json['token'] ?? '',
     );
   }
 }

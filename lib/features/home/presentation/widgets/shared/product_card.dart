@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
+import '../../../../../core/common/helpers/helpers.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({super.key});

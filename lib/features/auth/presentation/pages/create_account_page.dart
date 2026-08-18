@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/app_primary_button.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
@@ -21,12 +21,15 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final _formKey = GlobalKey<FormState>();
+  final _usernameFocus = FocusNode();
   final _passwordFocus = FocusNode();
   final _confirmPasswordFocus = FocusNode();
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  bool emailIsAccepted = false;
+bool emailIsAccepted = false;
+  bool usernameIsAccepted = false;
   bool passwordIsAccepted = false;
   bool confirmPasswordIsAccepted = false;
   bool showPassword = false;
@@ -40,10 +43,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       return;
     }
     if (_formKey.currentState!.validate()) {
+      final String username = _usernameController.text.trim();
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
       context.read<AuthBloc>().add(
-        SignUpRequested(SignUpRequestDto(email: email, password: password)),
+        SignUpRequested(
+          SignUpRequestDto(
+            username: username,
+            email: email,
+            password: password,
+          ),
+        ),
       );
     }
   }
@@ -58,6 +68,25 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     setState(() {
       showConfirmPassword = !showConfirmPassword;
     });
+  }
+
+  void _onUsernameChanged(String value) {
+    setState(() {
+      usernameIsAccepted = value.trim().isNotEmpty;
+    });
+  }
+
+  void _onUsernameSubmitted(String value) {
+    if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).requestFocus(_passwordFocus);
+    }
+  }
+
+  String? _validateUsername(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter your username';
+    }
+    return null;
   }
 
   void _onEmailChanged(String value) {
@@ -110,8 +139,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   @override
   void dispose() {
+    _usernameFocus.dispose();
     _passwordFocus.dispose();
     _confirmPasswordFocus.dispose();
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -120,122 +151,131 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AuthBloc>(),
-      child: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
-          }
-          if (state is AuthSignUpSuccess) {
-            context.go(AppRoutes.home);
-          }
-        },
-        builder: (context, state) {
-          final isLoading = state is AuthLoading;
-          final hasError = state is AuthError;
-          return Scaffold(
-            body: AuthBackgroundWidget(
-              title: 'Create Account',
-              content: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SingleChildScrollView(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight: constraints.maxHeight,
-                          ),
-                          child: IntrinsicHeight(
-                            child: Column(
-                              spacing: context.spaceXl,
-                              children: [
-                                Spacer(flex: 3),
-                                AuthTextField(
-                                  controller: _emailController,
-                                  isAccepted: emailIsAccepted,
-                                  onChanged: _onEmailChanged,
-                                  onFieldSubmitted: _onEmailSubmitted,
-                                  validator: _validateEmail,
-                                  keyboardType: TextInputType.emailAddress,
-                                  textInputAction: TextInputAction.next,
-                                  autofocus: true,
-                                  hintText: 'Email',
-                                  prefixIcon: IconsaxPlusLinear.sms,
-                                ),
-                                AuthTextField(
-                                  controller: _passwordController,
-                                  onChanged: _onPasswordChanged,
-                                  isAccepted: passwordIsAccepted,
-                                  focusNode: _passwordFocus,
-                                  onFieldSubmitted: _onPasswordSubmitted,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  validator: _validatePassword,
-                                  textInputAction: TextInputAction.next,
-                                  autofocus: false,
-                                  obscureText: showPassword,
-                                  hintText: 'password',
-                                  prefixIcon: IconsaxPlusLinear.password_check,
-                                suffixIcon: IconButton(
-                                  onPressed: _togglePassword,
-                                    icon: Icon(
-                                      showPassword
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                    ),
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+        if (state is AuthSignUpSuccess) {
+          context.go(AppRoutes.home);
+        }
+      },
+      builder: (context, state) {
+        final isLoading = state is AuthLoading;
+        final hasError = state is AuthError;
+        return Scaffold(
+          body: AuthBackgroundWidget(
+            title: 'Create Account',
+            content: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(30),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            spacing: context.spaceXl,
+                            children: [
+                              Spacer(flex: 3),
+                              AuthTextField(
+                                controller: _usernameController,
+                                isAccepted: usernameIsAccepted,
+                                onChanged: _onUsernameChanged,
+                                onFieldSubmitted: _onUsernameSubmitted,
+                                validator: _validateUsername,
+                                keyboardType: TextInputType.text,
+                                textInputAction: TextInputAction.next,
+                                autofocus: true,
+                                hintText: 'Username',
+                                prefixIcon: IconsaxPlusLinear.user,
+                              ),
+                              AuthTextField(
+                                controller: _emailController,
+                                isAccepted: emailIsAccepted,
+                                onChanged: _onEmailChanged,
+                                onFieldSubmitted: _onEmailSubmitted,
+                                validator: _validateEmail,
+                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                autofocus: false,
+                                hintText: 'Email',
+                                prefixIcon: IconsaxPlusLinear.sms,
+                              ),
+                              AuthTextField(
+                                controller: _passwordController,
+                                onChanged: _onPasswordChanged,
+                                isAccepted: passwordIsAccepted,
+                                focusNode: _passwordFocus,
+                                onFieldSubmitted: _onPasswordSubmitted,
+                                keyboardType: TextInputType.visiblePassword,
+                                validator: _validatePassword,
+                                textInputAction: TextInputAction.next,
+                                autofocus: false,
+                                obscureText: showPassword,
+                                hintText: 'password',
+                                prefixIcon: IconsaxPlusLinear.password_check,
+                              suffixIcon: IconButton(
+                                onPressed: _togglePassword,
+                                  icon: Icon(
+                                    showPassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
                                   ),
                                 ),
-                                AuthTextField(
-                                  controller: _confirmPasswordController,
-                                  onChanged: _onConfirmPasswordChanged,
-                                  onFieldSubmitted: _onConfirmPasswordSubmitted,
-                                  isAccepted: confirmPasswordIsAccepted,
-                                  focusNode: _confirmPasswordFocus,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  validator: _validateConfirmPassword,
-                                  autofocus: false,
-                                  obscureText: showConfirmPassword,
-                                  hintText: 'confirm password',
-                                  prefixIcon: IconsaxPlusLinear.password_check,
-suffixIcon: IconButton(
-                                  onPressed: _toggleConfirmPassword,
-                                    icon: Icon(
-                                      showConfirmPassword
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                    ),
+                              ),
+                              AuthTextField(
+                                controller: _confirmPasswordController,
+                                onChanged: _onConfirmPasswordChanged,
+                                onFieldSubmitted: _onConfirmPasswordSubmitted,
+                                isAccepted: confirmPasswordIsAccepted,
+                                focusNode: _confirmPasswordFocus,
+                                keyboardType: TextInputType.visiblePassword,
+                                validator: _validateConfirmPassword,
+                                autofocus: false,
+                                obscureText: showConfirmPassword,
+                                hintText: 'confirm password',
+                                prefixIcon: IconsaxPlusLinear.password_check,
+    suffixIcon: IconButton(
+                                onPressed: _toggleConfirmPassword,
+                                  icon: Icon(
+                                    showConfirmPassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
                                   ),
                                 ),
-                                Spacer(),
-                                AppPrimaryButton(
-                                  label: 'Create account',
-                                  isLoading: isLoading,
-                                  hasError: hasError,
-                                  onPressed: _submit,
-                                ),
-                                Spacer(),
-                                AlreadyHaveAccountButton(
-                                  onPressed: () {
-                                    context.go(AppRoutes.signIn);
-                                  },
-                                ),
-                              ],
-                            ),
+                              ),
+                              Spacer(),
+                              AppPrimaryButton(
+                                label: 'Create account',
+                                isLoading: isLoading,
+                                hasError: hasError,
+                                onPressed: _submit,
+                              ),
+                              Spacer(),
+                              AlreadyHaveAccountButton(
+                                onPressed: () {
+                                  context.go(AppRoutes.signIn);
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

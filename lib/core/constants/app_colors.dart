@@ -45,20 +45,3 @@ final class DarkColors {
   static const Color error = Color(0xFFF87171);
 }
 
-/// ملحق لتسهيل استخدام الألوان حسب الوضع (فاتح/داكن).
-extension AppColorsX on BuildContext {
-  bool get _isDark => Theme.of(this).brightness == Brightness.dark;
-
-  Color get primary => _isDark ? DarkColors.primary : LightColors.primary;
-  Color get background =>
-      _isDark ? DarkColors.background : LightColors.background;
-  Color get surface => _isDark ? DarkColors.surface : LightColors.surface;
-  Color get textPrimary =>
-      _isDark ? DarkColors.textPrimary : LightColors.textPrimary;
-  Color get textSecondary =>
-      _isDark ? DarkColors.textSecondary : LightColors.textSecondary;
-  Color get border => _isDark ? DarkColors.border : LightColors.border;
-  Color get success => _isDark ? DarkColors.success : LightColors.success;
-  Color get warning => _isDark ? DarkColors.warning : LightColors.warning;
-  Color get error => _isDark ? DarkColors.error : LightColors.error;
-}

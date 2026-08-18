@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 /// ShellRoute'un şablonu: alt route'ları (Home, Products, Cart, Profile)
 /// bottom navigation bar ile saran ana iskelet.
@@ -29,6 +30,8 @@ class _MainNavigationBarState extends State<_MainNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return NavigationBar(
+      backgroundColor: context.background,
+      indicatorColor: context.primary.withValues(alpha: 0.5),
       selectedIndex: _selectedIndex,
       onDestinationSelected: (index) {
         setState(() {
@@ -38,8 +41,9 @@ class _MainNavigationBarState extends State<_MainNavigationBar> {
       destinations: const [
         NavigationDestination(
           icon: Icon(Icons.home_outlined),
-          selectedIcon: Icon(Icons.home),
+          selectedIcon: Icon(Icons.home,),
           label: 'Home',
+          
         ),
         NavigationDestination(
           icon: Icon(Icons.shopping_bag_outlined),

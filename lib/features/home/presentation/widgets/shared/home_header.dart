@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
+import '../../../../../core/common/helpers/helpers.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
