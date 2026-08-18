@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
 import 'api_endpoints.dart';
+import 'failure.dart';
 import 'interceptors/auth_interceptor.dart';
 
 class DioClient {
@@ -57,10 +58,19 @@ class DioClient {
     }
   }
 
-  Exception _handleError(DioException error) {
-    if (error.type == DioExceptionType.connectionTimeout) {
-      return Exception("Internet connection timed out.");
-    }
-    return Exception("An error has occurred.");
+  Failure _handleError(DioException error) {
+    final statusCode = error.response?.statusCode;
+    final message = switch (error.type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.receiveTimeout =>
+        'Internet connection timed out.',
+      DioExceptionType.badResponse =>
+        'Request failed${statusCode != null ? ' ($statusCode)' : ''}.',
+      DioExceptionType.connectionError =>
+        'No internet connection. Check your network.',
+      _ => 'An unexpected error has occurred.',
+    };
+    return Failure(message, statusCode: statusCode);
   }
 }

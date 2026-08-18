@@ -19,12 +19,30 @@ class ProductCard extends StatelessWidget {
             color: context.surface,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(width: 100, product.image),
-              const Spacer(),
+              Expanded(
+                flex: 4,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    product.image,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => ColoredBox(
+                      color: context.border.withValues(alpha: 0.2),
+                      child: Icon(
+                        IconsaxPlusLinear.image,
+                        size: 40,
+                        color: context.textSecondary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
               Text(
                 product.title,
-
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
@@ -36,20 +54,16 @@ class ProductCard extends StatelessWidget {
               const SizedBox(height: 5),
               Row(
                 children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      '${product.price}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: context.textPrimary,
-                      ),
-                      maxLines: 1,
+                  Text(
+                    '${product.price}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: context.textPrimary,
                     ),
+                    maxLines: 1,
                   ),
                   const Spacer(),
-
                   ...List.generate(
                     3,
                     (colorIndex) => Container(

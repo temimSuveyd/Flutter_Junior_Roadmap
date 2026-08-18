@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
-/// ShellRoute'un şablonu: alt route'ları (Home, Products, Cart, Profile)
-/// bottom navigation bar ile saran ana iskelet.
 class MainShell extends StatelessWidget {
   const MainShell({super.key, required this.child});
 

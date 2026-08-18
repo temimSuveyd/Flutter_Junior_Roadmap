@@ -1,7 +1,6 @@
 export 'app_colors.dart';
 export 'app_spacing.dart';
 export 'app_typography.dart';
-export 'api_constans.dart';
 
 /// ثوابت عامة للتخطيط والترقيم والمدد الزمنية للحركات.
 final class AppConstants {

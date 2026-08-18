@@ -21,9 +21,13 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     if (err.response?.statusCode == 401) {
-      log('Dio Error:${err.response?.statusCode}');
+      log('Dio Error:${err.response?.statusCode} - clearing token');
+      await _secureStorage.deleteToken();
     }
     return handler.next(err);
   }

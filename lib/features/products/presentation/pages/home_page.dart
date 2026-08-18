@@ -11,21 +11,18 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<ProductBloc>()..add(ProductsRequested()),
-      child: Scaffold(
-        body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              if (AppBreakpoints.isMobile(constraints)) {
-                return const MobileContant();
-              }
-              if (AppBreakpoints.isTablet(constraints)) {
-                return const TabletContant();
-              }
+    return Scaffold(
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (AppBreakpoints.isMobile(constraints)) {
+              return const MobileContant();
+            }
+            if (AppBreakpoints.isTablet(constraints)) {
               return const TabletContant();
-            },
-          ),
+            }
+            return const TabletContant();
+          },
         ),
       ),
     );

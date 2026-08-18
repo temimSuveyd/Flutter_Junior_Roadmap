@@ -6,7 +6,6 @@ import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_res
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_response_dto.dart';
 
-import '../../../../core/di/injection.dart';
 import '../../../../core/services/network/api_endpoints.dart';
 
 abstract class AuthService {
@@ -15,7 +14,9 @@ abstract class AuthService {
 }
 
 class AuthServiceImpl extends AuthService {
-  final DioClient _client = getIt<DioClient>();
+  final DioClient _client;
+
+  AuthServiceImpl(this._client);
 
   @override
   Future<SignInResponseDto> signIn(SignInRequestDto loginDto) async {

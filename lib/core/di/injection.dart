@@ -31,7 +31,9 @@ Future<void> setupLocator() async {
   );
 
   // ── Services ──
-  getIt.registerLazySingleton<AuthService>(AuthServiceImpl.new);
+  getIt.registerLazySingleton<AuthService>(
+    () => AuthServiceImpl(getIt<DioClient>()),
+  );
   getIt.registerLazySingleton<ProductServices>(
     () => ProductServicesImpl(getIt<DioClient>()),
   );
