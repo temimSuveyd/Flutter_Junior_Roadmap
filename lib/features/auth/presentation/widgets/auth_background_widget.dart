@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
-import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
+import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
 
 class AuthBackgroundWidget extends StatelessWidget {
   const AuthBackgroundWidget({
@@ -46,7 +45,7 @@ class AuthBackgroundWidget extends StatelessWidget {
                   color: Colors.black.withValues(alpha: 0.3),
                   child: Text(
                     title,
-                    style: AppTypography.headlineMedium.copyWith(
+                    style: context.headlineMedium.copyWith(
                       color: Colors.white,
                     ),
                   ),

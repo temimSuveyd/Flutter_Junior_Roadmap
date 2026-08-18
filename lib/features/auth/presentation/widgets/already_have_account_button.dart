@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
-import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
+import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
 
 class AlreadyHaveAccountButton extends StatelessWidget {
   const AlreadyHaveAccountButton({super.key, this.onPressed});
@@ -14,7 +13,7 @@ class AlreadyHaveAccountButton extends StatelessWidget {
       children: [
         Text(
           'Already have account',
-          style: AppTypography.bodySmall.copyWith(
+          style: context.bodySmall.copyWith(
             color: context.textSecondary,
             fontWeight: FontWeight.w300,
           ),
@@ -23,7 +22,7 @@ class AlreadyHaveAccountButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             'Sign in',
-            style: AppTypography.labelSmall.copyWith(
+            style: context.labelSmall.copyWith(
               color: context.primary,
               fontWeight: FontWeight.w500,
             ),

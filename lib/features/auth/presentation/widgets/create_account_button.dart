@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
-import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
+import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
 
 class CreateAccountButton extends StatelessWidget {
   const CreateAccountButton({super.key, this.onPressed});
@@ -14,7 +13,7 @@ class CreateAccountButton extends StatelessWidget {
       children: [
         Text(
           "Don't have account",
-          style: AppTypography.bodySmall.copyWith(
+          style: context.bodySmall.copyWith(
             color: context.textSecondary,
             fontWeight: FontWeight.w300,
           ),
@@ -23,7 +22,7 @@ class CreateAccountButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             'Create account',
-            style: AppTypography.labelSmall.copyWith(
+            style: context.labelSmall.copyWith(
               color: context.primary,
               fontWeight: FontWeight.w500,
             ),

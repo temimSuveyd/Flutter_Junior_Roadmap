@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
-import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
+import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
 
 class AuthTextField extends StatelessWidget {
   const AuthTextField({
@@ -65,7 +64,7 @@ class AuthTextField extends StatelessWidget {
       validator: validator,
       obscureText: obscureText,
       autofocus: autofocus,
-      style: AppTypography.bodyMedium.copyWith(color: textColor),
+      style: context.bodyMedium.copyWith(color: textColor),
       decoration: InputDecoration(
         border: UnderlineInputBorder(
           borderSide: BorderSide(color: borderColor),
@@ -80,7 +79,7 @@ class AuthTextField extends StatelessWidget {
           borderSide: BorderSide(color: focusedColor),
         ),
         hintText: hintText,
-        hintStyle: AppTypography.bodySmall.copyWith(color: hintColor),
+        hintStyle: context.bodySmall.copyWith(color: hintColor),
         prefixIcon: Icon(prefixIcon, color: activeColor),
         suffixIcon: suffixIcon,
         contentPadding: const EdgeInsets.all(10),

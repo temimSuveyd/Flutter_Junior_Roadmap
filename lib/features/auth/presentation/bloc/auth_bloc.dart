@@ -14,11 +14,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this._authRepository) : super(AuthInitial()) {
     on<SignInRequested>(
       transformer: droppable(),
-      (event, emit) => _onLoginRequested(event, emit),
+      _onLoginRequested,
     );
     on<SignUpRequested>(
       transformer: droppable(),
-      (event, emit) => _onRegisterRequested(event, emit),
+      _onRegisterRequested,
     );
   }
 

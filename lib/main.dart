@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/theme/app_theme.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
-import 'package:juniorflutterroadmap/features/auth/presentation/bloc/auth_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

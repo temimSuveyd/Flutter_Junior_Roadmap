@@ -16,7 +16,7 @@ class HomeHeader extends StatelessWidget {
         BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, themeMode) {
             return IconButton(
-              onPressed: () => cubit.toggleTheme(),
+              onPressed: cubit.toggleTheme,
               style: ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(context.surface),
               ),

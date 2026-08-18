@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
-import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
+import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
 
 class ForgotPasswordButton extends StatelessWidget {
   const ForgotPasswordButton({super.key, this.onPressed});
@@ -16,7 +15,7 @@ class ForgotPasswordButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             'Forget password',
-            style: AppTypography.labelMedium.copyWith(color: context.primary),
+            style: context.labelMedium.copyWith(color: context.primary),
           ),
         ),
       ],

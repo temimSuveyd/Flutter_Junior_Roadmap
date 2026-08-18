@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
+import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/app_primary_button.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
@@ -117,7 +117,7 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                           child: IntrinsicHeight(
                             child: Column(
-                              spacing: AppSpacing.xl,
+                              spacing: context.spaceXl,
                               children: [
                                 Spacer(flex: 3),
                                 AuthTextField(
@@ -144,8 +144,8 @@ class _SignInPageState extends State<SignInPage> {
                                   obscureText: showPassword,
                                   hintText: 'password',
                                   prefixIcon: IconsaxPlusLinear.password_check,
-                                  suffixIcon: IconButton(
-                                    onPressed: () => _togglePassword(),
+                                suffixIcon: IconButton(
+                                  onPressed: _togglePassword,
                                     icon: Icon(
                                       showPassword
                                           ? Icons.visibility_off_outlined

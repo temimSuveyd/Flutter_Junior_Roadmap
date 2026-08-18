@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:juniorflutterroadmap/core/constants/app_colors.dart';
-import 'package:juniorflutterroadmap/core/constants/app_typography.dart';
+import 'package:juniorflutterroadmap/common/helpers/helpers.dart';
 
 class AppPrimaryButton extends StatelessWidget {
   const AppPrimaryButton({
@@ -25,7 +24,7 @@ class AppPrimaryButton extends StatelessWidget {
             onPressed: isLoading ? null : onPressed,
             elevation: 0,
             shape: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: context.radiusFull,
               borderSide: BorderSide.none,
             ),
             color: hasError ? context.error : context.primary,
@@ -41,7 +40,7 @@ class AppPrimaryButton extends StatelessWidget {
                   )
                 : Text(
                     label,
-                    style: AppTypography.buttonLarge.copyWith(
+                    style: context.buttonLarge.copyWith(
                       color: Colors.white,
                     ),
                   ),

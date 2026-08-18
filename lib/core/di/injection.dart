@@ -14,14 +14,14 @@ final GetIt getIt = GetIt.instance;
 Future<void> setupLocator() async {
   // ── Storage ──
   getIt.registerLazySingleton<FlutterSecureStorage>(
-    () => const FlutterSecureStorage(),
+    FlutterSecureStorage.new,
   );
   getIt.registerLazySingleton<SecureStorage>(
     () => SecureStorageImpl(getIt<FlutterSecureStorage>()),
   );
 
   // ── Services ──
-  getIt.registerLazySingleton<AuthService>(() => AuthServiceImpl());
+  getIt.registerLazySingleton<AuthService>(AuthServiceImpl.new);
 
   // ── Repositories ──
   getIt.registerLazySingleton<AuthRepository>(
@@ -40,5 +40,5 @@ Future<void> setupLocator() async {
   getIt.registerFactory<AuthBloc>(
     () => AuthBloc(getIt<AuthRepository>()),
   );
-  getIt.registerFactory<ThemeCubit>(() => ThemeCubit());
+  getIt.registerFactory<ThemeCubit>(ThemeCubit.new);
 }
