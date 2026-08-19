@@ -3,7 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/routing/app_router.dart';
 import 'package:juniorflutterroadmap/core/services/network/dio_clint.dart';
-import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
+import 'package:juniorflutterroadmap/core/storage/auth_token_manager.dart';
+import 'package:juniorflutterroadmap/core/storage/secure_storage_token_manager.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
@@ -21,13 +22,18 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<FlutterSecureStorage>(
     FlutterSecureStorage.new,
   );
-  getIt.registerLazySingleton<SecureStorage>(
-    () => SecureStorageImpl(getIt<FlutterSecureStorage>()),
+
+  getIt.registerLazySingleton<AuthTokenManager>(
+    () => SecureStorageTokenManager(getIt<FlutterSecureStorage>()),
   );
 
   // ── Dio ──
   getIt.registerLazySingleton<DioClient>(
-    () => DioClient(getIt<SecureStorage>()),
+    () => DioClient(
+      getIt<AuthTokenManager>(),
+      tokenManager: getIt<AuthTokenManager>(),
+      refreshTokenProvider: () => getIt<AuthService>(),
+    ),
   );
 
   // ── Services ──
@@ -42,7 +48,7 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
       getIt<AuthService>(),
-      getIt<SecureStorage>(),
+      getIt<AuthTokenManager>(),
     ),
   );
   getIt.registerLazySingleton<ProductRepository>(
@@ -51,7 +57,7 @@ Future<void> setupLocator() async {
 
   // ── Routing ──
   getIt.registerLazySingleton<GoRouter>(
-    () => AppRouter.create(getIt<SecureStorage>()),
+    () => AppRouter.create(getIt<AuthTokenManager>()),
   );
 
   // ── Blocs / Cubits ──

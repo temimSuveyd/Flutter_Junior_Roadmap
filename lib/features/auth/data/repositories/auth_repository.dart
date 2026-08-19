@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:juniorflutterroadmap/core/errors/result.dart';
-import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
-import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
-import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
-import 'package:juniorflutterroadmap/features/auth/data/mappers/auth_mapper.dart';
-import 'package:juniorflutterroadmap/features/auth/data/models/user_model.dart';
-import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
+
+import '../../../../core/errors/result.dart';
+import '../../../../core/storage/auth_token_manager.dart';
+import '../dtos/sign_in/sign_in_request_dto.dart';
+import '../dtos/sign_up/sign_up_request_dto.dart';
+import '../mappers/auth_mapper.dart';
+import '../models/user_model.dart';
+import '../services/auth_service.dart';
 
 abstract class AuthRepository {
   Future<Result<bool>> loginUser(
@@ -21,7 +22,7 @@ abstract class AuthRepository {
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthService _authService;
-  final SecureStorage _secureStorage;
+  final AuthTokenManager _secureStorage;
   AuthRepositoryImpl(this._authService, this._secureStorage);
 
   @override
@@ -34,7 +35,10 @@ class AuthRepositoryImpl extends AuthRepository {
         loginDto,
         cancelToken: cancelToken,
       );
-      await _secureStorage.saveToken(response.token);
+      await _secureStorage.saveTokens(
+        accessToken: response.token,
+        refreshToken: response.token,
+      );
       return true;
     });
   }
@@ -49,7 +53,10 @@ class AuthRepositoryImpl extends AuthRepository {
         signUpDto,
         cancelToken: cancelToken,
       );
-      await _secureStorage.saveToken(response.token);
+      await _secureStorage.saveTokens(
+        accessToken: response.token,
+        refreshToken: response.token,
+      );
       return AuthMapper.toUserModel({
         'db_user_id': response.id,
         'full_name': signUpDto.username,

@@ -1,14 +1,22 @@
 import 'package:dio/dio.dart';
-import '../../storage/secure_storage.dart';
+import '../../storage/auth_token_manager.dart';
+import '../auth/refresh_token_provider.dart';
 import 'api_endpoints.dart';
 import 'failure.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/error_interceptor.dart';
 import 'interceptors/retry_interceptor.dart';
+import 'interceptors/token_refresh_interceptor.dart';
 
 class DioClient {
   late final Dio _dio;
-  DioClient(this._secureStorage) {
+
+  DioClient(
+    this._secureStorage, 
+    {
+    AuthTokenManager? tokenManager,
+    RefreshTokenProvider Function()? refreshTokenProvider,
+  }) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiEndpoints.baseUrl,
@@ -21,26 +29,41 @@ class DioClient {
       ),
     );
 
-    _dio.interceptors.addAll([
+    final interceptors = <Interceptor>[
       AuthInterceptor(_secureStorage),
-      ErrorInterceptor(_secureStorage),
+      ErrorInterceptor(),
       AutoRetryInterceptor(dio: _dio),
       LogInterceptor(requestBody: true, responseBody: true),
-    ]);
+    ];
+
+    if (tokenManager != null && refreshTokenProvider != null) {
+      interceptors.insert(
+        2,
+        TokenRefreshInterceptor(
+          tokenManager: tokenManager,
+          refreshTokenProvider: refreshTokenProvider,
+          dio: _dio,
+        ),
+      );
+    }
+
+    _dio.interceptors.addAll(interceptors);
   }
 
-  final SecureStorage _secureStorage;
+  final AuthTokenManager _secureStorage;
 
   Future<Response> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     CancelToken? cancelToken,
+    Options? options,
   }) async {
     try {
       return await _dio.get(
         path,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
+        options: options,
       );
     } on DioException catch (e) {
       throw _toFailure(e);
@@ -52,6 +75,7 @@ class DioClient {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     CancelToken? cancelToken,
+    Options? options,
   }) async {
     try {
       return await _dio.post(
@@ -59,6 +83,7 @@ class DioClient {
         data: data,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
+        options: options,
       );
     } on DioException catch (e) {
       throw _toFailure(e);

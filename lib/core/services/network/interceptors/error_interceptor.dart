@@ -1,12 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/services/network/failure.dart';
-import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
 
 class ErrorInterceptor extends Interceptor {
-  ErrorInterceptor(this._secureStorage);
-
-  final SecureStorage _secureStorage;
-
   @override
   Future<void> onError(
     DioException err,
@@ -17,10 +12,6 @@ class ErrorInterceptor extends Interceptor {
     }
 
     final statusCode = err.response?.statusCode;
-    if (statusCode == 401) {
-      await _secureStorage.deleteToken();
-    }
-
     final failure = Failure(_message(err), statusCode: statusCode);
     return handler.next(
       DioException(

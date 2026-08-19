@@ -8,6 +8,7 @@ class ApiEndpoints {
 
   // Endpoints
   static const String login = "/auth/login";
+  static const String refreshToken = "/auth/refresh";
   static const String users = "/users";
   static const String getProducts = "/products";
   static const String uploadAvatar = "/user/upload-avatar";
