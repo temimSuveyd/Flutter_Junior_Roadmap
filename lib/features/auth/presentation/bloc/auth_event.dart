@@ -5,10 +5,12 @@ sealed class AuthEvent {}
 
 class SignInRequested extends AuthEvent {
   final SignInRequestDto signInRequestDto;
-  SignInRequested(this.signInRequestDto);
+  final CancelToken? cancelToken;
+  SignInRequested(this.signInRequestDto, {this.cancelToken});
 }
 
 class SignUpRequested extends AuthEvent {
   final SignUpRequestDto signUpRequestDto;
-  SignUpRequested(this.signUpRequestDto);
+  final CancelToken? cancelToken;
+  SignUpRequested(this.signUpRequestDto, {this.cancelToken});
 }

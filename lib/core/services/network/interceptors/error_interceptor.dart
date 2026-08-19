@@ -51,6 +51,7 @@ class ErrorInterceptor extends Interceptor {
         'Request failed${statusCode != null ? ' ($statusCode)' : ''}.',
       DioExceptionType.connectionError =>
         'No internet connection. Check your network.',
+      DioExceptionType.cancel => 'Request was cancelled.',
       _ => 'An unexpected error has occurred.',
     };
   }

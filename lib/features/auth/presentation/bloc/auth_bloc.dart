@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/errors/result.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
@@ -30,7 +31,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     final result = await _authRepository.loginUser(
       event.signInRequestDto,
+      cancelToken: event.cancelToken,
     );
+    if (isClosed) return;
     switch (result) {
       case Success():
         emit(AuthSignInSuccess());
@@ -46,7 +49,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     final result = await _authRepository.registerUser(
       event.signUpRequestDto,
+      cancelToken: event.cancelToken,
     );
+    if (isClosed) return;
     switch (result) {
       case Success():
         emit(AuthSignUpSuccess());

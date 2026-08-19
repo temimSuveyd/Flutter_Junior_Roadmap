@@ -8,7 +8,6 @@ import 'interceptors/retry_interceptor.dart';
 
 class DioClient {
   late final Dio _dio;
-
   DioClient(this._secureStorage) {
     _dio = Dio(
       BaseOptions(
@@ -35,9 +34,14 @@ class DioClient {
   Future<Response> get(
     String path, {
     Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
   }) async {
     try {
-      return await _dio.get(path, queryParameters: queryParameters);
+      return await _dio.get(
+        path,
+        queryParameters: queryParameters,
+        cancelToken: cancelToken,
+      );
     } on DioException catch (e) {
       throw _toFailure(e);
     }
@@ -47,12 +51,14 @@ class DioClient {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
   }) async {
     try {
       return await _dio.post(
         path,
         data: data,
         queryParameters: queryParameters,
+        cancelToken: cancelToken,
       );
     } on DioException catch (e) {
       throw _toFailure(e);

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -26,6 +27,7 @@ class _SignInPageState extends State<SignInPage> {
   final _passwordFocus = FocusNode();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _cancelToken = CancelToken();
   bool passwordIsAccepted = false;
   bool emailIsAccepted = false;
   bool showPassword = false;
@@ -42,7 +44,10 @@ class _SignInPageState extends State<SignInPage> {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
       context.read<AuthBloc>().add(
-        SignInRequested(SignInRequestDto(userName: email, password: password)),
+        SignInRequested(
+          SignInRequestDto(userName: email, password: password),
+          cancelToken: _cancelToken,
+        ),
       );
     }
   }
@@ -78,6 +83,7 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   void dispose() {
+    _cancelToken.cancel('Sign in page disposed');
     _passwordFocus.dispose();
     _emailController.dispose();
     _passwordController.dispose();

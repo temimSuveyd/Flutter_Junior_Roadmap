@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/services/network/dio_clint.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_response_dto.dart';
@@ -9,8 +10,14 @@ import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_res
 import '../../../../core/services/network/api_endpoints.dart';
 
 abstract class AuthService {
-  Future<SignInResponseDto> signIn(SignInRequestDto loginDto);
-  Future<SignUpResponseDto> signUp(SignUpRequestDto signUpDto);
+  Future<SignInResponseDto> signIn(
+    SignInRequestDto loginDto, {
+    CancelToken? cancelToken,
+  });
+  Future<SignUpResponseDto> signUp(
+    SignUpRequestDto signUpDto, {
+    CancelToken? cancelToken,
+  });
 }
 
 class AuthServiceImpl extends AuthService {
@@ -19,19 +26,27 @@ class AuthServiceImpl extends AuthService {
   AuthServiceImpl(this._client);
 
   @override
-  Future<SignInResponseDto> signIn(SignInRequestDto loginDto) async {
+  Future<SignInResponseDto> signIn(
+    SignInRequestDto loginDto, {
+    CancelToken? cancelToken,
+  }) async {
     final response = await _client.post(
       ApiEndpoints.login,
       data: loginDto.toJson(),
+      cancelToken: cancelToken,
     );
     return SignInResponseDto.fromJson(response.data as Map<String, dynamic>);
   }
 
   @override
-  Future<SignUpResponseDto> signUp(SignUpRequestDto signUpDto) async {
+  Future<SignUpResponseDto> signUp(
+    SignUpRequestDto signUpDto, {
+    CancelToken? cancelToken,
+  }) async {
     final response = await _client.post(
       ApiEndpoints.users,
       data: signUpDto.toJson(),
+      cancelToken: cancelToken,
     );
     log('SignUp response: ${response.data}');
     final id = (response.data as Map<String, dynamic>)['id'];
