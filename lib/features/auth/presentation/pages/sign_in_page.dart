@@ -37,6 +37,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   void _submit() {
+    if (context.read<AuthBloc>().state is AuthLoading) return;
     if (_formKey.currentState!.validate()) {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();

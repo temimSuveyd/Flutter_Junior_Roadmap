@@ -1,10 +1,10 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
-import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
+import '../../storage/secure_storage.dart';
 import 'api_endpoints.dart';
 import 'failure.dart';
 import 'interceptors/auth_interceptor.dart';
+import 'interceptors/error_interceptor.dart';
+import 'interceptors/retry_interceptor.dart';
 
 class DioClient {
   late final Dio _dio;
@@ -24,6 +24,8 @@ class DioClient {
 
     _dio.interceptors.addAll([
       AuthInterceptor(_secureStorage),
+      ErrorInterceptor(_secureStorage),
+      AutoRetryInterceptor(dio: _dio),
       LogInterceptor(requestBody: true, responseBody: true),
     ]);
   }
@@ -37,7 +39,7 @@ class DioClient {
     try {
       return await _dio.get(path, queryParameters: queryParameters);
     } on DioException catch (e) {
-      throw _handleError(e);
+      throw _toFailure(e);
     }
   }
 
@@ -53,24 +55,17 @@ class DioClient {
         queryParameters: queryParameters,
       );
     } on DioException catch (e) {
-      log(e.toString());
-      throw _handleError(e);
+      throw _toFailure(e);
     }
   }
 
-  Failure _handleError(DioException error) {
-    final statusCode = error.response?.statusCode;
-    final message = switch (error.type) {
-      DioExceptionType.connectionTimeout ||
-      DioExceptionType.sendTimeout ||
-      DioExceptionType.receiveTimeout =>
-        'Internet connection timed out.',
-      DioExceptionType.badResponse =>
-        'Request failed${statusCode != null ? ' ($statusCode)' : ''}.',
-      DioExceptionType.connectionError =>
-        'No internet connection. Check your network.',
-      _ => 'An unexpected error has occurred.',
-    };
-    return Failure(message, statusCode: statusCode);
+  Failure _toFailure(DioException error) {
+    final failure = error.error;
+    return failure is Failure
+        ? failure
+        : Failure(
+            'An unexpected error has occurred.',
+            statusCode: error.response?.statusCode,
+          );
   }
 }
