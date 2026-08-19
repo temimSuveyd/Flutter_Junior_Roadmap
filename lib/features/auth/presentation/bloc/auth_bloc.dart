@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:juniorflutterroadmap/core/errors/result.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
@@ -27,13 +28,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
-    final (failure, user) = await _authRepository.loginUser(
+    final result = await _authRepository.loginUser(
       event.signInRequestDto,
     );
-    if (failure != null) {
-      emit(AuthError(failure.message));
-    } else {
-      emit(AuthSignInSuccess());
+    switch (result) {
+      case Success():
+        emit(AuthSignInSuccess());
+      case Error(:final error):
+        emit(AuthError(error.message));
     }
   }
 
@@ -42,13 +44,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
-    final (failure, user) = await _authRepository.registerUser(
+    final result = await _authRepository.registerUser(
       event.signUpRequestDto,
     );
-    if (failure != null) {
-      emit(AuthError(failure.message));
-    } else {
-      emit(AuthSignUpSuccess());
+    switch (result) {
+      case Success():
+        emit(AuthSignUpSuccess());
+      case Error(:final error):
+        emit(AuthError(error.message));
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:juniorflutterroadmap/core/services/network/failure.dart';
+import 'package:juniorflutterroadmap/core/errors/result.dart';
 import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
@@ -7,13 +7,9 @@ import 'package:juniorflutterroadmap/features/auth/data/models/user_model.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
 
 abstract class AuthRepository {
-  Future<(Failure? failure, bool? isSuccess)> loginUser(
-    SignInRequestDto loginDto,
-  );
+  Future<Result<bool>> loginUser(SignInRequestDto loginDto);
 
-  Future<(Failure? failure, UserModel? user)> registerUser(
-    SignUpRequestDto signUpDto,
-  );
+  Future<Result<UserModel>> registerUser(SignUpRequestDto signUpDto);
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -22,43 +18,24 @@ class AuthRepositoryImpl extends AuthRepository {
   AuthRepositoryImpl(this._authService, this._secureStorage);
 
   @override
-  Future<(Failure? failure, bool? isSuccess)> loginUser(
-    SignInRequestDto loginDto,
-  ) async {
-    try {
+  Future<Result<bool>> loginUser(SignInRequestDto loginDto) {
+    return runCatching(() async {
       final response = await _authService.signIn(loginDto);
       await _secureStorage.saveToken(response.token);
-      return (null, true);
-    } on Failure catch (customFailure) {
-      return (customFailure, null);
-    } catch (unexpectedError) {
-      final systemFailure = Failure(
-        "A system error occurred: ${unexpectedError.toString()}",
-      );
-      return (systemFailure, null);
-    }
+      return true;
+    });
   }
 
   @override
-  Future<(Failure? failure, UserModel? user)> registerUser(
-    SignUpRequestDto signUpDto,
-  ) async {
-    try {
+  Future<Result<UserModel>> registerUser(SignUpRequestDto signUpDto) {
+    return runCatching(() async {
       final response = await _authService.signUp(signUpDto);
       await _secureStorage.saveToken(response.token);
-      final userModel = AuthMapper.toUserModel({
+      return AuthMapper.toUserModel({
         'db_user_id': response.id,
         'full_name': signUpDto.username,
         'email_address': signUpDto.email,
       });
-      return (null, userModel);
-    } on Failure catch (customFailure) {
-      return (customFailure, null);
-    } catch (unexpectedError) {
-      final systemFailure = Failure(
-        "A system error occurred: ${unexpectedError.toString()}",
-      );
-      return (systemFailure, null);
-    }
+    });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:juniorflutterroadmap/core/errors/result.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:meta/meta.dart';
@@ -22,11 +23,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     emit(ProductLoading());
-    final (failure, products) = await _productRepository.getProducts();
-    if (failure != null) {
-      emit(ProductError(failure.message));
-    } else {
-      emit(ProductLoaded(products ?? []));
+    final result = await _productRepository.getProducts();
+    switch (result) {
+      case Success(:final data):
+        emit(ProductLoaded(data));
+      case Error(:final error):
+        emit(ProductError(error.message));
     }
   }
 }

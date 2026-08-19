@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import '../../../../core/common/helpers/helpers.dart';
 
 class MainShell extends StatelessWidget {
   const MainShell({super.key, required this.child});

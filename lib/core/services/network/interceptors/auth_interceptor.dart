@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/storage/secure_storage.dart';
 
+import '../failure.dart';
+
 class AuthInterceptor extends Interceptor {
   AuthInterceptor(this._secureStorage);
 
@@ -25,10 +27,18 @@ class AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
+    String mesaj = "An unexpected error occurred.";
     if (err.response?.statusCode == 401) {
       log('Dio Error:${err.response?.statusCode} - clearing token');
       await _secureStorage.deleteToken();
     }
-    return handler.next(err);
+    mesaj = err.response?.data['error_message'] ?? "Server error.";
+    return handler.next(
+      DioException(
+        requestOptions: err.requestOptions,
+        error: Failure(mesaj, statusCode: err.response?.statusCode),
+        
+      ),
+    );
   }
 }
