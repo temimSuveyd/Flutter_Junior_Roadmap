@@ -15,19 +15,18 @@ import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_
 import 'package:juniorflutterroadmap/features/profile/data/services/profile_service.dart';
 import 'package:juniorflutterroadmap/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
-import 'package:juniorflutterroadmap/features/products/data/services/product_services.dart';
+import 'package:juniorflutterroadmap/features/products/data/services/local_product_services.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../features/products/data/services/remote_product_services.dart';
 
 final GetIt getIt = GetIt.instance;
 
 /// Tüm bağımlılıkları kaydeden servis locator.
 Future<void> setupLocator() async {
-
   // ── Storage ──
-  getIt.registerLazySingleton<FlutterSecureStorage>(
-    FlutterSecureStorage.new,
-  );
+  getIt.registerLazySingleton<FlutterSecureStorage>(FlutterSecureStorage.new);
 
   getIt.registerLazySingleton<AuthTokenManager>(
     () => SecureStorageTokenManager(getIt<FlutterSecureStorage>()),
@@ -52,10 +51,16 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<AuthService>(
     () => AuthServiceImpl(getIt<DioClient>()),
   );
-  getIt.registerLazySingleton<ProductServices>(
-    () => ProductServicesImpl(getIt<DioClient>()),
+  getIt.registerLazySingleton<LocalProductServices>(
+    () => LocalProductServicesImpl(
+      // getIt<DioClient>(),
+      getIt<SharedPreferences>(),
+    ),
   );
 
+  getIt.registerLazySingleton<RemoteProductServices>(
+    () => RemoteProductServicesImpl(getIt<DioClient>()),
+  );
   // ── Repositories ──
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
@@ -65,7 +70,10 @@ Future<void> setupLocator() async {
     ),
   );
   getIt.registerLazySingleton<ProductRepository>(
-    () => ProductRepositoryImpl(getIt<ProductServices>()),
+    () => ProductRepositoryImpl(
+      getIt<LocalProductServices>(),
+      getIt<RemoteProductServices>(),
+    ),
   );
   getIt.registerLazySingleton<ProfileService>(
     () => ProfileServiceImpl(getIt<DioClient>()),
@@ -83,10 +91,10 @@ Future<void> setupLocator() async {
   );
 
   // ── Blocs / Cubits ──
-  getIt.registerFactory<AuthBloc>(
-    () => AuthBloc(getIt<AuthRepository>()),
+  getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt<AuthRepository>()));
+  getIt.registerFactory<ThemeCubit>(
+    () => ThemeCubit(getIt<SharedPreferences>()),
   );
-  getIt.registerFactory<ThemeCubit>(ThemeCubit.new);
   getIt.registerFactory<ProductBloc>(
     () => ProductBloc(getIt<ProductRepository>()),
   );

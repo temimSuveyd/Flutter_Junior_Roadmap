@@ -92,11 +92,15 @@ class DioClient {
 
   Failure _toFailure(DioException error) {
     final failure = error.error;
-    return failure is Failure
-        ? failure
-        : Failure(
-            'An unexpected error has occurred.',
-            statusCode: error.response?.statusCode,
-          );
+    if (failure is Failure) {
+      return failure;
+    }
+    final serverMessage = extractServerErrorMessage(error.response?.data);
+    return Failure(
+      serverMessage.isNotEmpty
+          ? serverMessage
+          : 'An unexpected error has occurred.',
+      statusCode: error.response?.statusCode,
+    );
   }
 }

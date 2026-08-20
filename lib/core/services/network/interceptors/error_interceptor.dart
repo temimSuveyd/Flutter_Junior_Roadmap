@@ -24,20 +24,16 @@ class ErrorInterceptor extends Interceptor {
   }
 
   String _message(DioException error) {
-    final data = error.response?.data;
-    if (data is Map<String, dynamic>) {
-      final serverMessage = data['error_message'];
-      if (serverMessage is String && serverMessage.isNotEmpty) {
-        return serverMessage;
-      }
+    final serverMessage = extractServerErrorMessage(error.response?.data);
+    if (serverMessage.isNotEmpty) {
+      return serverMessage;
     }
 
     final statusCode = error.response?.statusCode;
     return switch (error.type) {
       DioExceptionType.connectionTimeout ||
       DioExceptionType.sendTimeout ||
-      DioExceptionType.receiveTimeout =>
-        'Internet connection timed out.',
+      DioExceptionType.receiveTimeout => 'Internet connection timed out.',
       DioExceptionType.badResponse =>
         'Request failed${statusCode != null ? ' ($statusCode)' : ''}.',
       DioExceptionType.connectionError =>

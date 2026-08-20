@@ -55,21 +55,21 @@ final class AppRouter {
           ],
         ),
       ],
-      redirect: (context, state) async {
-        final token = await secureStorage.getAccessToken();
-        final isAuthenticated = token != null;
-        final isAuthRoute =
-            state.matchedLocation == AppRoutes.signIn ||
-            state.matchedLocation == AppRoutes.signup;
+      // redirect: (context, state) async {
+      //   final token = await secureStorage.getAccessToken();
+      //   final isAuthenticated = token != null;
+      //   final isAuthRoute =
+      //       state.matchedLocation == AppRoutes.signIn ||
+      //       state.matchedLocation == AppRoutes.signup;
 
-        if (!isAuthenticated && !isAuthRoute) {
-          return AppRoutes.signIn;
-        }
-        if (isAuthenticated && isAuthRoute) {
-          return AppRoutes.home;
-        }
-        return null;
-      },
+      //   if (!isAuthenticated && !isAuthRoute) {
+      //     return AppRoutes.signIn;
+      //   }
+      //   if (isAuthenticated && isAuthRoute) {
+      //     return AppRoutes.home;
+      //   }
+      //   return null;
+      // },
     );
   }
 }

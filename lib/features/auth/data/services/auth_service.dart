@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/services/auth/refresh_token_provider.dart';
 import 'package:juniorflutterroadmap/core/services/network/dio_clint.dart';
@@ -9,6 +7,7 @@ import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_req
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_response_dto.dart';
 
 import '../../../../core/services/network/api_endpoints.dart';
+import '../dtos/profile/profile_response_dto.dart';
 
 abstract class AuthService extends RefreshTokenProvider {
   Future<SignInResponseDto> signIn(
@@ -17,6 +16,11 @@ abstract class AuthService extends RefreshTokenProvider {
   });
   Future<SignUpResponseDto> signUp(
     SignUpRequestDto signUpDto, {
+    CancelToken? cancelToken,
+  });
+
+  Future<ProfileResponseDto> getProfileData(
+    String accessToken, {
     CancelToken? cancelToken,
   });
 }
@@ -49,9 +53,7 @@ class AuthServiceImpl extends AuthService {
       data: signUpDto.toJson(),
       cancelToken: cancelToken,
     );
-    log('SignUp response: ${response.data}');
-    final id = (response.data as Map<String, dynamic>)['id'];
-    return SignUpResponseDto(id: id, token: 'mock_token');
+    return SignUpResponseDto.fromJson(response.data as Map<String, dynamic>);
   }
 
   @override
@@ -59,11 +61,21 @@ class AuthServiceImpl extends AuthService {
     final response = await dio.post(
       ApiEndpoints.refreshToken,
       data: {'refresh_token': refreshToken},
-      options: Options(
-        extra: {RefreshTokenProvider.isRefreshRequestKey: true},
-      ),
+      options: Options(extra: {RefreshTokenProvider.isRefreshRequestKey: true}),
     );
     final data = response.data as Map<String, dynamic>;
-    return data['token'] as String?;
+    return data['accessToken'] as String?;
+  }
+
+  @override
+  Future<ProfileResponseDto> getProfileData(
+    String accessToken, {
+    CancelToken? cancelToken,
+  }) async {
+    final response = await _client.get(
+      ApiEndpoints.profile,
+      cancelToken: cancelToken,
+    );
+    return ProfileResponseDto.fromJson(response.data as Map<String, dynamic>);
   }
 }

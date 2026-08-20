@@ -27,6 +27,9 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
+
+
+    
     final isRefreshRequest =
         err.requestOptions.extra[RefreshTokenProvider.isRefreshRequestKey] ==
             true;

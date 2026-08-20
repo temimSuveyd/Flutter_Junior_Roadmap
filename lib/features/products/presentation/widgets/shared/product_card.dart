@@ -22,11 +22,10 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                flex: 2,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
-                    product.image,
+                    product.image[0],
                     width: double.infinity,
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) => ColoredBox(
@@ -40,6 +39,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
+
               const SizedBox(height: 10),
               Text(
                 product.title,
