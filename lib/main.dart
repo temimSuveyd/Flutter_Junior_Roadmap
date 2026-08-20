@@ -5,9 +5,9 @@ import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/theme/app_theme.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
+  await setupLocator();
   runApp(const MyApp());
 }
 
