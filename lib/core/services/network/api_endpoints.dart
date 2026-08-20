@@ -1,6 +1,6 @@
 class ApiEndpoints {
   // Base URL
-  static const String baseUrl = "https://fakestoreapi.com";
+  static const String baseUrl = "https://api.escuelajs.co/api/v1";
 
   // Timeout
   static const Duration connectTimeout = Duration(seconds: 10);
@@ -11,5 +11,7 @@ class ApiEndpoints {
   static const String refreshToken = "/auth/refresh";
   static const String users = "/users";
   static const String getProducts = "/products";
-  static const String uploadAvatar = "/user/upload-avatar";
+  static const String uploadAvatar = "/api/v1/files/upload";
+  static const String profile = "/auth/profile";
+
 }

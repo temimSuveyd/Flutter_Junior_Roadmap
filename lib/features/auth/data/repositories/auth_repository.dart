@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/result.dart';
+import '../../../../core/services/network/failure.dart';
 import '../../../../core/storage/auth_token_manager.dart';
 import '../../../../core/storage/user_profile_data.dart';
 import '../../../../core/storage/user_profile_store.dart';
@@ -38,15 +39,28 @@ class AuthRepositoryImpl extends AuthRepository {
     CancelToken? cancelToken,
   }) {
     return runCatching(() async {
-      final response = await _authService.signIn(
+      final loginResponse = await _authService.signIn(
         loginDto,
         cancelToken: cancelToken,
       );
+
+      final accessToken = loginResponse.accessToken;
+      if (accessToken == null) {
+        throw Failure('Login failed: no access token received.');
+      }
       await _secureStorage.saveTokens(
-        accessToken: response.token,
-        refreshToken: response.token,
+        accessToken: accessToken,
+        refreshToken: loginResponse.refreshToken,
       );
-      await _saveProfile(name: loginDto.userName, email: loginDto.userName);
+
+      final response = await _authService.getProfileData(accessToken);
+
+      final userModel = AuthMapper.toUserModelFromProfile(response);
+      await _saveProfile(
+        name: userModel.name,
+        email: userModel.email,
+        avatarUrl: userModel.image,
+      );
       return true;
     });
   }
@@ -61,21 +75,19 @@ class AuthRepositoryImpl extends AuthRepository {
         signUpDto,
         cancelToken: cancelToken,
       );
-      await _secureStorage.saveTokens(
-        accessToken: response.token,
-        refreshToken: response.token,
-      );
-      final userModel = AuthMapper.toUserModel({
-        'db_user_id': response.id,
-        'full_name': signUpDto.username,
-        'email_address': signUpDto.email,
-      });
+      final userModel = AuthMapper.toUserModelFromSignUp(response);
       await _saveProfile(name: userModel.name, email: userModel.email);
       return userModel;
     });
   }
 
-  Future<void> _saveProfile({required String? name, required String? email}) {
-    return _userProfileStore.save(UserProfileData(name: name, email: email));
+  Future<void> _saveProfile({
+    required String? name,
+    required String? email,
+    String? avatarUrl,
+  }) {
+    return _userProfileStore.save(
+      UserProfileData(name: name, email: email, avatarUrl: avatarUrl),
+    );
   }
 }

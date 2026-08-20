@@ -13,71 +13,72 @@ class AuthBackgroundWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    return SizedBox(
-      child: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Stack(
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: screenHeight * 0.4,
-                  decoration: BoxDecoration(
-                    color: context.background.withValues(alpha: 0.3),
-                    image: const DecorationImage(
-                      image: AssetImage(
-                        'assets/images/auth_background_image.png',
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableHeight = constraints.maxHeight;
+        return Stack(
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    height: availableHeight * 0.4,
+                    decoration: BoxDecoration(
+                      color: context.background.withValues(alpha: 0.3),
+                      image: const DecorationImage(
+                        image: AssetImage(
+                          'assets/images/auth_background_image.png',
+                        ),
+                        fit: BoxFit.cover,
                       ),
-                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: screenHeight * 0.4,
-                  color: Colors.black.withValues(alpha: 0.3),
-                  child: Text(
-                    title,
-                    style: context.headlineMedium.copyWith(
-                      color: Colors.white,
+                  Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    height: availableHeight * 0.4,
+                    color: Colors.black.withValues(alpha: 0.3),
+                    child: Text(
+                      title,
+                      style: context.headlineMedium.copyWith(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: ClipPath(
-              clipper: WelcomeCustomClipper(),
-              child: Container(
-                width: double.infinity,
-                height: screenHeight * 0.8,
-                decoration: BoxDecoration(
-                  color: context.background,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(100),
-                    topRight: Radius.circular(0),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: ClipPath(
+                clipper: WelcomeCustomClipper(),
+                child: Container(
+                  width: double.infinity,
+                  height: availableHeight * 0.8,
+                  decoration: BoxDecoration(
+                    color: context.background,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(100),
+                      topRight: Radius.circular(0),
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 110),
-                  child: content,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 110),
+                    child: content,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }

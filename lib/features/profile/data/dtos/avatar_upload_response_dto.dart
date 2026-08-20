@@ -4,7 +4,7 @@ class AvatarUploadResponseDto {
   AvatarUploadResponseDto({required this.avatarUrl});
 
   factory AvatarUploadResponseDto.fromJson(Map<String, dynamic> json) {
-    final rawUrl = json['avatar_url'] ?? json['url'] ?? json['image'];
+    final rawUrl = json['location'] ;
     return AvatarUploadResponseDto(avatarUrl: rawUrl?.toString() ?? '');
   }
 }

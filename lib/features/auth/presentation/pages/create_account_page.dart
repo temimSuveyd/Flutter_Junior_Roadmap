@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
-import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/app_primary_button.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
@@ -21,42 +20,19 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameFocus = FocusNode();
+  final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
   final _confirmPasswordFocus = FocusNode();
-  final _usernameController = TextEditingController();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-bool emailIsAccepted = false;
-  bool usernameIsAccepted = false;
+  bool nameIsAccepted = false;
+  bool emailIsAccepted = false;
   bool passwordIsAccepted = false;
   bool confirmPasswordIsAccepted = false;
   bool showPassword = false;
   bool showConfirmPassword = false;
-
-  void _submit() {
-    if (_confirmPasswordController.text != _passwordController.text) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('passwords are not compatible')));
-      return;
-    }
-    if (_formKey.currentState!.validate()) {
-      final String username = _usernameController.text.trim();
-      final String email = _emailController.text.trim();
-      final String password = _passwordController.text.trim();
-      context.read<AuthBloc>().add(
-        SignUpRequested(
-          SignUpRequestDto(
-            username: username,
-            email: email,
-            password: password,
-          ),
-        ),
-      );
-    }
-  }
 
   void _togglePassword() {
     setState(() {
@@ -70,23 +46,31 @@ bool emailIsAccepted = false;
     });
   }
 
-  void _onUsernameChanged(String value) {
+  void _submit() {
+    if (context.read<AuthBloc>().state is AuthLoading) return;
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+            SignUpRequested(
+              SignUpRequestDto(
+                name: _nameController.text.trim(),
+                email: _emailController.text.trim(),
+                password: _passwordController.text.trim(),
+              ),
+            ),
+          );
+    }
+  }
+
+  void _onNameChanged(String value) {
     setState(() {
-      usernameIsAccepted = value.trim().isNotEmpty;
+      nameIsAccepted = value.trim().isNotEmpty;
     });
   }
 
-  void _onUsernameSubmitted(String value) {
+  void _onNameSubmitted(String value) {
     if (_formKey.currentState!.validate()) {
-      FocusScope.of(context).requestFocus(_passwordFocus);
+      FocusScope.of(context).requestFocus(_emailFocus);
     }
-  }
-
-  String? _validateUsername(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your username';
-    }
-    return null;
   }
 
   void _onEmailChanged(String value) {
@@ -101,8 +85,6 @@ bool emailIsAccepted = false;
     }
   }
 
-  String? _validateEmail(String? value) => AppValidators.validateEmail(value);
-
   void _onPasswordChanged(String value) {
     setState(() {
       passwordIsAccepted = AppValidators.validatePassword(value) == null;
@@ -115,34 +97,42 @@ bool emailIsAccepted = false;
     }
   }
 
-  String? _validatePassword(String? value) =>
-      AppValidators.validatePassword(value);
-
   void _onConfirmPasswordChanged(String value) {
     setState(() {
-      confirmPasswordIsAccepted = AppValidators.validatePassword(value) == null;
+      confirmPasswordIsAccepted =
+          value.isNotEmpty && value == _passwordController.text;
     });
   }
 
   void _onConfirmPasswordSubmitted(String value) {
-    if (value == _passwordController.text) {
+    if (_formKey.currentState!.validate()) {
       _submit();
     }
   }
 
+  String? _validateName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter your name';
+    }
+    return null;
+  }
+
   String? _validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password';
+    }
     if (value != _passwordController.text) {
-      return 'passwords are not compatible';
+      return 'Passwords do not match';
     }
     return null;
   }
 
   @override
   void dispose() {
-    _usernameFocus.dispose();
+    _emailFocus.dispose();
     _passwordFocus.dispose();
     _confirmPasswordFocus.dispose();
-    _usernameController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -159,7 +149,14 @@ bool emailIsAccepted = false;
           ).showSnackBar(SnackBar(content: Text(state.message)));
         }
         if (state is AuthSignUpSuccess) {
-          context.go(AppRoutes.home);
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(
+            const SnackBar(
+              content: Text('Account created. Please sign in.'),
+            ),
+          );
+          context.go(AppRoutes.signIn);
         }
       },
       builder: (context, state) {
@@ -185,15 +182,15 @@ bool emailIsAccepted = false;
                             children: [
                               Spacer(flex: 3),
                               AuthTextField(
-                                controller: _usernameController,
-                                isAccepted: usernameIsAccepted,
-                                onChanged: _onUsernameChanged,
-                                onFieldSubmitted: _onUsernameSubmitted,
-                                validator: _validateUsername,
-                                keyboardType: TextInputType.text,
+                                controller: _nameController,
+                                isAccepted: nameIsAccepted,
+                                onChanged: _onNameChanged,
+                                onFieldSubmitted: _onNameSubmitted,
+                                validator: _validateName,
+                                keyboardType: TextInputType.name,
                                 textInputAction: TextInputAction.next,
                                 autofocus: true,
-                                hintText: 'Username',
+                                hintText: 'name',
                                 prefixIcon: IconsaxPlusLinear.user,
                               ),
                               AuthTextField(
@@ -201,53 +198,57 @@ bool emailIsAccepted = false;
                                 isAccepted: emailIsAccepted,
                                 onChanged: _onEmailChanged,
                                 onFieldSubmitted: _onEmailSubmitted,
-                                validator: _validateEmail,
+                                validator: AppValidators.validateEmail,
+                                focusNode: _emailFocus,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
                                 autofocus: false,
-                                hintText: 'Email',
+                                hintText: 'email',
                                 prefixIcon: IconsaxPlusLinear.sms,
                               ),
                               AuthTextField(
                                 controller: _passwordController,
-                                onChanged: _onPasswordChanged,
                                 isAccepted: passwordIsAccepted,
-                                focusNode: _passwordFocus,
+                                onChanged: _onPasswordChanged,
                                 onFieldSubmitted: _onPasswordSubmitted,
+                                validator: AppValidators.validatePassword,
+                                focusNode: _passwordFocus,
                                 keyboardType: TextInputType.visiblePassword,
-                                validator: _validatePassword,
                                 textInputAction: TextInputAction.next,
                                 autofocus: false,
                                 obscureText: showPassword,
                                 hintText: 'password',
                                 prefixIcon: IconsaxPlusLinear.password_check,
-                              suffixIcon: IconButton(
-                                onPressed: _togglePassword,
+                                suffixIcon: IconButton(
+                                  onPressed: _togglePassword,
                                   icon: Icon(
                                     showPassword
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                    color: context.textSecondary,
                                   ),
                                 ),
                               ),
                               AuthTextField(
                                 controller: _confirmPasswordController,
+                                isAccepted: confirmPasswordIsAccepted,
                                 onChanged: _onConfirmPasswordChanged,
                                 onFieldSubmitted: _onConfirmPasswordSubmitted,
-                                isAccepted: confirmPasswordIsAccepted,
+                                validator: _validateConfirmPassword,
                                 focusNode: _confirmPasswordFocus,
                                 keyboardType: TextInputType.visiblePassword,
-                                validator: _validateConfirmPassword,
+                                textInputAction: TextInputAction.done,
                                 autofocus: false,
                                 obscureText: showConfirmPassword,
                                 hintText: 'confirm password',
                                 prefixIcon: IconsaxPlusLinear.password_check,
-    suffixIcon: IconButton(
-                                onPressed: _toggleConfirmPassword,
+                                suffixIcon: IconButton(
+                                  onPressed: _toggleConfirmPassword,
                                   icon: Icon(
                                     showConfirmPassword
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                    color: context.textSecondary,
                                   ),
                                 ),
                               ),

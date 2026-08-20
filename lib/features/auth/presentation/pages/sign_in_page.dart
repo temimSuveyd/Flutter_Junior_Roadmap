@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
-import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/app_primary_button.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
@@ -64,8 +63,6 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
-  String? _validateEmail(String? value) => AppValidators.validateEmail(value);
-
   void _onPasswordChanged(String value) {
     setState(() {
       passwordIsAccepted = AppValidators.validatePassword(value) == null;
@@ -78,6 +75,7 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
+  String? _validateEmail(String? value) => AppValidators.validateEmail(value);
   String? _validatePassword(String? value) =>
       AppValidators.validatePassword(value);
 
@@ -130,12 +128,12 @@ class _SignInPageState extends State<SignInPage> {
                                 isAccepted: emailIsAccepted,
                                 onChanged: _onEmailChanged,
                                 onFieldSubmitted: _onEmailSubmitted,
-                                // validator: _validateEmail,
+                                validator: _validateEmail,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
                                 autofocus: true,
-                                hintText: 'user name',
-                                prefixIcon: IconsaxPlusLinear.user,
+                                hintText: 'email',
+                                prefixIcon: IconsaxPlusLinear.sms,
                               ),
                               AuthTextField(
                                 controller: _passwordController,
@@ -167,7 +165,9 @@ class _SignInPageState extends State<SignInPage> {
                                 hasError: hasError,
                                 onPressed: _submit,
                               ),
+
                               Spacer(),
+
                               CreateAccountButton(
                                 onPressed: () {
                                   context.push(AppRoutes.signup);

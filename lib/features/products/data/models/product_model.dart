@@ -1,5 +1,5 @@
 class ProductModel {
-  final String image;
+  final List<dynamic> image;
   final String title;
   final String description;
   final double price;

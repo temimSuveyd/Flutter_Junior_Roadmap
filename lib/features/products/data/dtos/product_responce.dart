@@ -1,5 +1,5 @@
 class ProductResponce {
-  final String image;
+  final List<dynamic> image;
   final String title;
   final String description;
   final double price;
@@ -16,11 +16,11 @@ class ProductResponce {
 
   factory ProductResponce.fromJson(Map<String, dynamic> json) =>
       ProductResponce(
-        image: json['image'],
+        image: json['images'],
         title: json['title'],
         description: json['description'],
         price: (json['price'] as num).toDouble(),
         id: json['id'].toString(),
-        category: json['category'],
+        category: json['category']['name'],
       );
 }

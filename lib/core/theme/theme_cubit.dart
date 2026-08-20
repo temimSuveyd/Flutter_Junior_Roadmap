@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeCubit extends Cubit<ThemeMode> {
-  // نبدأ بالوضع الافتراضي (مثلاً Light)
-  ThemeCubit() : super(ThemeMode.light);
+  ThemeCubit(this._prefs) : super(_loadInitialTheme(_prefs));
 
-  // دالة لتبديل الثيم
+  final SharedPreferences _prefs;
+  static const String _themeModeKey = 'theme_mode';
+
+  static ThemeMode _loadInitialTheme(SharedPreferences prefs) {
+    final saved = prefs.getString(_themeModeKey);
+    return saved == 'dark' ? ThemeMode.dark : ThemeMode.light;
+  }
+
   void toggleTheme() {
-    if (state == ThemeMode.light) {
-      emit(ThemeMode.dark);
-    } else {
-      emit(ThemeMode.light);
-    }
+    final newMode = state == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    _prefs.setString(
+      _themeModeKey,
+      newMode == ThemeMode.dark ? 'dark' : 'light',
+    );
+    emit(newMode);
   }
 }

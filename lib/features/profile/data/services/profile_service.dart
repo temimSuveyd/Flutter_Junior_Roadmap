@@ -17,12 +17,15 @@ class ProfileServiceImpl extends ProfileService {
   @override
   Future<String> uploadAvatar(File image) async {
     final formData = FormData.fromMap({
-      'avatar': await MultipartFile.fromFile(image.path),
+      'file': await MultipartFile.fromFile(image.path),
     });
+
     final response = await _dioClient.post(
       ApiEndpoints.uploadAvatar,
       data: formData,
+      // options: Options(contentType: 'multipart/form-data'),
     );
+
     final dto = AvatarUploadResponseDto.fromJson(
       response.data as Map<String, dynamic>,
     );
