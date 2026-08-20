@@ -1,0 +1,82 @@
+import 'package:flutter/material.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/storage/user_profile_data.dart';
+
+class ProfileAvatar extends StatelessWidget {
+  const ProfileAvatar({
+    super.key,
+    required this.profile,
+    this.isUploading = false,
+    this.onTap,
+  });
+
+  final UserProfileData profile;
+  final bool isUploading;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final avatarUrl = profile.avatarUrl;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        GestureDetector(
+          onTap: onTap,
+          child: CircleAvatar(
+            radius: 56,
+            backgroundColor: context.primary.withValues(alpha: 0.15),
+            backgroundImage: avatarUrl != null
+                ? NetworkImage(avatarUrl)
+                : null,
+            child: avatarUrl == null
+                ? Text(
+                    _initials(profile.name),
+                    style: context.titleLarge.copyWith(
+                      color: context.primary,
+                    ),
+                  )
+                : null,
+          ),
+        ),
+        if (isUploading)
+          const Positioned.fill(
+            child: Center(
+              child: SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+          ),
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: context.surface,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              IconsaxPlusLinear.camera,
+              size: 20,
+              color: context.textPrimary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _initials(String? name) {
+    if (name == null || name.isEmpty) {
+      return '?';
+    }
+    final parts = name.trim().split(RegExp(r'\s+'));
+    if (parts.length == 1) {
+      return parts.first[0].toUpperCase();
+    }
+    return (parts.first[0] + parts.last[0]).toUpperCase();
+  }
+}

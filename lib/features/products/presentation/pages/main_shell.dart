@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import '../../../../core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 class MainShell extends StatelessWidget {
   const MainShell({super.key, required this.child});
@@ -16,37 +17,40 @@ class MainShell extends StatelessWidget {
   }
 }
 
-class _MainNavigationBar extends StatefulWidget {
+class _MainNavigationBar extends StatelessWidget {
   const _MainNavigationBar();
 
-  @override
-  State<_MainNavigationBar> createState() => _MainNavigationBarState();
-}
+  int _indexFor(String location) {
+    if (location == AppRoutes.profile) {
+      return 1;
+    }
+    return 0;
+  }
 
-class _MainNavigationBarState extends State<_MainNavigationBar> {
-  int _selectedIndex = 0;
+  void _onDestinationSelected(BuildContext context, int index) {
+    final current = GoRouterState.of(context).uri.path;
+    final target = switch (index) {
+      1 => AppRoutes.profile,
+      _ => AppRoutes.home,
+    };
+    if (current != target) {
+      context.go(target);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final location = GoRouterState.of(context).uri.path;
     return NavigationBar(
       backgroundColor: context.background,
       indicatorColor: context.primary.withValues(alpha: 0.5),
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
+      selectedIndex: _indexFor(location),
+      onDestinationSelected: (index) => _onDestinationSelected(context, index),
       destinations: const [
         NavigationDestination(
           icon: Icon(IconsaxPlusLinear.home_2),
           selectedIcon: Icon(IconsaxPlusBold.home_2),
           label: 'Home',
-        ),
-        NavigationDestination(
-          icon: Icon(IconsaxPlusLinear.bag_2),
-          selectedIcon: Icon(IconsaxPlusBold.bag_2),
-          label: 'Cart',
         ),
         NavigationDestination(
           icon: Icon(IconsaxPlusLinear.profile),

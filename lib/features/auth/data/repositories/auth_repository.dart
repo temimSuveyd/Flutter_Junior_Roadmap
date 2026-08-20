@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/errors/result.dart';
 import '../../../../core/storage/auth_token_manager.dart';
+import '../../../../core/storage/user_profile_data.dart';
+import '../../../../core/storage/user_profile_store.dart';
 import '../dtos/sign_in/sign_in_request_dto.dart';
 import '../dtos/sign_up/sign_up_request_dto.dart';
 import '../mappers/auth_mapper.dart';
@@ -23,7 +25,12 @@ abstract class AuthRepository {
 class AuthRepositoryImpl extends AuthRepository {
   final AuthService _authService;
   final AuthTokenManager _secureStorage;
-  AuthRepositoryImpl(this._authService, this._secureStorage);
+  final UserProfileStore _userProfileStore;
+  AuthRepositoryImpl(
+    this._authService,
+    this._secureStorage,
+    this._userProfileStore,
+  );
 
   @override
   Future<Result<bool>> loginUser(
@@ -39,6 +46,7 @@ class AuthRepositoryImpl extends AuthRepository {
         accessToken: response.token,
         refreshToken: response.token,
       );
+      await _saveProfile(name: loginDto.userName, email: loginDto.userName);
       return true;
     });
   }
@@ -57,11 +65,17 @@ class AuthRepositoryImpl extends AuthRepository {
         accessToken: response.token,
         refreshToken: response.token,
       );
-      return AuthMapper.toUserModel({
+      final userModel = AuthMapper.toUserModel({
         'db_user_id': response.id,
         'full_name': signUpDto.username,
         'email_address': signUpDto.email,
       });
+      await _saveProfile(name: userModel.name, email: userModel.email);
+      return userModel;
     });
+  }
+
+  Future<void> _saveProfile({required String? name, required String? email}) {
+    return _userProfileStore.save(UserProfileData(name: name, email: email));
   }
 }
