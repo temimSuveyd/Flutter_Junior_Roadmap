@@ -55,8 +55,8 @@ class AuthServiceImpl extends AuthService {
   }
 
   @override
-  Future<String?> refreshUserToken(String refreshToken) async {
-    final response = await _client.post(
+  Future<String?> refreshUserToken(String refreshToken, Dio dio) async {
+    final response = await dio.post(
       ApiEndpoints.refreshToken,
       data: {'refresh_token': refreshToken},
       options: Options(
