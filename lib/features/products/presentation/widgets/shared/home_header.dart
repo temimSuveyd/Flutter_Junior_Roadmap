@@ -42,14 +42,14 @@ class HomeHeader extends StatelessWidget {
             return GestureDetector(
               onTap: () => localeCubit.changeLocale(isEn ? 'ar' : 'en'),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: context.surface,
-                  borderRadius: BorderRadius.circular(10),
+                  shape: BoxShape.circle,
                 ),
                 child: Text(
                   isEn ? 'EN' : 'AR',
-                  style: context.labelLarge.copyWith(
+                  style: context.labelMedium.copyWith(
                     color: context.textPrimary,
                     fontWeight: FontWeight.w600,
                   ),

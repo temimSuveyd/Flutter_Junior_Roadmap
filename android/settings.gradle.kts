@@ -11,14 +11,14 @@ pluginManagement {
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
-        // Aliyun mirrors (primary)
+        // Aliyun mirrors (primary) - avoids blocked Google/dl.google.com
+        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
         maven { url = uri("https://maven.aliyun.com/repository/google") }
         maven { url = uri("https://maven.aliyun.com/repository/public") }
         maven { url = uri("https://maven.aliyun.com/repository/central") }
-        // Fallback to original repos
-        google()
-        mavenCentral()
+        // Fallback to original repos (Gradle's own portal, not Google)
         gradlePluginPortal()
+        mavenCentral()
     }
 }
 
@@ -36,12 +36,11 @@ gradle.projectsLoaded {
     rootProject.allprojects {
         buildscript {
             repositories {
-                // Aliyun mirrors (primary)
+                // Aliyun mirrors (primary) - avoids blocked Google/dl.google.com
                 maven { url = uri("https://maven.aliyun.com/repository/google") }
                 maven { url = uri("https://maven.aliyun.com/repository/public") }
                 maven { url = uri("https://maven.aliyun.com/repository/central") }
                 // Fallback to original repos
-                google()
                 mavenCentral()
             }
             configurations.classpath {

@@ -7,23 +7,31 @@ import 'package:go_router/go_router.dart';
 import '../../constants/app_constants.dart';
 import '../../storage/fcm_token_manager.dart';
 
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
     print("تم القبض على الإخطار في الخلفية: ${message.messageId}");
   }
 }
 
-class NotificationService {
-  NotificationService(this._fcmTokenManager);
+abstract class NotificationService {
+  void setRouter(GoRouter router);
+  Future<void> initializeNotificationPipeline();
+}
+
+class FirebaseNotificationService implements NotificationService {
+  FirebaseNotificationService(this._fcmTokenManager);
 
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   final FcmTokenManager _fcmTokenManager;
   GoRouter? _router;
 
+  @override
   void setRouter(GoRouter router) {
     _router = router;
   }
 
+  @override
   Future<void> initializeNotificationPipeline() async {
     // 1. طلب ​​إذن الإشعارات من نظام التشغيل (خاصة iOS وAndroid 13+)
     await _messaging.requestPermission(alert: true, badge: true, sound: true);
@@ -66,10 +74,10 @@ class NotificationService {
   void _handleDeepLinkNavigation(RemoteMessage message) {
     Map<String, dynamic> data = message.data;
 
-    if (data.containsKey('sayfa') && _router != null) {
-      String targetPage = data['sayfa'] as String;
+    if (data.containsKey('page') && _router != null) {
+      String targetPage = data['page'] as String;
 
-      if (targetPage == 'profil') {
+      if (targetPage == 'profile') {
         _router!.go(AppRoutes.profile);
       }
     }

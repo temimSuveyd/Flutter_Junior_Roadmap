@@ -37,7 +37,9 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<FirebaseInitializer>(() => FirebaseInitializer());
 
   // 2. FireBase Notification
-  getIt.registerLazySingleton<NotificationService>(() => NotificationService(getIt<FcmTokenManager>()));
+  getIt.registerLazySingleton<NotificationService>(
+    () => FirebaseNotificationService(getIt<FcmTokenManager>()),
+  );
 
   // ── Storage ──
   getIt.registerLazySingleton<FlutterSecureStorage>(FlutterSecureStorage.new);

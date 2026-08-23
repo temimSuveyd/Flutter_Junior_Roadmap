@@ -5,6 +5,12 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// START: FlutterFire Configuration
+// Applied via the buildscript classpath (root build.gradle.kts) so it resolves
+// from the Aliyun mirror, which does not serve the Gradle plugin marker artifact.
+apply(plugin = "com.google.gms.google-services")
+// END: FlutterFire Configuration
+
 android {
     namespace = "com.example.e_commerce"
     compileSdk = 36

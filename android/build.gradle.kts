@@ -1,3 +1,18 @@
+buildscript {
+    repositories {
+        // Aliyun mirrors (primary) - avoids blocked Google/dl.google.com
+        maven { url = uri("https://maven.aliyun.com/repository/google") }
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
+        maven { url = uri("https://maven.aliyun.com/repository/central") }
+        mavenCentral()
+    }
+    dependencies {
+        // google-services plugin loaded via classpath because the Aliyun mirror
+        // does not serve the Gradle plugin MARKER artifact, only the plugin jar.
+        classpath("com.google.gms:google-services:4.4.2")
+    }
+}
+
 allprojects {
     repositories {
         // Aliyun mirrors (primary)
@@ -5,7 +20,6 @@ allprojects {
         maven { url = uri("https://maven.aliyun.com/repository/public") }
         maven { url = uri("https://maven.aliyun.com/repository/central") }
         // Fallback to original repos if not in Aliyun
-        google()
         mavenCentral()
     }
 }
