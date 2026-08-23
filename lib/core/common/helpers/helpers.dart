@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
+
+import '../../l10n/app_localizations.dart';
 
 export 'package:juniorflutterroadmap/core/constants/app_constants.dart';
 
@@ -116,3 +119,22 @@ extension AppColorsX on BuildContext {
   Color get warning => _isDark ? DarkColors.warning : LightColors.warning;
   Color get error => _isDark ? DarkColors.error : LightColors.error;
 }
+
+
+
+extension LocalizedBuildContext on BuildContext {
+  AppLocalizations get t => AppLocalizations.of(this)!;
+  String get currentLanguage => Localizations.localeOf(this).languageCode;
+  bool get isRtl => currentLanguage == 'ar';
+}
+
+extension DateFormatter on BuildContext {
+  String formatDayMonth(DateTime date) {
+    return DateFormat.MMMMd(currentLanguage).format(date);
+  }
+
+  String formatFullDate(DateTime date) {
+    return DateFormat.yMMMMd(currentLanguage).format(date);
+  }
+}
+

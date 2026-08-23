@@ -38,7 +38,7 @@ class ErrorState extends StatelessWidget {
                   foregroundColor: Colors.white,
                 ),
                 icon: const Icon(IconsaxPlusLinear.refresh),
-                label: const Text('Retry'),
+                label: Text(context.t.retry),
               ),
             ],
           ],

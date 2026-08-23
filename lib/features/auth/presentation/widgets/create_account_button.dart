@@ -12,7 +12,7 @@ class CreateAccountButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Don't have account",
+          context.t.dontHaveAccount,
           style: context.bodySmall.copyWith(
             color: context.textSecondary,
             fontWeight: FontWeight.w300,
@@ -21,7 +21,7 @@ class CreateAccountButton extends StatelessWidget {
         TextButton(
           onPressed: onPressed,
           child: Text(
-            'Create account',
+            context.t.createAccount,
             style: context.labelSmall.copyWith(
               color: context.primary,
               fontWeight: FontWeight.w500,

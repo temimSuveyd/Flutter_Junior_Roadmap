@@ -1,21 +1,35 @@
 import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:juniorflutterroadmap/core/errors/result.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_data.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_store.dart';
+import 'package:juniorflutterroadmap/features/data/service/local/image_picker_service.dart';
+
 import '../services/profile_service.dart';
 
+/// واجهة مستودع الملف الشخصي.
 abstract class ProfileRepository {
+  /// جلب بيانات الملف الشخصي المخزنة محلياً.
   Future<Result<UserProfileData>> getProfile();
-  Future<Result<UserProfileData>> updateAvatar(File image);
+
+  /// التقاط صورة من مصدر معين ثم رفعها وحفظ رابطها.
+  Future<Result<UserProfileData>> updateAvatarFromSource(ImageSource source);
+
+  /// حذف صورة الملف الشخصي.
   Future<Result<UserProfileData>> removeAvatar();
 }
 
 class ProfileRepositoryImpl extends ProfileRepository {
-  ProfileRepositoryImpl(this._profileService, this._userProfileStore);
+  ProfileRepositoryImpl(
+    this._profileService,
+    this._userProfileStore,
+    this._imagePickerService,
+  );
 
   final ProfileService _profileService;
   final UserProfileStore _userProfileStore;
+  final ImagePickerService _imagePickerService;
 
   @override
   Future<Result<UserProfileData>> getProfile() {
@@ -25,8 +39,20 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
-  Future<Result<UserProfileData>> updateAvatar(File image) {
+  Future<Result<UserProfileData>> updateAvatarFromSource(ImageSource source) {
     return runCatching(() async {
+      // التقاط الصورة من الكاميرا أو المعرض.
+      final File? image;
+      if (source == ImageSource.camera) {
+        image = await _imagePickerService.pickImageFromCamera();
+      } else {
+        image = await _imagePickerService.pickImageFromGallery();
+      }
+      if (image == null) {
+        throw Exception('لم يتم اختيار صورة');
+      }
+
+      // رفع الصورة إلى الخادم وحفظ الرابط محلياً.
       final avatarUrl = await _profileService.uploadAvatar(image);
       final current =
           await _userProfileStore.read() ?? const UserProfileData();

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/di/injection.dart';
+import 'package:juniorflutterroadmap/core/l10n/app_localizations.dart';
+import 'package:juniorflutterroadmap/core/local/cubit/local_cubit.dart';
 import 'package:juniorflutterroadmap/core/theme/app_theme.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 
@@ -16,16 +18,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<ThemeCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<ThemeCubit>()),
+        BlocProvider(create: (_) => getIt<LocaleCubit>()),
+      ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
-        builder: (context, state) {
+        builder: (context, themeMode) {
+          final locale = context.watch<LocaleCubit>().state.locale;
           return MaterialApp.router(
             darkTheme: AppTheme.darkTheme,
             theme: AppTheme.lightTheme,
-            themeMode: state,
+            themeMode: themeMode,
+            locale: locale,
             title: 'Flutter Demo',
             routerConfig: getIt<GoRouter>(),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
           );
         },
       ),

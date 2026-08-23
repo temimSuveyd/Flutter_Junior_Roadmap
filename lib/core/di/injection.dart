@@ -1,7 +1,11 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:juniorflutterroadmap/core/local/cubit/local_cubit.dart';
+import 'package:juniorflutterroadmap/core/local/shared_prefs_locale_repository.dart';
 import 'package:juniorflutterroadmap/core/routing/app_router.dart';
+import 'package:juniorflutterroadmap/core/storage/fcm_token_manager.dart';
+import 'package:juniorflutterroadmap/core/storage/shared_prefs_fcm_token_manager.dart';
 import 'package:juniorflutterroadmap/core/services/network/dio_clint.dart';
 import 'package:juniorflutterroadmap/core/storage/auth_token_manager.dart';
 import 'package:juniorflutterroadmap/core/storage/secure_storage_token_manager.dart';
@@ -11,6 +15,8 @@ import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:juniorflutterroadmap/features/data/service/local/image_picker_service.dart';
+import 'package:juniorflutterroadmap/features/data/service/local/permission_service.dart';
 import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_repository.dart';
 import 'package:juniorflutterroadmap/features/profile/data/services/profile_service.dart';
 import 'package:juniorflutterroadmap/features/profile/presentation/bloc/profile_bloc.dart';
@@ -20,13 +26,24 @@ import 'package:juniorflutterroadmap/features/products/presentation/bloc/product
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/products/data/services/remote_product_services.dart';
+import '../services/notifications/firebase_initializer.dart';
+import '../services/notifications/notification_service.dart';
 
 final GetIt getIt = GetIt.instance;
 
 /// Tüm bağımlılıkları kaydeden servis locator.
 Future<void> setupLocator() async {
+  // 1. Firebase 
+  getIt.registerLazySingleton<FirebaseInitializer>(() => FirebaseInitializer());
+
+  // 2. FireBase Notification
+  getIt.registerLazySingleton<NotificationService>(() => NotificationService(getIt<FcmTokenManager>()));
+
   // ── Storage ──
   getIt.registerLazySingleton<FlutterSecureStorage>(FlutterSecureStorage.new);
+  getIt.registerLazySingleton<FcmTokenManager>(
+    () => SharedPrefsFcmTokenManager(getIt<SharedPreferences>()),
+  );
 
   getIt.registerLazySingleton<AuthTokenManager>(
     () => SecureStorageTokenManager(getIt<FlutterSecureStorage>()),
@@ -52,14 +69,16 @@ Future<void> setupLocator() async {
     () => AuthServiceImpl(getIt<DioClient>()),
   );
   getIt.registerLazySingleton<LocalProductServices>(
-    () => LocalProductServicesImpl(
-      // getIt<DioClient>(),
-      getIt<SharedPreferences>(),
-    ),
+    () => LocalProductServicesImpl(getIt<SharedPreferences>()),
   );
-
   getIt.registerLazySingleton<RemoteProductServices>(
     () => RemoteProductServicesImpl(getIt<DioClient>()),
+  );
+
+  // خدمات الأذونات واختيار الصور المشتركة بين الميزات.
+  getIt.registerLazySingleton<PermissionService>(() => PermissionServiceImpl());
+  getIt.registerLazySingleton<ImagePickerService>(
+    () => ImagePickerServiceImpl(getIt<PermissionService>()),
   );
   // ── Repositories ──
   getIt.registerLazySingleton<AuthRepository>(
@@ -82,7 +101,13 @@ Future<void> setupLocator() async {
     () => ProfileRepositoryImpl(
       getIt<ProfileService>(),
       getIt<UserProfileStore>(),
+      getIt<ImagePickerService>(),
     ),
+  );
+
+  // ── Locale ──
+  getIt.registerLazySingleton<LocaleRepository>(
+    () => SharedPrefsLocaleRepository(getIt<SharedPreferences>()),
   );
 
   // ── Routing ──
@@ -100,5 +125,8 @@ Future<void> setupLocator() async {
   );
   getIt.registerFactory<ProfileBloc>(
     () => ProfileBloc(getIt<ProfileRepository>()),
+  );
+  getIt.registerFactory<LocaleCubit>(
+    () => LocaleCubit(getIt<LocaleRepository>()),
   );
 }

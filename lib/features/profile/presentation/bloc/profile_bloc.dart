@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:juniorflutterroadmap/core/errors/result.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_data.dart';
 import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_repository.dart';
@@ -9,15 +8,17 @@ import 'package:meta/meta.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
+/// блок إدارة الملف الشخصي.
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(this._profileRepository) : super(ProfileInitial()) {
     on<ProfileRequested>(_onProfileRequested);
-    on<AvatarPicked>(_onAvatarPicked);
+    on<AvatarChanged>(_onAvatarChanged);
     on<AvatarRemoved>(_onAvatarRemoved);
   }
 
   final ProfileRepository _profileRepository;
 
+  /// جلب بيانات الملف الشخصي.
   Future<void> _onProfileRequested(
     ProfileRequested event,
     Emitter<ProfileState> emit,
@@ -33,8 +34,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
-  Future<void> _onAvatarPicked(
-    AvatarPicked event,
+  /// التقاط صورة من مصدر معين ثم رفعها.
+  Future<void> _onAvatarChanged(
+    AvatarChanged event,
     Emitter<ProfileState> emit,
   ) async {
     final currentProfile = switch (state) {
@@ -43,7 +45,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       _ => const UserProfileData(),
     };
     emit(AvatarUploading(currentProfile));
-    final result = await _profileRepository.updateAvatar(event.image);
+    final result = await _profileRepository.updateAvatarFromSource(event.source);
     if (isClosed) return;
     switch (result) {
       case Success(:final data):
@@ -53,6 +55,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
+  /// حذف صورة الملف الشخصي.
   Future<void> _onAvatarRemoved(
     AvatarRemoved event,
     Emitter<ProfileState> emit,

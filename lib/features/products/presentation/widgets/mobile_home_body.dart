@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:juniorflutterroadmap/core/common/widgets/empty_state.dart';
-import 'package:juniorflutterroadmap/core/common/widgets/error_state.dart';
-import 'package:juniorflutterroadmap/core/common/widgets/loading_state.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_bloc.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/mobile/phone_product_grid.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/banner_slider.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/category_list.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/home_header.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/home_search_bar.dart';
+import '../../../../core/common/helpers/helpers.dart';
+import '../../../../core/utils/empty_state.dart';
+import '../../../../core/utils/error_state.dart';
+import '../../../../core/utils/loading_state.dart';
+import '../bloc/product_bloc.dart';
+import 'mobile/phone_product_grid.dart';
+import 'shared/banner_slider.dart';
+import 'shared/category_list.dart';
+import 'shared/home_header.dart';
+import 'shared/home_search_bar.dart';
 
 class MobileContant extends StatelessWidget {
   const MobileContant({super.key});
@@ -41,8 +42,8 @@ class MobileContant extends StatelessWidget {
           BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
               if (state is ProductLoading) {
-                return const SliverToBoxAdapter(
-                  child: LoadingState(message: 'Loading products...'),
+                return SliverToBoxAdapter(
+                  child: LoadingState(message: context.t.loadingProducts),
                 );
               }
               if (state is ProductError) {
@@ -56,8 +57,8 @@ class MobileContant extends StatelessWidget {
               }
               if (state is ProductLoaded) {
                 if (state.products.isEmpty) {
-                  return const SliverToBoxAdapter(
-                    child: EmptyState(message: 'No products available'),
+                  return SliverToBoxAdapter(
+                    child: EmptyState(message: context.t.noProducts),
                   );
                 }
                 return MobileProductGrid(products: state.products);

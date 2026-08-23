@@ -1,0 +1,47 @@
+{
+  "@@locale": "ar",
+
+  "loginTitle": "مرحباً بك مجدداً",
+  "loginButton": "تسجيل الدخول",
+
+  "signIn": "تسجيل الدخول",
+  "signUp": "إنشاء حساب",
+  "createAccount": "إنشاء حساب",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "name": "الاسم",
+  "forgotPassword": "نسيت كلمة المرور",
+  "alreadyHaveAccount": "لديك حساب بالفعل",
+  "dontHaveAccount": "ليس لديك حساب",
+
+  "pleaseEnterName": "يرجى إدخال اسمك",
+  "pleaseConfirmPassword": "يرجى تأكيد كلمة المرور",
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+  "pleaseEnterEmail": "يرجى إدخال بريدك الإلكتروني",
+  "invalidEmail": "يرجى إدخال بريد إلكتروني صالح",
+  "pleaseEnterPassword": "يرجى إدخال كلمة المرور",
+  "passwordTooShort": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "accountCreated": "تم إنشاء الحساب. يرجى تسجيل الدخول.",
+
+  "home": "الرئيسية",
+  "profile": "الملف الشخصي",
+  "search": "بحث..",
+
+  "loadingProducts": "جاري تحميل المنتجات...",
+  "noProducts": "لا توجد منتجات متاحة",
+  "loadingProfile": "جاري تحميل الملف الشخصي...",
+
+  "retry": "إعادة المحاولة",
+
+  "camera": "الكاميرا",
+  "gallery": "المعرض",
+  "removePhoto": "حذف الصورة",
+  "removePhotoConfirm": "هل أنت متأكد أنك تريد حذف صورة ملفك الشخصي؟",
+  "cancel": "إلغاء",
+  "remove": "حذف",
+  "changePhoto": "تغيير الصورة",
+  "anonymousUser": "مستخدم مجهول",
+  "permissionDenied": "تم رفض الإذن. يرجى تمكينه من إعدادات الجهاز.",
+  "noImageSelected": "لم يتم اختيار صورة"
+}

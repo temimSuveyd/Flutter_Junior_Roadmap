@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../../../../core/errors/result.dart';
 import '../../../../core/services/network/network_info.dart';
 import '../dtos/product_responce.dart';
@@ -25,7 +23,8 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
     return runCatching(() async {
       if (await isOnline) {
         final remoteProducts = await _remoteProductServices.getProducts();
-        await _localProductServices.cashProducts(products: remoteProducts);
+        await _localProductServices.clearProductCache();
+        await _localProductServices.cacheProducts(products: remoteProducts);
         return remoteProducts
             .map(
               (item) => ProductMapper.toProductModel(
@@ -34,7 +33,7 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
             )
             .toList();
       }
-      final localProducts = _localProductServices.getLoclProduct();
+      final localProducts = _localProductServices.getCachedProducts();
       return localProducts;
     });
   }

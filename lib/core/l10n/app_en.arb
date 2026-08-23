@@ -1,0 +1,47 @@
+{
+  "@@locale": "en",
+
+  "loginTitle": "Welcome Back",
+  "loginButton": "Sign In",
+
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "createAccount": "Create Account",
+  "email": "email",
+  "password": "password",
+  "confirmPassword": "confirm password",
+  "name": "name",
+  "forgotPassword": "Forget password",
+  "alreadyHaveAccount": "Already have account",
+  "dontHaveAccount": "Don't have account",
+
+  "pleaseEnterName": "Please enter your name",
+  "pleaseConfirmPassword": "Please confirm your password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "pleaseEnterEmail": "Please enter your e-mail address",
+  "invalidEmail": "Please enter a valid email address",
+  "pleaseEnterPassword": "Please enter your password",
+  "passwordTooShort": "Password must consist of at least 6 characters",
+  "accountCreated": "Account created. Please sign in.",
+
+  "home": "Home",
+  "profile": "Profile",
+  "search": "Search..",
+
+  "loadingProducts": "Loading products...",
+  "noProducts": "No products available",
+  "loadingProfile": "Loading profile...",
+
+  "retry": "Retry",
+
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "removePhoto": "Remove photo",
+  "removePhotoConfirm": "Are you sure you want to remove your profile photo?",
+  "cancel": "Cancel",
+  "remove": "Remove",
+  "changePhoto": "Change photo",
+  "anonymousUser": "Anonymous User",
+  "permissionDenied": "Permission denied. Enable it in device settings.",
+  "noImageSelected": "No image selected"
+}

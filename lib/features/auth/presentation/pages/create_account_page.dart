@@ -75,7 +75,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   void _onEmailChanged(String value) {
     setState(() {
-      emailIsAccepted = AppValidators.validateEmail(value) == null;
+      emailIsAccepted = AppValidators.validateEmail(context, value) == null;
     });
   }
 
@@ -87,7 +87,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   void _onPasswordChanged(String value) {
     setState(() {
-      passwordIsAccepted = AppValidators.validatePassword(value) == null;
+      passwordIsAccepted = AppValidators.validatePassword(context, value) == null;
     });
   }
 
@@ -110,22 +110,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     }
   }
 
-  String? _validateName(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your name';
-    }
-    return null;
-  }
+  String? _validateName(String? value) =>
+      AppValidators.validateName(context, value);
 
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
-    }
-    if (value != _passwordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
+  String? _validateConfirmPassword(String? value) =>
+      AppValidators.validateConfirmPassword(
+        context,
+        value,
+        _passwordController.text,
+      );
 
   @override
   void dispose() {
@@ -147,13 +140,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message)));
-        }
-        if (state is AuthSignUpSuccess) {
+        }          if (state is AuthSignUpSuccess) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(
-            const SnackBar(
-              content: Text('Account created. Please sign in.'),
+            SnackBar(
+              content: Text(context.t.accountCreated),
             ),
           );
           context.go(AppRoutes.signIn);
@@ -164,7 +156,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         final hasError = state is AuthError;
         return Scaffold(
           body: AuthBackgroundWidget(
-            title: 'Create Account',
+            title: context.t.createAccount,
             content: Form(
               key: _formKey,
               child: Padding(
@@ -190,7 +182,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 keyboardType: TextInputType.name,
                                 textInputAction: TextInputAction.next,
                                 autofocus: true,
-                                hintText: 'name',
+                                hintText: context.t.name,
                                 prefixIcon: IconsaxPlusLinear.user,
                               ),
                               AuthTextField(
@@ -198,12 +190,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 isAccepted: emailIsAccepted,
                                 onChanged: _onEmailChanged,
                                 onFieldSubmitted: _onEmailSubmitted,
-                                validator: AppValidators.validateEmail,
+                                validator: (v) => AppValidators.validateEmail(context, v),
                                 focusNode: _emailFocus,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
                                 autofocus: false,
-                                hintText: 'email',
+                                hintText: context.t.email,
                                 prefixIcon: IconsaxPlusLinear.sms,
                               ),
                               AuthTextField(
@@ -211,13 +203,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 isAccepted: passwordIsAccepted,
                                 onChanged: _onPasswordChanged,
                                 onFieldSubmitted: _onPasswordSubmitted,
-                                validator: AppValidators.validatePassword,
+                                validator: (v) => AppValidators.validatePassword(context, v),
                                 focusNode: _passwordFocus,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.next,
                                 autofocus: false,
                                 obscureText: showPassword,
-                                hintText: 'password',
+                                hintText: context.t.password,
                                 prefixIcon: IconsaxPlusLinear.password_check,
                                 suffixIcon: IconButton(
                                   onPressed: _togglePassword,
@@ -240,7 +232,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 textInputAction: TextInputAction.done,
                                 autofocus: false,
                                 obscureText: showConfirmPassword,
-                                hintText: 'confirm password',
+                                hintText: context.t.confirmPassword,
                                 prefixIcon: IconsaxPlusLinear.password_check,
                                 suffixIcon: IconButton(
                                   onPressed: _toggleConfirmPassword,
@@ -254,7 +246,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               ),
                               Spacer(),
                               AppPrimaryButton(
-                                label: 'Create account',
+                                label: context.t.createAccount,
                                 isLoading: isLoading,
                                 hasError: hasError,
                                 onPressed: _submit,

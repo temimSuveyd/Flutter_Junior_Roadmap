@@ -46,16 +46,16 @@ class _MainNavigationBar extends StatelessWidget {
       indicatorColor: context.primary.withValues(alpha: 0.5),
       selectedIndex: _indexFor(location),
       onDestinationSelected: (index) => _onDestinationSelected(context, index),
-      destinations: const [
+      destinations: [
         NavigationDestination(
-          icon: Icon(IconsaxPlusLinear.home_2),
-          selectedIcon: Icon(IconsaxPlusBold.home_2),
-          label: 'Home',
+          icon: const Icon(IconsaxPlusLinear.home_2),
+          selectedIcon: const Icon(IconsaxPlusBold.home_2),
+          label: context.t.home,
         ),
         NavigationDestination(
-          icon: Icon(IconsaxPlusLinear.profile),
-          selectedIcon: Icon(IconsaxPlusBold.profile),
-          label: 'Profile',
+          icon: const Icon(IconsaxPlusLinear.profile),
+          selectedIcon: const Icon(IconsaxPlusBold.profile),
+          label: context.t.profile,
         ),
       ],
     );

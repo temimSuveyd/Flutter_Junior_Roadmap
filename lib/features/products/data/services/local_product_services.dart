@@ -5,8 +5,9 @@ import '../mappers/product_mapper.dart';
 import '../models/product_model.dart';
 
 abstract class LocalProductServices {
-  List<ProductModel> getLoclProduct();
-  Future<void> cashProducts({required List<dynamic> products});
+  List<ProductModel> getCachedProducts();
+  Future<void> cacheProducts({required List<dynamic> products});
+  Future<void> clearProductCache();
 }
 
 class LocalProductServicesImpl extends LocalProductServices {
@@ -16,14 +17,9 @@ class LocalProductServicesImpl extends LocalProductServices {
   LocalProductServicesImpl(this._prefs);
 
   @override
-  Future<void> cashProducts({required List<dynamic> products}) async {
+  Future<void> cacheProducts({required List<dynamic> products}) async {
     await _prefs.setString(_cacheKey, jsonEncode(products));
   }
-
-  // @override
-  // Future<List<ProductModel>> cashProducts({required List<ProductModel> products}) async {
-
-  // }
 
   List<ProductModel> _mapProducts(List<dynamic> productsList) {
     return productsList
@@ -36,7 +32,7 @@ class LocalProductServicesImpl extends LocalProductServices {
   }
 
   @override
-  List<ProductModel> getLoclProduct() {
+  List<ProductModel> getCachedProducts() {
     final cached = _prefs.getString(_cacheKey);
     try {
       final decoded = jsonDecode(cached!) as List<dynamic>;
@@ -44,5 +40,10 @@ class LocalProductServicesImpl extends LocalProductServices {
     } catch (_) {
       return [];
     }
+  }
+
+  @override
+  Future<void> clearProductCache() async {
+    await _prefs.clear();
   }
 }

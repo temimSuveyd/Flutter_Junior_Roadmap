@@ -12,7 +12,7 @@ class AlreadyHaveAccountButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Already have account',
+          context.t.alreadyHaveAccount,
           style: context.bodySmall.copyWith(
             color: context.textSecondary,
             fontWeight: FontWeight.w300,
@@ -21,7 +21,7 @@ class AlreadyHaveAccountButton extends StatelessWidget {
         TextButton(
           onPressed: onPressed,
           child: Text(
-            'Sign in',
+            context.t.signIn,
             style: context.labelSmall.copyWith(
               color: context.primary,
               fontWeight: FontWeight.w500,

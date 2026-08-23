@@ -1,29 +1,60 @@
+import 'package:flutter/material.dart';
+
+import '../l10n/app_localizations.dart';
+
+/// فئة التحقق من صحة المدخلات مع دعم الترجمة.
 class AppValidators {
-  // محقق البريد الإلكتروني
-  static String? validateEmail(String? value) {
+  /// محقق البريد الإلكتروني.
+  static String? validateEmail(BuildContext context, String? value) {
+    final t = AppLocalizations.of(context)!;
     if (value == null || value.trim().isEmpty) {
-      return 'Please enter your e-mail address';
+      return t.pleaseEnterEmail;
     }
-    
-    // التعبير المنتظم (Regex) المعتمد لفحص صيغة الإيميل
+
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return 'Please enter a valid email address';
+      return t.invalidEmail;
     }
-    
-    return null; // المدخل صحيح
+
+    return null;
   }
 
-  // محقق كلمة المرور
-  static String? validatePassword(String? value) {
+  /// محقق كلمة المرور.
+  static String? validatePassword(BuildContext context, String? value) {
+    final t = AppLocalizations.of(context)!;
     if (value == null || value.isEmpty) {
-      return 'Please enter your password';
+      return t.pleaseEnterPassword;
     }
-    
+
     if (value.length < 6) {
-      return 'Password must consist of at least 6 characters';
+      return t.passwordTooShort;
     }
-    
-    return null; // المدخل صحيح
+
+    return null;
+  }
+
+  /// محقق اسم المستخدم.
+  static String? validateName(BuildContext context, String? value) {
+    final t = AppLocalizations.of(context)!;
+    if (value == null || value.trim().isEmpty) {
+      return t.pleaseEnterName;
+    }
+    return null;
+  }
+
+  /// محقق تأكيد كلمة المرور.
+  static String? validateConfirmPassword(
+    BuildContext context,
+    String? value,
+    String password,
+  ) {
+    final t = AppLocalizations.of(context)!;
+    if (value == null || value.isEmpty) {
+      return t.pleaseConfirmPassword;
+    }
+    if (value != password) {
+      return t.passwordsDoNotMatch;
+    }
+    return null;
   }
 }

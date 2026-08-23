@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:juniorflutterroadmap/core/common/widgets/empty_state.dart';
-import 'package:juniorflutterroadmap/core/common/widgets/error_state.dart';
-import 'package:juniorflutterroadmap/core/common/widgets/loading_state.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_bloc.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/banner_slider.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/category_list.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/home_header.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/home_search_bar.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/widgets/tablet/tablet_product_grid.dart';
+
+import '../../../../core/common/helpers/helpers.dart';
+import '../../../../core/utils/empty_state.dart';
+import '../../../../core/utils/error_state.dart';
+import '../../../../core/utils/loading_state.dart';
+import '../bloc/product_bloc.dart';
+import 'shared/banner_slider.dart';
+import 'shared/category_list.dart';
+import 'shared/home_header.dart';
+import 'shared/home_search_bar.dart';
+import 'tablet/tablet_product_grid.dart';
+
 
 class TabletContant extends StatelessWidget {
   const TabletContant({super.key});
@@ -41,20 +44,20 @@ class TabletContant extends StatelessWidget {
           SliverToBoxAdapter(
             child: BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {
-                if (state is ProductLoading) {
-                  return const LoadingState(message: 'Loading products...');
+              if (state is ProductLoading) {
+                return LoadingState(message: context.t.loadingProducts);
+              }
+              if (state is ProductError) {
+                return ErrorState(
+                  message: state.message,
+                  onRetry: () =>
+                      context.read<ProductBloc>().add(ProductsRequested()),
+                );
+              }
+              if (state is ProductLoaded) {
+                if (state.products.isEmpty) {
+                  return EmptyState(message: context.t.noProducts);
                 }
-                if (state is ProductError) {
-                  return ErrorState(
-                    message: state.message,
-                    onRetry: () =>
-                        context.read<ProductBloc>().add(ProductsRequested()),
-                  );
-                }
-                if (state is ProductLoaded) {
-                  if (state.products.isEmpty) {
-                    return const EmptyState(message: 'No products available');
-                  }
                   return TabletProductGrid(products: state.products);
                 }
                 return const SizedBox.shrink();

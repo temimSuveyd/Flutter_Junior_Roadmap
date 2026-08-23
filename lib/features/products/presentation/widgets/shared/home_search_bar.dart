@@ -19,7 +19,7 @@ class HomeSearchBar extends StatelessWidget {
         children: [
           Icon(IconsaxPlusLinear.search_normal_1, size: 18),
           Text(
-            'Search..',
+            context.t.search,
             style: TextStyle(
               fontSize: 12,
               color: context.textSecondary,

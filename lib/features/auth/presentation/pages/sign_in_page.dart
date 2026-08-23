@@ -53,7 +53,7 @@ class _SignInPageState extends State<SignInPage> {
 
   void _onEmailChanged(String value) {
     setState(() {
-      emailIsAccepted = AppValidators.validateEmail(value) == null;
+      emailIsAccepted = AppValidators.validateEmail(context, value) == null;
     });
   }
 
@@ -65,7 +65,7 @@ class _SignInPageState extends State<SignInPage> {
 
   void _onPasswordChanged(String value) {
     setState(() {
-      passwordIsAccepted = AppValidators.validatePassword(value) == null;
+      passwordIsAccepted = AppValidators.validatePassword(context, value) == null;
     });
   }
 
@@ -75,9 +75,10 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
-  String? _validateEmail(String? value) => AppValidators.validateEmail(value);
+  String? _validateEmail(String? value) =>
+      AppValidators.validateEmail(context, value);
   String? _validatePassword(String? value) =>
-      AppValidators.validatePassword(value);
+      AppValidators.validatePassword(context, value);
 
   @override
   void dispose() {
@@ -106,7 +107,7 @@ class _SignInPageState extends State<SignInPage> {
         final hasError = state is AuthError;
         return Scaffold(
           body: AuthBackgroundWidget(
-            title: 'Sign In',
+            title: context.t.signIn,
             content: Form(
               key: _formKey,
               child: Padding(
@@ -132,7 +133,7 @@ class _SignInPageState extends State<SignInPage> {
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
                                 autofocus: true,
-                                hintText: 'email',
+                                hintText: context.t.email,
                                 prefixIcon: IconsaxPlusLinear.sms,
                               ),
                               AuthTextField(
@@ -145,7 +146,7 @@ class _SignInPageState extends State<SignInPage> {
                                 validator: _validatePassword,
                                 autofocus: false,
                                 obscureText: showPassword,
-                                hintText: 'password',
+                                hintText: context.t.password,
                                 prefixIcon: IconsaxPlusLinear.password_check,
                                 suffixIcon: IconButton(
                                   onPressed: _togglePassword,
@@ -160,7 +161,7 @@ class _SignInPageState extends State<SignInPage> {
                               ForgotPasswordButton(onPressed: () {}),
                               Spacer(),
                               AppPrimaryButton(
-                                label: 'Sign in',
+                                label: context.t.signIn,
                                 isLoading: isLoading,
                                 hasError: hasError,
                                 onPressed: _submit,
