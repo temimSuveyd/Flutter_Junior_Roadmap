@@ -39,32 +39,8 @@ class AuthRepositoryImpl extends AuthRepository {
     CancelToken? cancelToken,
   }) {
     return runCatching(() async {
-      final loginResponse = await _authService.signIn(
-        loginDto,
-        cancelToken: cancelToken,
-      );
-
-      final accessToken = loginResponse.accessToken;
-      if (accessToken == null) {
-        throw Failure('Login failed: no access token received.');
-      }
-      await _secureStorage.saveTokens(
-        accessToken: accessToken,
-        refreshToken: loginResponse.refreshToken,
-      );
-
-      final response = await _authService.getProfileData(
-        accessToken,
-        cancelToken: cancelToken,
-      );
-
-      final userModel = AuthMapper.toUserModelFromProfile(response);
-      await _saveProfile(
-        name: userModel.name,
-        email: userModel.email,
-        avatarUrl: userModel.image,
-      );
-      return true;
+      final user = await _authenticateAndPersist(loginDto, cancelToken);
+      return user != null;
     });
   }
 
@@ -74,14 +50,50 @@ class AuthRepositoryImpl extends AuthRepository {
     CancelToken? cancelToken,
   }) {
     return runCatching(() async {
-      final response = await _authService.signUp(
-        signUpDto,
-        cancelToken: cancelToken,
+      await _authService.signUp(signUpDto, cancelToken: cancelToken);
+
+      // Kayıt yanıtı token içermez; aynı kimlik bilgileriyle oturum aç.
+      final user = await _authenticateAndPersist(
+        SignInRequestDto(
+          userName: signUpDto.email,
+          password: signUpDto.password,
+        ),
+        cancelToken,
       );
-      final userModel = AuthMapper.toUserModelFromSignUp(response);
-      await _saveProfile(name: userModel.name, email: userModel.email);
-      return userModel;
+      return user!;
     });
+  }
+
+  Future<UserModel?> _authenticateAndPersist(
+    SignInRequestDto loginDto,
+    CancelToken? cancelToken,
+  ) async {
+    final loginResponse = await _authService.signIn(
+      loginDto,
+      cancelToken: cancelToken,
+    );
+
+    final accessToken = loginResponse.accessToken;
+    if (accessToken == null) {
+      throw Failure('Login failed: no access token received.');
+    }
+    await _secureStorage.saveTokens(
+      accessToken: accessToken,
+      refreshToken: loginResponse.refreshToken,
+    );
+
+    final response = await _authService.getProfileData(
+      accessToken,
+      cancelToken: cancelToken,
+    );
+
+    final userModel = AuthMapper.toUserModelFromProfile(response);
+    await _saveProfile(
+      name: userModel.name,
+      email: userModel.email,
+      avatarUrl: userModel.image,
+    );
+    return userModel;
   }
 
   Future<void> _saveProfile({

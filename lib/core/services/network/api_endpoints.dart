@@ -13,7 +13,7 @@ class ApiEndpoints {
   static const String getProducts = '/products';
   static const String getCategories = '/categories';
   static String getProductById(int id) => '/products/$id';
-  static const String uploadAvatar = '/api/v1/files/upload';
+  static const String uploadAvatar = '/files/upload';
   static const String profile = '/auth/profile';
 
 }
