@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:juniorflutterroadmap/core/errors/result.dart';
+import 'package:juniorflutterroadmap/core/services/network/failure.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_data.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_store.dart';
 import 'package:juniorflutterroadmap/features/data/service/local/image_picker_service.dart';
@@ -49,11 +50,25 @@ class ProfileRepositoryImpl extends ProfileRepository {
         image = await _imagePickerService.pickImageFromGallery();
       }
       if (image == null) {
-        throw Exception('لم يتم اختيار صورة');
+        final current =
+            await _userProfileStore.read() ?? const UserProfileData();
+        return current;
       }
 
       // رفع الصورة إلى الخادم وحفظ الرابط محلياً.
-      final avatarUrl = await _profileService.uploadAvatar(image);
+      final String avatarUrl;
+      try {
+        avatarUrl = await _profileService.uploadAvatar(image);
+      } on Failure catch (failure) {
+        throw Failure(
+          'Profile photo could not be uploaded: ${failure.message}',
+        );
+      } catch (e) {
+        throw Failure(
+          'Profile photo could not be uploaded. Please check your '
+          'internet connection and try again.',
+        );
+      }
       final current =
           await _userProfileStore.read() ?? const UserProfileData();
       final updated = current.copyWith(avatarUrl: avatarUrl);

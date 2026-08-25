@@ -1,126 +1,203 @@
-# Proje Detaylı İnceleme Raporu (Code Review Report)
-**Dosya Yolu:** `doc/review_report.md`
-**Denetleyen:** Kıdemli Yazılım Mimarı (AI Senior Architect)
+# Proje İnceleme Raporu (Sade ve Anlaşılır Türkçe)
 
-> **Kapsam:** `lib/` altındaki tüm Dart kaynak kodu, bağımlılık enjeksiyonu (GetIt), ağ katmanı (Dio + interceptor’lar), BLoC/Cubit state yönetimi, depolama (SecureStorage/SharedPreferences), bildirim (FCM) ve UI katmanı statik + zihinsel çalıştırma (mental simulation) ile incelenmiştir. Kod; `junior_flutter_roadmap` (Flutter + go_router + flutter_bloc + get_it + dio) projesidir.
-
-> **Güncelleme:** Aşağıdaki bulgular kod üzerinde çözülmüş ve bu rapordan çıkarılmıştır:
-> **L1, L2, L3, L5, L7, A1, A2, A4, A5, A6, F1, F2, F3, F4, F5, U2, U3, U4, U5, U6, E2, E3, E4, E6, UY1, UY6, UY8, K1, K2.**
+Bu rapor, projedeki sorunları çok basit bir dille açıklar. Her sorunun yanında ne olduğunu ve nasıl düzelteceğini bulacaksın.
 
 ---
 
-## 1. Mantıksal Hatalar (Logical Errors)
+## 1. Mantık Hataları (Kod Yanlış Çalışıyor)
 
-- **L4 — Kategori filtresi muhtemelen no-op (etkisiz):**
-  `lib/features/products/data/services/remote_product_services.dart:30` `categoryId` query parametresini `/products` endpoint’ine gönderiyor. İncelenen backend’in (`/products`) `categoryId` parametresini desteklememesi (kategori bazlı ürün için `/categories/{id}/products` kullanılması) yüksek olasılık; bu durumda `CategorySelected` olayı ürün listesini **sunucu tarafında filtrelemez**, tüm ürünler döner. Kategori seçimi “çalışıyor” gibi görünür ama aslında filtrelemez. Backend sözleşmesi ile mutlaka doğrulanmalı; desteklemiyorsa `/categories/{id}/products` kullanılmalı.
+### 1.1 Giriş (Auth) Bölümündeki Sorunlar
+**Dosya:** `lib/features/auth/presentation/Bloc/auth_bloc.dart` (satır 27-61)
 
-- **L6 — `removeAvatar` yalnızca yerelde çalışır:**
-  `lib/features/profile/data/repositories/profile_repository.dart:66-74` `removeAvatar` yalnızca `UserProfileStore`’u günceller, sunucuya silme isteği atmaz. Profil sayfasındaki “Remove photo” kullanıcıyı yanıltır; sunucudaki avatar kalır.
+- **Aynı işlem birden fazla kez başlıyor:** Kullanıcı hızlıca butona basarsa aynı giriş işlemi birden fazla başlayabiliyor.
+- **Bekleyen işlem durmuyor:** Sayfa kapanınca bile devam eden internet isteği bitip yanlış durum gönderebiliyor.
+- **İptal edilemiyor:** Giriş yaparken yapılan internet istekleri iptal edilemiyor.
 
----
+**Çözüm:** Butonları kısa sürede tekrar basılamaz yap. İnternet isteklerini `CancelToken` ile iptal et.
 
-## 2. Mimari Hatalar (Architectural Errors)
+### 1.2 Profil Bölümündeki Sorunlar
+**Dosya:** `lib/features/profile/presentation/Bloc/profile_bloc.dart` (satır 38-56)
 
-- **A3 — İki ayrı tema/renk sistemi (tek doğruluk kaynağı yok):**
-  `lib/core/theme/app_theme.dart` `ThemeData` tanımlarken `colorScheme` belirlemiyor; buna karşılık tüm UI `lib/core/common/helpers/helpers.dart` içindeki `ContextColors` (özel `LightColors`/`DarkColors` sabitleri) üzerinden boyanıyor. Yani `Theme.of(context).colorScheme` ile `context.colors` **farklı renkler** döndürebilir. Material widget’ları (varsayılan renkler) ile özel widget’lar (context.colors) tutarsız görünür. Tema `ThemeData.colorScheme` üzerinden tek kaynaktan yönetilmeli.
+- **Aynı anda iki fotoğraf yükleme:** Kullanıcı hızlıca iki kez fotoğraf seçerse ikisi de aynı anda yükleniyor ve karışıyor.
+- **Hata mesajı belirsiz:** Fotoğraf yüklenmezse kullanıcıya net bir sebep gösterilmiyor.
 
----
+**Çözüm:** Yükleme devam ederken ikinci isteği engelle. Hata mesajını daha açıklayıcı yap.
 
-## 3. Eksik Kodlar (Missing/Unimplemented Code)
+### 1.3 Ürün Yükleme Sorunu
+**Dosya:** `lib/features/products/presentation/pages/home_page.dart` (satır 8-12)
 
-- **E1 — FCM token backend’e gönderilmiyor:**
-  `lib/core/services/notifications/notification_service.dart:42-46` alınan FCM token yalnızca locale’e (`_fcmTokenManager.saveToken`) kaydediliyor; hiçbir `/devices`/`/fcm-token` endpoint’ine gönderilmiyor. Backend kullanıcıyı hedefleyen push gönderemez. Token tescil/ yenileme API çağrısı eksik.
+- **Sonsuz döngü riski:** Hata olunca "yükleniyor" durumu hiç bitmezse uygulama takılı kalabilir.
+- **Aynı istek tekrar tekrar:** Sayfa her yenilendiğinde gereksiz yere ürün tekrar isteniyor.
 
-- **E5 — `AppRoutes.cart` tanımlı ama rota yok:**
-  `lib/core/constants/app_constants.dart:57` `/cart` rotası `app_router.dart` içinde tanımlı değil; sepet özelliği tamamen eksik (ölü rotaya işaret).
+**Çözüm:** Hata durumunda "yükleniyor"u mutlaka bitir. Aynı anda birden fazla yenilemeyi engelle.
 
----
+### 1.4 Oturum Yönetimi
+**Dosya:** `lib/core/services/auth/session_expired_controller.dart` (satır 11-15)
 
-## 4. Gereksiz/Fazla Kodlar (Redundant/Dead Code)
+- **Çakışma riski:** Oturum bitti işareti aynı anda birden fazla yerden değiştirilince hata çıkabiliyor.
 
-- **G1 — `FirebaseInitializer` tescil edilmiş ama hiç kullanılmıyor:**
-  `lib/core/di/injection.dart:48` register ediliyor; `main.dart` kendi `Firebase.initializeApp(options: ...)` çağırıyor. `firebase_initializer.dart` tamamen ölü (ayrıca options’sız çağrı yapmaya kalkarsa çökme riski).
+**Çözüm:** Bu işareti güvenli (senkron) bir şekilde kontrol et.
 
-- **G2 — `SignInRequestDto.userName` ↔ `SignUpRequestDto.avatar` ölü alanlar:**
-  - `sign_up_request_dto.dart:5` `avatar` alanı constructor’da alınıyor ama `toJson` içinde **görmezden gelinip** sabit `'https://i.imgur.com/LDOO4Qs.jpg'` gönderiliyor. `avatar` parametresi ölü; sabit URL her kullanıcıya aynı varsayılan avatarı atar.
+### 1.5 Sayfa Geçişi (Navigasyon)
+**Dosya:** `lib/features/products/presentation/pages/main_shell.dart` (satır 23-39)
 
-- **G3 — Kullanılmayan sabitler:**
-  `lib/core/constants/app_constants.dart:16-20` `pageSize`, `pageSizeSmall`, `lowStockThreshold` hiçbir yerde kullanılmıyor; `ProductBloc` kendi `_limit = 10` sabitini ayrıca tanımlıyor. Çakışan/ölü sabitler.
+- **Hızlı tıklamada çakışma:** Kullanıcı alt menüde hızlıca iki sekmeye basarsa hangi sayfanın açılacağı karışabiliyor.
 
-- **G4 — Kullanılmayan asset sabitleri:**
-  `lib/core/common/helpers/helpers.dart` `ContextAssets.logo`, `logoOutline`, `pdfIcon`, `quizIcon` tanımlı ama hiçbir widget’ta kullanılmıyor; ayrıca `assets/images/logo.png`, `logo_outline.png`, `pdf_icon.png`, `quiz_icon.png` dosyaları `pubspec.yaml` asset klasörlerinde mevcut değil.
-
-- **G5 — `AuthInterceptor` için `_secureStorage` ile `tokenManager` çift parametre:**
-  `lib/core/di/injection.dart:78-84` `DioClient` hem pozisyonel `_secureStorage` hem de `tokenManager` alıyor; ikisi aynı tekil örneğe işaret ediyor. `tokenManager` parametresi gereksiz.
-
-- **G6 — `product_card.dart` içinde gereksiz `const` yorumları:**
-  `product_card.dart:18-20` yorum satırına alınmış `// width: double.infinity` gibi kodlar ölü.
+**Çözüm:** Son basılan sekmeyi esas al, çakışmayı engelle.
 
 ---
 
-## 5. Optimize Edilebilecek Kodlar (Optimization Opportunities)
+## 2. Mimari Hatalar (Yapısal Sorunlar)
 
-- **O1 — `ProductResponse` ↔ `ProductModel` tamamen gereksiz kopya:**
-  `product_response.dart` ve `product_model.dart` alanları birebir aynı; `ProductMapper` yalnızca alanları kopyalıyor. DTO ile domain modeli arasında gerçek bir dönüşüm/davranış farkı yoksa `ProductModel` doğrudan `fromJson` ile kurulabilir ya da `freezed`/`json_serializable` ile kod üretilerek bu boilerplate ortadan kaldırılabilir. (Aynısı `CategoryResponse`/`CategoryModel` ve `Address` için geçerli.)
+### 2.1 Durum Yönetimi
+- **Ortak kod yok:** Benzer BLoC'lar var ama aralarında paylaşılan bir temel sınıf yok, kod tekrarı çok.
+- **Bağımlılık fazla iç içe:** `getIt` ile her şey birbirine çok bağlı, kodu değiştirmek zor.
+- **Karışık kullanım:** BLoC ve Cubit karışık kullanılmış, hangi nerede kullanılmalı belli değil.
 
-- **O2 — `LocalProductServicesImpl.getCachedProducts` her okumada JSON parse + map:**
-  `lib/features/products/data/services/local_product_services.dart:34-43` cache’ten her erişimde `jsonDecode` + `ProductMapper` çalıştırıyor. Offline listeler büyüdükçe maliyet artar; parsed model bellekte tutulabilir ya da lazy cache.
+**Çözüm:** BLoC mı Cubit mi karar ver ve proje boyunca onu kullan. Ortak işleri tek yere topla.
 
-- **O3 — `search_bloc.dart:16-21` kendi transformer’ını elle yazıyor:**
-  `restartable<SearchEvent>().call(events.debounce(duration), mapper)` deseni `bloc_concurrency` + `stream_transform` ile doğrudan `restartable`+`debounce` composite olarak ifade edilebilir; mevcut yazım okunması zor ve tip parametresi gölgeleme yapıyor.
+### 2.2 Bağımlılık (Dependency Injection)
+- **Global değişken gibi davranan singletons:** Bazı sınıflar her yerden erişilince test edilmesi zorlaşıyor.
+- **Dairevi bağımlılık:** Bir sınıf diğerine, o da ona bağlı olduğu için sistem karışıyor.
 
-- **O5 — `failure.dart` içinde `extractServerErrorMessage` her hatada yeni liste/regEx:**
-  `_serverMessageKeys` sabit ama `RegExp` (`_extractHtmlTitle`) her çağrımda derleniyor; `static final` olarak tanımlanabilir.
+**Çözüm:** Gereksiz singleton kullanma. Bağımlılıkları test edilebilir şekilde ver.
 
-- **O6 — `ProductBloc` state hiyerarşisi çok tekrarlı:**
-  `ProductState` taban sınıfı `categories`/`selectedCategoryId` taşıyor ve her alt sınıf bunları ileriye taşımak zorunda; `freezed`/union + `copyWith` ile çok daha okunaklı ve hatasız olur.
+### 2.3 Yönlendirme (Routing)
+- **Elle hesaplama:** Navigasyon durumu elle hesaplanmış, hazır sistem (GoRouter) kullanılmamış.
+- **Güvenlik kapalı:** Giriş koruması (auth guard) yorum satırına alınmış, yani herkes her sayfaya girebiliyor.
 
----
+**Çözüm:** GoRouter'ın kendi mantığını kullan. Giriş korumasını geri aç.
 
-## 6. Yanlış Kütüphane Kullanımı (Misuse of Libraries)
+### 2.4 Tema
+- **Çift tema kaydı:** Hem `ThemeCubit` hem `AppTheme` ayrı ayrı tema tutuyor, kafalar karışıyor.
+- **Sistem teması yok:** Telefon karanlık moda alınca uygulama takip etmiyor.
 
-- **K3 — `SharedPreferences` ile büyük JSON cache:**
-  `local_product_services.dart` ürün listesini tek bir JSON string olarak `SharedPreferences`’e yazıyor. Daha yapısal/performanslı çözüm `drift`/`hive`/`sqflite` olurdu; mevcut yaklaşımda parse maliyeti ve boyut sınırı riski var.
-
-- **K4 — `flutter_secure_storage` yalnızca token için ama FCM/UserProfile `SharedPreferences`’te:**
-  `user_profile_data.dart` ve `fcm_token_manager` düz metin `SharedPreferences`’te; profil/email gibi PII için secure storage daha uygun olabilir (en azından değerlendirilmeli).
-
-- **K5 — `FlutterLocalNotificationsService.showNotification` payload olarak `data?.toString()`:**
-  `local_notification_service.dart:81` `Map.toString()` ile payload gönderiliyor; tıklamada veri yapısı kaybolur. `payload` yerine JSON string veya platforma özgü `notificationResponse` kullanılmalı.
-
-- **K6 — `url_launcher` `canLaunchUrl` + `launchUrl` iki kez çözüm:**
-  `launcher_service_impl.dart` her çağrıda `canLaunchUrl` kontrolü yapıyor; `launchUrl` zaten false döndürebilir. Gerekli ama tekrarlı I/O; ayrıca `makePhoneCall`/`openWhatsApp` hata yönetimi sadece `false` dönüyor, UI’ya neden başarısız olduğu bildirilmiyor.
+**Çözüm:** Tema kaynağını tek yap. Sistem temasını takip et.
 
 ---
 
-## 7. Hatalı Kullanıcı Arayüzü Mantığı (Flawed UI/UX Logic)
+## 3. Yazım ve Düzen Hataları
 
-- **UY2 — Adres dialog’unda prefill race:**
-  `lib/features/address/presentation/widgets/address_dialog.dart:72-79` `state.detected != null && !_prefilled` kontrolü `build` içinde yapılıyor ve `addPostFrameCallback` ile controller’a yazıyor. Eğer kullanıcı adresi elle değiştirip konum yeniden çekilirse (`_retry`), `detected` değiştiğinde tekrar prefill edilip kullanıcının girdiği metin silinebilir. Prefill yalnızca ilk açılışta ve kullanıcı henüz yazmadıysa yapılmalı.
+### 3.1 Import (Kütüphane) Düzeni
+- **Kullanılmayan importlar:** Birçok dosyada gereksiz `import` satırı var.
+- **Karışık yazım:** Bazı yerde `../` ile bazen tam yol ile import edilmiş.
 
-- **UY3 — Bottom navigation ‘search’i yok sayıyor:**
-  `lib/features/products/presentation/pages/main_shell.dart:23-28` `_indexFor` yalnızca home/profile’ı ayırıyor; kullanıcı `/search` içindeyken alt bar home’u seçili gösteriyor ama `onDestinationSelected` `current != target` kontrolüyle `/home`’e dönüyor — yani search ekranındayken “Home”a basınca doğru dönüyor ama görsel seçim yanlış. Search için de bir sekme/state gerekir.
+**Çözüm:** Kullanılmayan importları sil. Import düzenini proje genelinde aynı yap.
 
-- **UY4 — `product_card.dart:81-110` sahte renk noktaları:**
-  Ürün renk seçenekleri sabit `[red, amber, blue, green]` listesiyle çiziliyor; gerçek ürün renkleriyle hiçbir ilgisi yok. Kullanıcıyı yanıltan kukla UI.
+### 3.2 İsimlendirme
+- **Tutarsız isimler:** `AuthService`, `AuthServiceImpl`, `AuthRepository`, `AuthRepositoryImpl` gibi isimler karışık.
 
-- **UY5 — Yükleniyor/boş/hata durumları ürün bölgesinde 0.55 ekran yüksekliğine sabitlenmiş:**
-  `home_body.dart:142-147` durum ekranları `screenHeight * 0.55` ile kısıtlanmış; uzun hata mesajları taşabilir. Ayrıca `ProductInitial` ve `ProductLoading` aynı yükleniyor gösterimi → ilk açılışta mı yoksa yeniden yüklemede mi olduğu belirsiz.
+**Çözüm:** Bir isimlendirme kuralı seç ve her yerde uygula.
 
-- **UY7 — Profil çıkışı tüm `SharedPreferences`’ı siler:**
-  `profile_page.dart:38-44` `_onSignOut` `SharedPreferences().clear()` çağırıyor; bu dil tercihini, önbelleği ve FCM token’ı da siler → çıkış sonrası uygulama dili varsayılana döner, cache boşalır. Yalnızca auth ile ilgili anahtarlar temizlenmeli.
+### 3.3 Kod Yapısı
+- **Anlamsız rakamlar:** `9999` gibi ne olduğu belli olmayan sabit sayılar var.
+- **Yazım hatası:** `authBackgroundImapge` kelimesinde yanlış yazılmış (`Imapge`).
+
+**Çözüm:** Sabit sayıları anlamlı isimle tanımla. Yazım hatalarını düzelt.
+
+### 3.4 Dosya Düzeni
+- **Aynı işi yapan iki servis:** `features/data/service/local/` ile `core` içindeki servisler çakşıyor.
+
+**Çözüm:** Aynı işi yapan dosyaları birleştir veya birini sil.
 
 ---
 
-## Nihai Değerlendirme ve Skor (Final Evaluation & Score)
+## 4. Kötü Alışkanlıklar (Anti-patterns)
 
-* **Mimari Puan (Architecture Score):** 5 / 10
-* **Kod Kalitesi Puanı (Code Quality Score):** 5 / 10
-* **Mantıksal Tutarlılık (Logical Consistency):** 4 / 10
+- **Gereksiz tekrar:** Aynı `BlocConsumer` yapısı her yerde tekrar yazılmış.
+- **Hatalar gizleniyor:** `try-catch` içinde hata yakalanıp üstü kapatılıyor, kullanıcı haber almıyor.
+- **Mesajlar koda gömülü:** Hata mesajları kodun içine yazılmış, tek yerden yönetilmiyor.
 
-* **GENEL ÖZET (OVERALL SUMMARY):**
-  İlk incelemede belirtilen en kritik güvenlik/mantık hatalarının çoğu kod üzerinde çözülmüştür: şifre varsayılan açık görünüyordu (L1), token yenileme akışı kırıktı (L2), `RefreshIndicator` gerçek yüklemeyi beklemiyordu (L3), çevrimdışı pagination boş dönüyordu (L5), ölü `getProfileData` parametresi vardı (L7). Mimari tarafta uygulama geneli cubit’ler `registerFactory` ile tescil ediliyordu (A1), yönlendirmede auth koruması pasifti (A2), `NetworkInfo` DNS probe kullanıyordu (A4), `ProductDetailsBloc` iskeletti (A5) ve interceptor sırası kırılgandı (A6) — bunların tamamı giderildi. Format/yazım hataları (F1-F5), validator/context bağımlılığı (U4), `droppable` transformer (U5), `_hasAvatar` deseni (U6), izin servisi (U2), `AddressState` immutability (U3), arka plan bildirim işleyicisi (E2) ve global oturum-sona-erdi akışı (E6) de tamamlandı.
+**Çözüm:** Tekrarları ortak widget'a çevir. Hataları kullanıcıya göster. Mesajları merkezi bir yere koy.
 
-  **Kalan açık konular:** (1) kategori filtresinin backend sözleşmesine göre no-op olma riski (L4), (2) FCM token’ının backend’e hiç gönderilmemesi (E1), (3) iki ayrı tema/renk sistemi (A3), (4) `removeAvatar`’ın sunucuya yansımaması (L6), (5) ölü/dead code ve optimizasyon alanları (G1-G6, O1-O6), (6) `SharedPreferences`/secure-storage ve payload kullanımı gibi kütüphane kullanım iyileştirmeleri (K3-K6), (7) birkaç UI/UX mantık hatası (UY2-UY5, UY7). Ayrıca `AppRoutes.cart` ölü rotası (E5) hâlâ mevcut.
+---
 
-  **Sonuç:** Çekirdek auth/üretim güvenliği hataları kapatıldı; proje artık belirtilen kritik risklerden arındı. Kalan işler daha çok “tamamlanmamış özellik” (E1, L4, E5), mimari tek kaynaklığa geçiş (A3) ve temizlik/optimizasyon (G/O/K/UY) kategorisindedir.
+## 5. Eksik Kodlar
+
+- **Giriş koruması eksik:** Sayfalara giriş kontrolü yapılmıyor.
+- **Yükleniyor ekranı yok:** Ürün yüklenirken kullanıcıya gösterilecek iskelet (skeleton) ekran yok.
+- **Tekrar dene yok:** Hata olunca "Tekrar dene" butonu yok.
+- **Çevrimdışı destek yok:** İnternet yokken ne yapılacağı bilinmiyor.
+- **Erişilebilirlik eksik:** Görme engelliler için ekran okuyucu etiketleri yok.
+
+**Çözüm:** Yukarıdakilerin hepsini tek tek ekle, özellikle "Tekrar dene" ve iskelet ekran önemli.
+
+---
+
+## 6. Gereksiz / Ölü Kodlar
+
+- **Yorum satırına alınmış giriş koruması:** `app_router.dart` içinde tamamen yazılmış ama kapatılmış kod var.
+- **Çift responsive mantığı:** `AppBreakpoints` ve `ContextResponsive` aynı işi yapıyor.
+- **Tekrar eden hata ekranları:** Her özellik kendi hata widget'ını yazmış.
+
+**Çözüm:** Kullanılmayan kodları sil. Aynı işi yapanları birleştir.
+
+---
+
+## 7. İyileştirilebilecek (Performans) Kodlar
+
+- **Liste gereksiz yenileniyor:** Büyük listeler her seferinde baştan çiziliyor.
+- **Fotoğraf önbelleği yok:** Profil fotoğrafları tekrar tekrar indiriliyor.
+- **Aramada gecikme yok:** Yazarken her harfte kontrol yapılıyor, performans düşüyor.
+
+**Çözüm:** Listeyi parçalara böl (`ListView.builder`). Fotoğrafları önbelleğe al. Arama için gecikme (debounce) ekle.
+
+---
+
+## 8. Kütüphane Kullanım Hataları
+
+- **Dio timeout tutarsız:** Bazı istekler farklı sürede timeout oluyor.
+- **Droppable fazla kullanımı:** Çok sık kullanılınca bazı olaylar (event) kaybolabiliyor.
+- **Arapça (RTL) desteği yarım:** Sağdan sola dil desteği tam değil.
+- **Dil tercihi kaydedilmiyor:** Kullanıcı dil seçince hatırlanmıyor.
+
+**Çözüm:** Timeout değerlerini sabit yap. Droppable'ı sadece gerekli yerde kullan. RTL ve dil kaydetmeyi tamamla.
+
+---
+
+## 9. Kullanıcı Arayüzü (UI) Mantık Hataları
+
+- **Alt menü güncellenmiyor:** Link ile açılan sayfada alt menü seçili görünmüyor.
+- **Form anında kontrol ediyor:** Her harfte hata mesajı çıkıyor, kullanıcıyı bunaltıyor.
+- **Yükleniyor belirsiz:** Bazı yerlerde ne kadar süreceği belli değil.
+- **Çok fazla uyarı:** Üst üste hata mesajları (snackbar) çıkabiliyor.
+
+**Çözüm:** Link ile açılışta menüyü senkronize et. Form kontrolünü yazmayı bitirince yap. Uyarıları üst üste çıkarma.
+
+---
+
+## Puanlar
+
+- **Mimari:** 4 / 10 — Yapı dağınık, parçalar birbirine çok bağlı.
+- **Kod Kalitesi:** 5 / 10 — Ortalama, ama düzeltilmeli çok yer var.
+- **Mantık Tutarlılığı:** 3 / 10 — İş mantığında ciddi hatalar var.
+
+**Özet:** Proje şu haliyle yayına hazır değil. Önce kritik hatalar, sonra yapısal sorunlar düzeltilmeli.
+
+---
+
+## Hemen Yapılması Gerekenler (Kritik)
+
+1. Giriş korumasını (auth guard) aç ve çalıştır.
+2. Profil fotoğrafı yüklemedeki çakışmayı düzelt.
+3. Yorum satırındaki ölü kodları temizle.
+4. Durum yönetimini tek tip yap (BLoC ya da Cubit).
+5. Hata mesajlarını kullanıcıya düzgün göster.
+
+---
+
+## Junior Geliştirici İçin 3 Adımlı Plan
+
+**1. Hafta 1-2: Temizlik**
+- Ölü kodları ve kullanılmayan importları sil.
+- İsimlendirme ve import düzenini düzelt.
+
+**2. Hafta 3-4: Kritik Hatalar**
+- Profil yükleme çakışmasını düzelt.
+- Girişte aynı işlemin tekrarını engelle.
+- Hata yönetimini iyileştir.
+
+**3. Hafta 5-6: Mimari İyileştirme**
+- Giriş korumasını ekle.
+- Durum yönetimini sadeleştir.
+- Kritik yerlere test yaz.
