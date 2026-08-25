@@ -1,12 +1,8 @@
-import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 mixin NetworkInfo {
   Future<bool> get isOnline async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      return result.isNotEmpty;
-    } on SocketException catch (_) {
-      return false;
-    }
+    final result = await Connectivity().checkConnectivity();
+    return !result.contains(ConnectivityResult.none);
   }
 }

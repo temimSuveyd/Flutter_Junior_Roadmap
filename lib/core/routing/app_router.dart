@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
+import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
+import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_repository.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/home_page.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/product_details_page.dart';
@@ -25,14 +27,14 @@ final class AppRouter {
         GoRoute(
           path: AppRoutes.signIn,
           builder: (context, state) => BlocProvider(
-            create: (context) => getIt<AuthBloc>(),
+            create: (context) => AuthBloc(getIt<AuthRepository>()),
             child: const SignInPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.signup,
           builder: (context, state) => BlocProvider(
-            create: (context) => getIt<AuthBloc>(),
+            create: (context) => AuthBloc(getIt<AuthRepository>()),
             child: const CreateAccountPage(),
           ),
         ),
@@ -42,14 +44,15 @@ final class AppRouter {
             GoRoute(
               path: AppRoutes.home,
               builder: (context, state) => BlocProvider(
-                    create: (context) => getIt<ProductBloc>()..add(ProductsRequested()),
+                    create: (context) =>
+                        ProductBloc(getIt<ProductRepository>())..add(ProductsRequested()),
                 child: const HomePage(),
               ),
             ),
             GoRoute(
               path: AppRoutes.profile,
               builder: (context, state) => BlocProvider(
-                create: (context) => getIt<ProfileBloc>(),
+                create: (context) => ProfileBloc(getIt<ProfileRepository>()),
                 child: const ProfilePage(),
               ),
             ),

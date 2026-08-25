@@ -8,7 +8,9 @@ import 'package:juniorflutterroadmap/core/l10n/app_localizations.dart';
 import 'package:juniorflutterroadmap/core/local/cubit/local_cubit.dart';
 import 'package:juniorflutterroadmap/core/theme/app_theme.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
+import 'package:juniorflutterroadmap/core/local/shared_prefs_locale_repository.dart';
 import 'package:juniorflutterroadmap/firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,8 +34,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => getIt<ThemeCubit>()),
-        BlocProvider(create: (_) => getIt<LocaleCubit>()),
+        BlocProvider(create: (_) => ThemeCubit(getIt<SharedPreferences>())),
+        BlocProvider(create: (_) => LocaleCubit(getIt<LocaleRepository>())),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
