@@ -3,10 +3,10 @@ import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/services/auth/refresh_token_provider.dart';
 import 'package:juniorflutterroadmap/core/services/network/api_endpoints.dart';
 
-/// DioClient ile AuthService arasındaki döngüsel bağımlılığı kırmak için
-/// token yenileme yeteneği AuthService'ten ayrıştırılmış bağımsız
-/// bir sağlayıcıdır. DioClient, kendi yaşam döngüsünde AuthService'e
-/// ihtiyaç duymadan bunu kullanır.
+/// Decouples the circular dependency between DioClient and AuthService;
+/// the token-refresh capability is extracted from AuthService as an
+/// independent provider. DioClient uses it in its own lifecycle
+/// without needing AuthService.
 class TokenRefresher implements RefreshTokenProvider {
   const TokenRefresher();
 

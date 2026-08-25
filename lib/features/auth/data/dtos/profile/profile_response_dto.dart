@@ -1,8 +1,4 @@
 class ProfileResponseDto {
-  final int id;
-  final String? name;
-  final String? email;
-  final String? avatar;
 
   ProfileResponseDto({
     required this.id,
@@ -19,4 +15,8 @@ class ProfileResponseDto {
       avatar: json['avatar'] as String?,
     );
   }
+  final int id;
+  final String? name;
+  final String? email;
+  final String? avatar;
 }

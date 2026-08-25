@@ -5,7 +5,7 @@ import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/core/local/cubit/local_cubit.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 
-/// رأس الصفحة الرئيسية يحتوي على أزرار تبديل الثيم واللغة.
+/// Home page header with theme and language toggle buttons.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
 
@@ -17,7 +17,7 @@ class HomeHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // زر تبديل الثيم (فاتح/داكن).
+        // Theme toggle button (light/dark).
         BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, themeMode) {
             return IconButton(
@@ -35,7 +35,7 @@ class HomeHeader extends StatelessWidget {
           },
         ),
 
-        // زر تبديل اللغة (EN/AR).
+        // Language toggle button (EN/AR).
         BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, state) {
             final isEn = state.locale.languageCode == 'en';

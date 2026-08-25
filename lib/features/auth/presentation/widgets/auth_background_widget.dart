@@ -66,7 +66,6 @@ class AuthBackgroundWidget extends StatelessWidget {
                     color: context.background,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(100),
-                      topRight: Radius.circular(0),
                     ),
                   ),
                   child: Padding(
@@ -88,11 +87,11 @@ class WelcomeCustomClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     var path = Path();
 
-    // 1. Kalem sol üstte (0,0) konumunda başlıyor.
-    // 2. Sol kenardan aşağıya, beyaz alanın başladığı yüksekliğe iniyoruz.
+    // 1. The pen starts at the top-left corner (0,0).
+    // 2. Go down the left edge to the height where the white area begins.
     path.lineTo(0, size.height * 0.2);
 
-    // 3. Görseldeki o yumuşak dalgayı (eğriyi) çiziyoruz:
+    // 3. Draw the soft wave (curve) from the design:
     path.quadraticBezierTo(
       size.width * 0.30,
       size.height * 0.10,
@@ -100,13 +99,13 @@ class WelcomeCustomClipper extends CustomClipper<Path> {
       size.height * 0.25,
     );
 
-    // 4. Sağ kenardan en aşağıya (sağ alt köşeye) iniyoruz.
+    // 4. Go down the right edge to the bottom-right corner.
     path.lineTo(size.width, size.height);
 
-    // 5. Alt kenardan dümdüz sol alt köşeye gidiyoruz.
+    // 5. Go straight along the bottom edge to the bottom-left corner.
     path.lineTo(0, size.height);
 
-    // 6. Şekli kapatıp içini dolduruyoruz.
+    // 6. Close the shape and fill it.
     path.close();
     return path;
   }

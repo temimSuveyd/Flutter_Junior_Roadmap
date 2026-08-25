@@ -27,7 +27,7 @@ import '../services/notifications/notification_service.dart';
 
 final GetIt getIt = GetIt.instance;
 
-/// Tüm bağımlılıkları kaydeden servis locator.
+/// Service locator that registers all dependencies.
 Future<void> setupLocator() async {
   // 1. Firebase 
   getIt.registerLazySingleton<FirebaseInitializer>(() => FirebaseInitializer());
@@ -53,7 +53,7 @@ Future<void> setupLocator() async {
     () => SharedPreferencesUserProfileStore(getIt<SharedPreferences>()),
   );
 
-  // ── Token Refresh (DioClient döngüsünü kırmak için bağımsız) ──
+  // ── Token Refresh (independent, to break the DioClient cycle) ──
   getIt.registerLazySingleton<TokenRefresher>(() => const TokenRefresher());
 
   // ── Dio ──
@@ -76,7 +76,7 @@ Future<void> setupLocator() async {
     () => RemoteProductServicesImpl(getIt<DioClient>()),
   );
 
-  // خدمات الأذونات واختيار الصور المشتركة بين الميزات.
+  // Permission and image-picker services shared across features.
   getIt.registerLazySingleton<PermissionService>(() => PermissionServiceImpl());
   getIt.registerLazySingleton<ImagePickerService>(
     () => ImagePickerServiceImpl(getIt<PermissionService>()),

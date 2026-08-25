@@ -30,11 +30,11 @@ class PermissionServiceImpl implements PermissionService {
 
     if (status.isPermanentlyDenied) {
       await openAppSettings();
-      // Kullanıcı ayarlardan izin verip geri döndükten sonra durumu tazele.
+      // Refresh status after the user grants permission from settings and returns.
       status = await permission.status;
     }
 
-    // iOS'ta fotoğraflar için `isLimited` (kısmi erişim) de yeterli kabul edilir.
+    // On iOS, `isLimited` (partial access) for photos is also accepted.
     return status.isGranted || status.isLimited;
   }
 }

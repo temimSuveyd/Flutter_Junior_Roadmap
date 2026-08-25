@@ -1,4 +1,4 @@
-import 'package:juniorflutterroadmap/features/products/data/dtos/product_responce.dart';
+import 'package:juniorflutterroadmap/features/products/data/dtos/product_response.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 
 class ProductMapper {

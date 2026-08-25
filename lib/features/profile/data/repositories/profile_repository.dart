@@ -9,15 +9,15 @@ import 'package:juniorflutterroadmap/features/data/service/local/image_picker_se
 
 import '../services/profile_service.dart';
 
-/// واجهة مستودع الملف الشخصي.
+/// Profile repository interface.
 abstract class ProfileRepository {
-  /// جلب بيانات الملف الشخصي المخزنة محلياً.
+  /// Loads the locally stored profile data.
   Future<Result<UserProfileData>> getProfile();
 
-  /// التقاط صورة من مصدر معين ثم رفعها وحفظ رابطها.
+  /// Captures an image from a source, uploads it, and saves the URL.
   Future<Result<UserProfileData>> updateAvatarFromSource(ImageSource source);
 
-  /// حذف صورة الملف الشخصي.
+  /// Deletes the profile photo.
   Future<Result<UserProfileData>> removeAvatar();
 }
 

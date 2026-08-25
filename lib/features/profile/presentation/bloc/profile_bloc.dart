@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
-/// блок إدارة الملف الشخصي.
+/// Bloc that manages the profile.
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(this._profileRepository) : super(ProfileInitial()) {
     on<ProfileRequested>(_onProfileRequested);
@@ -19,7 +19,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ProfileRepository _profileRepository;
   bool _isAvatarBusy = false;
 
-  /// جلب بيانات الملف الشخصي.
+  /// Loads the profile data.
   Future<void> _onProfileRequested(
     ProfileRequested event,
     Emitter<ProfileState> emit,
@@ -35,7 +35,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
-  /// التقاط صورة من مصدر معين ثم رفعها.
+  /// Captures an image from a source and uploads it.
   Future<void> _onAvatarChanged(
     AvatarChanged event,
     Emitter<ProfileState> emit,
@@ -59,7 +59,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
-  /// حذف صورة الملف الشخصي.
+  /// Deletes the profile photo.
   Future<void> _onAvatarRemoved(
     AvatarRemoved event,
     Emitter<ProfileState> emit,

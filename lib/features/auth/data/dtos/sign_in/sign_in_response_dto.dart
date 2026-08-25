@@ -1,6 +1,4 @@
 class SignInResponseDto {
-  final String? accessToken;
-  final String? refreshToken;
 
   SignInResponseDto({required this.accessToken, required this.refreshToken});
 
@@ -10,4 +8,6 @@ class SignInResponseDto {
       refreshToken: json['refresh_token'] as String?,
     );
   }
+  final String? accessToken;
+  final String? refreshToken;
 }

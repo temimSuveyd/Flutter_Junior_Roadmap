@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
-import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
 import 'package:juniorflutterroadmap/core/utils/empty_state.dart';
 import 'package:juniorflutterroadmap/core/utils/error_state.dart';
 import 'package:juniorflutterroadmap/core/utils/loading_state.dart';

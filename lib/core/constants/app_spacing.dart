@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// قيم المسافات المستخدمة عبر التطبيق.
+/// Spacing values used across the app.
 final class AppSpacing {
   AppSpacing._();
 

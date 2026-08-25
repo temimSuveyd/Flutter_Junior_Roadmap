@@ -11,9 +11,6 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository _authRepository;
-  final CancelToken _cancelToken = CancelToken();
-  bool _isProcessing = false;
 
   AuthBloc(this._authRepository) : super(AuthInitial()) {
     on<SignInRequested>(
@@ -25,6 +22,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _onRegisterRequested,
     );
   }
+  final AuthRepository _authRepository;
+  final CancelToken _cancelToken = CancelToken();
+  bool _isProcessing = false;
 
   CancelToken _tokenFor(CancelToken? provided) => provided ?? _cancelToken;
 

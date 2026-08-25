@@ -1,5 +1,4 @@
 class AvatarUploadResponseDto {
-  final String avatarUrl;
 
   AvatarUploadResponseDto({required this.avatarUrl});
 
@@ -7,4 +6,5 @@ class AvatarUploadResponseDto {
     final rawUrl = json['location'] ;
     return AvatarUploadResponseDto(avatarUrl: rawUrl?.toString() ?? '');
   }
+  final String avatarUrl;
 }

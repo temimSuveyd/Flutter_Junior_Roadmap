@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// لوحة الألوان الموحدة للهوية البصرية للتطبيق.
+/// Centralized color palette for the app's visual identity.
 final class AppColors {
   AppColors._();
 

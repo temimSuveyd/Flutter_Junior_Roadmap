@@ -2,7 +2,7 @@ export 'app_colors.dart';
 export 'app_spacing.dart';
 export 'app_typography.dart';
 
-/// ثوابت عامة للتخطيط والترقيم والمدد الزمنية للحركات.
+/// General constants for layout, pagination and animation durations.
 final class AppConstants {
   AppConstants._();
 
@@ -26,17 +26,17 @@ final class AppConstants {
   static const Duration showDelay = Duration(milliseconds: 200);
 }
 
-/// صور مخصصة للشاشات مثل صفحة المصادقة.
+/// Images used on specific screens like the auth screen.
 final class AppImages {
   AppImages._();
 
-  static const String authBackgroundImapge = 'assets/images/auth_background_image.png';
+  static const String authBackgroundImage = 'assets/images/auth_background_image.png';
   static const String emptyImageIcon= 'assets/icons/empty_image_icon.png';
 
 }
 
 
-/// مسارات التنقل بين شاشات التطبيق.
+/// Navigation routes between app screens.
 final class AppRoutes {
   AppRoutes._();
 

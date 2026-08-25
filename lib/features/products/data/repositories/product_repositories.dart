@@ -1,6 +1,6 @@
 import '../../../../core/errors/result.dart';
 import '../../../../core/services/network/network_info.dart';
-import '../dtos/product_responce.dart';
+import '../dtos/product_response.dart';
 import '../mappers/product_mapper.dart';
 import '../models/category_model.dart';
 import '../models/product_model.dart';

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../dtos/product_responce.dart';
+import '../dtos/product_response.dart';
 import '../mappers/product_mapper.dart';
 import '../models/product_model.dart';
 

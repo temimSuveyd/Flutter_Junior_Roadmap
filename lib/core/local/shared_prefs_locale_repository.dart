@@ -1,12 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// واجهة حفظ واسترجاع اللغة من التخزين المحلي.
+/// Interface for saving and retrieving the locale from local storage.
 abstract class LocaleRepository {
   Future<String?> getLocaleCode();
   Future<void> saveLocaleCode(String code);
 }
 
-/// تنفيذ باستخدام SharedPreferences.
+/// Implementation backed by SharedPreferences.
 class SharedPrefsLocaleRepository implements LocaleRepository {
   SharedPrefsLocaleRepository(this._prefs);
 

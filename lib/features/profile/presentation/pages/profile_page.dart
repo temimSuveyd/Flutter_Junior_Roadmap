@@ -9,10 +9,10 @@ import '../../../../core/utils/loading_state.dart';
 import '../bloc/profile_bloc.dart';
 import '../widgets/profile_avatar.dart';
 
-/// خيارات اختيار مصدر الصورة في ورقة السحب.
+/// Image-source options shown in the bottom sheet.
 enum _AvatarAction { camera, gallery, remove }
 
-/// صفحة الملف الشخصي.
+/// Profile page.
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -27,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
     context.read<ProfileBloc>().add(ProfileRequested());
   }
 
-  /// عرض ورقة اختيار المصدر ثم إرسال الحدث المناسب.
+  /// Shows the source picker sheet then emits the corresponding event.
   Future<void> _onChangePhoto() async {
     final action = await _showImageSourceSheet();
     if (action == null || !mounted) return;
@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  /// عرض حوار التأكيد قبل حذف الصورة.
+  /// Shows a confirmation dialog before deleting the photo.
   Future<void> _onRemovePhoto() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -66,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  /// ورقة سحب لاختيار مصدر الصورة (كاميرا / معرض / حذف).
+  /// Bottom sheet to pick the image source (camera / gallery / remove).
   Future<_AvatarAction?> _showImageSourceSheet() async {
     return showModalBottomSheet<_AvatarAction>(
       context: context,
@@ -96,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  /// التحقق مما إذا كان لدى المستخدم صورة حالية.
+  /// Checks whether the user already has a profile photo.
   bool get _hasAvatar {
     final state = context.read<ProfileBloc>().state;
     return switch (state) {
@@ -136,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-/// محتوى الصفحة عند تحميل البيانات بنجاح.
+/// Page content shown once data loads successfully.
 class _ProfileContent extends StatelessWidget {
   const _ProfileContent({
     required this.profile,

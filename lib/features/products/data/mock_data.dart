@@ -1,14 +1,14 @@
 class BannerItem {
-  final String imageUrl;
 
   const BannerItem({required this.imageUrl});
+  final String imageUrl;
 }
 
 class CategoryItem {
-  final String name;
-  final String imageUrl;
 
   const CategoryItem({required this.name, required this.imageUrl});
+  final String name;
+  final String imageUrl;
 }
 
 const bannerImages = [

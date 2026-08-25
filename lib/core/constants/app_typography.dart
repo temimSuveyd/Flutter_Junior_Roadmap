@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// فئة تجمع أنماط الخطوط المستخدمة في التطبيق.
+/// Collects font styles used across the app.
 final class AppTypography {
   AppTypography._();
 
@@ -136,14 +136,14 @@ final class AppTypography {
   static TextStyle tabularMedium = GoogleFonts.jetBrainsMono(
     fontSize: 14,
     fontWeight: FontWeight.w500,
-    fontFeatures: [FontFeature.tabularFigures()],
+    fontFeatures: [const FontFeature.tabularFigures()],
     height: 1.5,
   );
 
   static TextStyle tabularSmall = GoogleFonts.jetBrainsMono(
     fontSize: 12,
     fontWeight: FontWeight.w500,
-    fontFeatures: [FontFeature.tabularFigures()],
+    fontFeatures: [const FontFeature.tabularFigures()],
     height: 1.5,
   );
 
@@ -161,7 +161,7 @@ final class AppTypography {
   );
 
   // ── Build a complete TextTheme for use in ThemeData ──
-  /// يبني نص ثيم كامل لاستخدامه في ThemeData.
+  /// Builds a complete text theme for use in ThemeData.
   static TextTheme get textTheme => TextTheme(
     displayLarge: displayLarge,
     displayMedium: displayMedium,
@@ -180,7 +180,7 @@ final class AppTypography {
     labelSmall: labelSmall,
   );
 
-  /// نص ثيم خاص بالأرقام الجدولية والبيانات أحادية العرض.
+  /// Text theme for tabular numbers and monospace data.
   static TextTheme get monoTextTheme => TextTheme(
     bodyMedium: tabularMedium,
     bodySmall: tabularSmall,

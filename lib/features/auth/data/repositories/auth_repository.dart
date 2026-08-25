@@ -24,14 +24,14 @@ abstract class AuthRepository {
 }
 
 class AuthRepositoryImpl extends AuthRepository {
-  final AuthService _authService;
-  final AuthTokenManager _secureStorage;
-  final UserProfileStore _userProfileStore;
   AuthRepositoryImpl(
     this._authService,
     this._secureStorage,
     this._userProfileStore,
   );
+  final AuthService _authService;
+  final AuthTokenManager _secureStorage;
+  final UserProfileStore _userProfileStore;
 
   @override
   Future<Result<bool>> loginUser(
@@ -52,7 +52,7 @@ class AuthRepositoryImpl extends AuthRepository {
     return runCatching(() async {
       await _authService.signUp(signUpDto, cancelToken: cancelToken);
 
-      // Kayıt yanıtı token içermez; aynı kimlik bilgileriyle oturum aç.
+      // The sign-up response has no token; log in with the same credentials.
       final user = await _authenticateAndPersist(
         SignInRequestDto(
           userName: signUpDto.email,

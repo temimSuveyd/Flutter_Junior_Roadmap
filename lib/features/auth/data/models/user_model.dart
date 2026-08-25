@@ -1,8 +1,4 @@
 class UserModel {
-  final String id;
-  final String name;
-  final String email;
-  final String? image;
 
   UserModel({
     required this.id,
@@ -10,4 +6,8 @@ class UserModel {
     required this.email,
     this.image,
   });
+  final String id;
+  final String name;
+  final String email;
+  final String? image;
 }

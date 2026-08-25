@@ -3,14 +3,14 @@ part of 'profile_bloc.dart';
 @immutable
 sealed class ProfileEvent {}
 
-/// طلب جلب بيانات الملف الشخصي.
+/// Event to load the profile data.
 final class ProfileRequested extends ProfileEvent {}
 
-/// طلب تغيير الصورة من مصدر معين (كاميرا أو معرض).
+/// Event to change the photo from a source (camera or gallery).
 final class AvatarChanged extends ProfileEvent {
-  final ImageSource source;
   AvatarChanged(this.source);
+  final ImageSource source;
 }
 
-/// طلب حذف صورة الملف الشخصي.
+/// Event to delete the profile photo.
 final class AvatarRemoved extends ProfileEvent {}

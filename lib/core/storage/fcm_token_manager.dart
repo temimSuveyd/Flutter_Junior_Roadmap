@@ -1,11 +1,11 @@
-/// FCM token'ının yerel depolanması için soyut sınıf.
+/// Abstract class for local storage of the FCM token.
 abstract class FcmTokenManager {
-  /// Kayıtlı FCM token'ını döndürür; yoksa `null`.
+  /// Returns the stored FCM token, or `null` if none.
   Future<String?> getToken();
 
-  /// FCM token'ını yerel depolamaya yazar.
+  /// Writes the FCM token to local storage.
   Future<void> saveToken(String token);
 
-  /// Kayıtlı FCM token'ını temizler.
+  /// Clears the stored FCM token.
   Future<void> clearToken();
 }

@@ -4,11 +4,11 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// ترجمات اللغة الإنجليزية.
+/// English language translations.
 class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
-  // ── المصادقة ──
+  // ── Authentication ──
   @override
   String get loginTitle => 'Welcome Back';
   @override
@@ -34,7 +34,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dontHaveAccount => "Don't have account";
 
-  // ── رسائل التحقق ──
+  // ── Validation Messages ──
   @override
   String get pleaseEnterName => 'Please enter your name';
   @override
@@ -53,7 +53,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get accountCreated => 'Account created. Please sign in.';
 
-  // ── التنقل ──
+  // ── Navigation ──
   @override
   String get home => 'Home';
   @override
@@ -63,7 +63,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get all => 'All';
 
-  // ── حالات التحميل ──
+  // ── Loading States ──
   @override
   String get loadingProducts => 'Loading products...';
   @override
@@ -93,11 +93,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get useMyLocation => 'Use my location';
 
-  // ── أزرار عامة ──
+  // ── General Buttons ──
   @override
   String get retry => 'Retry';
 
-  // ── الملف الشخصي ──
+  // ── Profile ──
   @override
   String get camera => 'Camera';
   @override

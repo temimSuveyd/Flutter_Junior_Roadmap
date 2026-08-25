@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_data.dart';
+import 'package:juniorflutterroadmap/core/utils/app_network_image.dart';
 
 class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
@@ -23,21 +24,22 @@ class ProfileAvatar extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: onTap,
-          child: CircleAvatar(
-            radius: 56,
-            backgroundColor: context.colors.primary.withValues(alpha: 0.15),
-            backgroundImage: avatarUrl != null
-                ? NetworkImage(avatarUrl)
-                : null,
-            child: avatarUrl == null
-                ? Text(
-                    _initials(profile.name),
-                    style: context.textTheme.titleLarge!.copyWith(
-                      color: context.colors.primary,
+            child: CircleAvatar(
+              radius: 56,
+              backgroundColor: context.colors.primary.withValues(alpha: 0.15),
+              child: avatarUrl != null
+                  ? AppNetworkImage(
+                      url: avatarUrl,
+                      width: 112,
+                      height: 112,
+                    )
+                  : Text(
+                      _initials(profile.name),
+                      style: context.textTheme.titleLarge!.copyWith(
+                        color: context.colors.primary,
+                      ),
                     ),
-                  )
-                : null,
-          ),
+            ),
         ),
         if (isUploading)
           const Positioned.fill(

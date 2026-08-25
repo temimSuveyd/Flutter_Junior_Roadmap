@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/utils/app_network_image.dart';
 
 class ProductDetailsGallery extends StatefulWidget {
   const ProductDetailsGallery({super.key, required this.images});
@@ -33,13 +34,9 @@ class _ProductDetailsGalleryState extends State<ProductDetailsGallery> {
             onPageChanged: (i) => setState(() => _current = i),
             itemBuilder: (context, i) => Padding(
               padding: context.spacing.insetMd,
-              child: ClipRRect(
+              child: AppNetworkImage(
+                url: widget.images[i],
                 borderRadius: context.radius.lg,
-                child: Image.network(
-                  widget.images[i],
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const _GalleryPlaceholder(),
-                ),
               ),
             ),
           ),

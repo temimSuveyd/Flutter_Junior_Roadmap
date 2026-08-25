@@ -10,7 +10,7 @@ import 'app_localizations_en.dart';
 
 // ignore_for_file: type=lint
 
-/// واجهة الوصول إلى النصوص المترجمة عبر `AppLocalizations.of(context)`.
+/// Interface to access translated strings via `AppLocalizations.of(context)`.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
       : localeName = intl.Intl.canonicalizedLocale(locale.toString());
@@ -37,7 +37,7 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
-  // ── المصادقة ──
+  // ── Authentication ──
   String get loginTitle;
   String get loginButton;
   String get signIn;
@@ -51,7 +51,7 @@ abstract class AppLocalizations {
   String get alreadyHaveAccount;
   String get dontHaveAccount;
 
-  // ── رسائل التحقق ──
+  // ── Validation Messages ──
   String get pleaseEnterName;
   String get pleaseConfirmPassword;
   String get passwordsDoNotMatch;
@@ -61,13 +61,13 @@ abstract class AppLocalizations {
   String get passwordTooShort;
   String get accountCreated;
 
-  // ── التنقل ──
+  // ── Navigation ──
   String get home;
   String get profile;
   String get search;
   String get all;
 
-  // ── حالات التحميل ──
+  // ── Loading States ──
   String get loadingProducts;
   String get noProducts;
   String get loadingProfile;
@@ -83,10 +83,10 @@ abstract class AppLocalizations {
   String get saveAddress;
   String get useMyLocation;
 
-  // ── أزرار عامة ──
+  // ── General Buttons ──
   String get retry;
 
-  // ── الملف الشخصي ──
+  // ── Profile ──
   String get camera;
   String get gallery;
   String get removePhoto;

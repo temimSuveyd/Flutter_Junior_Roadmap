@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 
-/// فئة التحقق من صحة المدخلات مع دعم الترجمة.
+/// Input validation helpers with localization support.
 class AppValidators {
-  /// محقق البريد الإلكتروني.
+  /// Email validator.
   static String? validateEmail(BuildContext context, String? value) {
     final t = AppLocalizations.of(context)!;
     if (value == null || value.trim().isEmpty) {
@@ -19,7 +19,7 @@ class AppValidators {
     return null;
   }
 
-  /// محقق كلمة المرور.
+  /// Password validator.
   static String? validatePassword(BuildContext context, String? value) {
     final t = AppLocalizations.of(context)!;
     if (value == null || value.isEmpty) {
@@ -33,7 +33,7 @@ class AppValidators {
     return null;
   }
 
-  /// محقق اسم المستخدم.
+  /// Username validator.
   static String? validateName(BuildContext context, String? value) {
     final t = AppLocalizations.of(context)!;
     if (value == null || value.trim().isEmpty) {
@@ -42,7 +42,7 @@ class AppValidators {
     return null;
   }
 
-  /// محقق تأكيد كلمة المرور.
+  /// Confirm-password validator.
   static String? validateConfirmPassword(
     BuildContext context,
     String? value,

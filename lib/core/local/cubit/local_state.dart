@@ -1,7 +1,7 @@
 part of 'local_cubit.dart';
 
-/// حالة اللغة الحالية في التطبيق.
+/// State holding the app's current locale.
 class LocaleState {
-  final Locale locale;
   const LocaleState([this.locale = const Locale('en')]);
+  final Locale locale;
 }

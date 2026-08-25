@@ -1,8 +1,4 @@
 class SignUpResponseDto {
-  final int id;
-  final String? name;
-  final String? email;
-  final String? avatar;
 
   SignUpResponseDto({
     required this.id,
@@ -19,4 +15,8 @@ class SignUpResponseDto {
       avatar: json['avatar'] as String?,
     );
   }
+  final int id;
+  final String? name;
+  final String? email;
+  final String? avatar;
 }

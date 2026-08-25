@@ -1,8 +1,4 @@
 class SignUpRequestDto {
-  final String name;
-  final String email;
-  final String password;
-  final String? avatar;
 
   SignUpRequestDto({
     required this.name,
@@ -10,6 +6,10 @@ class SignUpRequestDto {
     required this.password,
     this.avatar,
   });
+  final String name;
+  final String email;
+  final String password;
+  final String? avatar;
 
   Map<String, dynamic> toJson() => {
         'name': name,

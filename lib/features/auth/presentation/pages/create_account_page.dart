@@ -172,7 +172,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           child: Column(
                             spacing: context.spaceXl,
                             children: [
-                              Spacer(flex: 3),
+                              const Spacer(flex: 3),
                               AuthTextField(
                                 controller: _nameController,
                                 isAccepted: nameIsAccepted,
@@ -194,7 +194,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 focusNode: _emailFocus,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
-                                autofocus: false,
                                 hintText: context.t.email,
                                 prefixIcon: IconsaxPlusLinear.sms,
                               ),
@@ -207,7 +206,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 focusNode: _passwordFocus,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.next,
-                                autofocus: false,
                                 obscureText: showPassword,
                                 hintText: context.t.password,
                                 prefixIcon: IconsaxPlusLinear.password_check,
@@ -230,7 +228,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 focusNode: _confirmPasswordFocus,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.done,
-                                autofocus: false,
                                 obscureText: showConfirmPassword,
                                 hintText: context.t.confirmPassword,
                                 prefixIcon: IconsaxPlusLinear.password_check,
@@ -244,14 +241,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   ),
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               AppPrimaryButton(
                                 label: context.t.createAccount,
                                 isLoading: isLoading,
                                 hasError: hasError,
                                 onPressed: _submit,
                               ),
-                              Spacer(),
+                              const Spacer(),
                               AlreadyHaveAccountButton(
                                 onPressed: () {
                                   context.go(AppRoutes.signIn);

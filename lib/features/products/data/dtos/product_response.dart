@@ -1,10 +1,4 @@
 class ProductResponce {
-  final List<dynamic> image;
-  final String title;
-  final String description;
-  final double price;
-  final String id;
-  final String category;
   ProductResponce({
     required this.image,
     required this.title,
@@ -21,6 +15,12 @@ class ProductResponce {
         description: json['description'],
         price: (json['price'] as num).toDouble(),
         id: json['id'].toString(),
-        category: json['category']['name'],
+        category: json['category']['name'] as String,
       );
+  final List<dynamic> image;
+  final String title;
+  final String description;
+  final double price;
+  final String id;
+  final String category;
 }

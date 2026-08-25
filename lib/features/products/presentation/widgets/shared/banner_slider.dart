@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/utils/app_network_image.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_bloc/product_bloc.dart';
 
@@ -36,47 +37,58 @@ class BannerSlider extends StatelessWidget {
             return Container(
               width: double.infinity,
               margin: const EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                color: product.thumbnailImage == null ? context.surface : null,
-                image: product.thumbnailImage != null
-                    ? DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(product.thumbnailImage!),
-                      )
-                    : null,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    colors: [
-                      Colors.black.withValues(alpha: 0.6),
-                      Colors.transparent,
+                child: Container(
+                  color: product.thumbnailImage == null ? context.surface : null,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      if (product.thumbnailImage != null)
+                        Positioned.fill(
+                          child: AppNetworkImage(
+                            url: product.thumbnailImage!,
+                          ),
+                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.6),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                product.title,
+                                style: context.titleMedium
+                                    .copyWith(color: Colors.white),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '\$${product.price.toStringAsFixed(2)}',
+                                style: context.titleSmall
+                                    .copyWith(color: Colors.white70),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.title,
-                      style: context.titleMedium
-                          .copyWith(color: Colors.white),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '\$${product.price.toStringAsFixed(2)}',
-                      style: context.titleSmall
-                          .copyWith(color: Colors.white70),
-                    ),
-                  ],
                 ),
               ),
             );

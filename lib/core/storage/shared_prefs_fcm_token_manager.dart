@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'fcm_token_manager.dart';
 
-/// SharedPreferences kullanarak FCM token'ını yerel depolayan implementasyon.
+/// SharedPreferences-backed implementation that stores the FCM token locally.
 class SharedPrefsFcmTokenManager implements FcmTokenManager {
   SharedPrefsFcmTokenManager(this._prefs);
 

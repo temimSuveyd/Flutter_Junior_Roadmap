@@ -3,9 +3,9 @@ import 'package:juniorflutterroadmap/features/products/data/models/product_model
 import '../shared/product_card.dart';
 
 class MobileProductGrid extends StatelessWidget {
-  final List<ProductModel> products;
 
   const MobileProductGrid({super.key, required this.products});
+  final List<ProductModel> products;
 
   @override
   Widget build(BuildContext context) {

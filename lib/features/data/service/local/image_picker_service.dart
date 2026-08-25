@@ -4,12 +4,12 @@ import 'package:image_picker/image_picker.dart';
 
 import 'permission_service.dart';
 
-/// خدمات اختيار الصور من الكاميرا أو المعرض.
+/// Image picking services from the camera or gallery.
 abstract class ImagePickerService {
-  /// التقاط صورة من الكاميرا (بعد طلب الإذن).
+  /// Capture an image from the camera (after requesting permission).
   Future<File?> pickImageFromCamera();
 
-  /// اختيار صورة من المعرض (بعد طلب الإذن).
+  /// Pick an image from the gallery (after requesting permission).
   Future<File?> pickImageFromGallery();
 }
 
@@ -37,7 +37,7 @@ class ImagePickerServiceImpl implements ImagePickerService {
     return _pick(source: ImageSource.gallery);
   }
 
-  /// التقاط صورة من مصدر معين مع تحديد الجودة والأبعاد.
+  /// Pick an image from a given source with quality and size limits.
   Future<File?> _pick({required ImageSource source}) async {
     final picked = await _picker.pickImage(
       source: source,

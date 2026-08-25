@@ -1,10 +1,19 @@
 class UserProfileData {
+
+  const UserProfileData({this.id, this.name, this.email, this.avatarUrl});
+
+  factory UserProfileData.fromJson(Map<String, dynamic> json) {
+    return UserProfileData(
+      id: json['id']?.toString(),
+      name: json['name'] as String?,
+      email: json['email'] as String?,
+      avatarUrl: json['avatarUrl'] as String?,
+    );
+  }
   final String? id;
   final String? name;
   final String? email;
   final String? avatarUrl;
-
-  const UserProfileData({this.id, this.name, this.email, this.avatarUrl});
 
   UserProfileData copyWith({
     String? id,
@@ -27,13 +36,4 @@ class UserProfileData {
         if (email != null) 'email': email,
         if (avatarUrl != null) 'avatarUrl': avatarUrl,
       };
-
-  factory UserProfileData.fromJson(Map<String, dynamic> json) {
-    return UserProfileData(
-      id: json['id']?.toString(),
-      name: json['name'] as String?,
-      email: json['email'] as String?,
-      avatarUrl: json['avatarUrl'] as String?,
-    );
-  }
 }

@@ -11,7 +11,7 @@ import 'notification_payload.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
-    print("تم القبض على الإخطار في الخلفية: ${message.messageId}");
+    print('تم القبض على الإخطار في الخلفية: ${message.messageId}');
   }
 }
 
@@ -34,38 +34,38 @@ class FirebaseNotificationService implements NotificationService {
 
   @override
   Future<void> initializeNotificationPipeline() async {
-    // 1. طلب ​​إذن الإشعارات من نظام التشغيل (خاصة iOS وAndroid 13+)
-    await _messaging.requestPermission(alert: true, badge: true, sound: true);
+    // 1. Request notification permission from the OS (especially iOS and Android 13+).
+    await _messaging.requestPermission();
 
-    // 2. احصل على العنوان الفريد للجهاز (رمز FCM) واحفظه محليًا
+    // 2. Get the device's unique token (FCM) and save it locally.
     String? token = await _messaging.getToken();
     if (token != null) {
       await _fcmTokenManager.saveToken(token);
-      if (kDebugMode) print("Device FCM Token (saved): $token");
+      if (kDebugMode) print('Device FCM Token (saved): $token');
     }
 
-    // 3. استمع إلى تحديثات الرمز المميز واحفظ الجديد
+    // 3. Listen for token refreshes and save the new one.
     _messaging.onTokenRefresh.listen((String newToken) async {
       await _fcmTokenManager.saveToken(newToken);
-      if (kDebugMode) print("FCM Token refreshed & saved: $newToken");
+      if (kDebugMode) print('FCM Token refreshed & saved: $newToken');
     });
 
-    // 4. سجل المستمع BACKGROUND و OFF STATE
+    // 4. Register the BACKGROUND and OFF state listener.
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-    // 5. استمع إلى الإشعارات عندما يكون التطبيق مفتوحًا (المقدمة)
+    // 5. Listen for notifications while the app is open (foreground).
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (kDebugMode) log("app open: ${message.notification?.title}");
+      if (kDebugMode) log('app open: ${message.notification?.title}');
 
       ///TODO: show snack bar or any action
     });
 
-    // 6. استمع إلى نقرات الإشعارات أثناء وجود التطبيق في الخلفية
+    // 6. Listen for notification taps while the app is in the background.
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       _handleDeepLinkNavigation(message);
     });
 
-    // 7. تحقق من حالة الافتتاح من خلال النقر على الإشعار عندما يكون التطبيق مغلقًا تمامًا
+    // 7. Check the open state via a notification tap when the app is fully closed.
     RemoteMessage? initialMessage = await _messaging.getInitialMessage();
     if (initialMessage != null) {
       _handleDeepLinkNavigation(initialMessage);

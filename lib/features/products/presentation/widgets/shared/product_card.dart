@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/utils/app_network_image.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
@@ -26,20 +27,13 @@ class ProductCard extends StatelessWidget {
                 Expanded(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                  child: product.thumbnailImage != null
-                      ? Image.network(
-                          product.thumbnailImage!,
-                          width: double.infinity,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Image.asset(
-                            AppImages.emptyImageIcon,
-                            width: 40,
-                            height: 40,
-                            color: context.textSecondary,
-                          ),
-                        )
-                      : Image.asset(
+                    child: product.thumbnailImage != null
+                        ? AppNetworkImage(
+                            url: product.thumbnailImage!,
+                            fit: BoxFit.contain,
+                            width: double.infinity,
+                          )
+                        : Image.asset(
                             AppImages.emptyImageIcon,
                             width: 40,
                             height: 40,

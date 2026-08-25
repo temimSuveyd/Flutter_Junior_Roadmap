@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
 import '../../../../../core/common/helpers/helpers.dart';
+import '../../../../../core/utils/app_network_image.dart';
 import '../../../../../features/products/data/models/category_model.dart';
 import '../../bloc/product_bloc/product_bloc.dart';
 
@@ -83,15 +84,15 @@ class CategoryChip extends StatelessWidget {
                     ? context.primary
                     : context.border.withValues(alpha: 0.6),
               ),
-              image: hasImage
-                  ? DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(category!.image),
-                    )
-                  : null,
             ),
             child: hasImage
-                ? null
+                ? ClipOval(
+                    child: AppNetworkImage(
+                      url: category!.image,
+                      width: 56,
+                      height: 56,
+                    ),
+                  )
                 : Icon(
                     IconsaxPlusLinear.category,
                     size: 24,

@@ -123,7 +123,7 @@ class _SignInPageState extends State<SignInPage> {
                           child: Column(
                             spacing: context.spaceXl,
                             children: [
-                              Spacer(flex: 3),
+                              const Spacer(flex: 3),
                               AuthTextField(
                                 controller: _emailController,
                                 isAccepted: emailIsAccepted,
@@ -144,7 +144,6 @@ class _SignInPageState extends State<SignInPage> {
                                 focusNode: _passwordFocus,
                                 keyboardType: TextInputType.visiblePassword,
                                 validator: _validatePassword,
-                                autofocus: false,
                                 obscureText: showPassword,
                                 hintText: context.t.password,
                                 prefixIcon: IconsaxPlusLinear.password_check,
@@ -159,7 +158,7 @@ class _SignInPageState extends State<SignInPage> {
                                 ),
                               ),
                               ForgotPasswordButton(onPressed: () {}),
-                              Spacer(),
+                              const Spacer(),
                               AppPrimaryButton(
                                 label: context.t.signIn,
                                 isLoading: isLoading,
@@ -167,7 +166,7 @@ class _SignInPageState extends State<SignInPage> {
                                 onPressed: _submit,
                               ),
 
-                              Spacer(),
+                              const Spacer(),
 
                               CreateAccountButton(
                                 onPressed: () {

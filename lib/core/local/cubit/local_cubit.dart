@@ -5,7 +5,7 @@ import '../shared_prefs_locale_repository.dart';
 
 part 'local_state.dart';
 
-/// Cubit مسؤول عن إدارة اللغة الحالية في التطبيق.
+/// Cubit responsible for managing the app's current locale.
 class LocaleCubit extends Cubit<LocaleState> {
   LocaleCubit(this._repository)
       : super(const LocaleState()) {
@@ -14,7 +14,7 @@ class LocaleCubit extends Cubit<LocaleState> {
 
   final LocaleRepository _repository;
 
-  /// تحميل اللغة المحفوظة من التخزين المحلي.
+  /// Loads the saved locale from local storage.
   Future<void> _loadSavedLocale() async {
     final code = await _repository.getLocaleCode();
     if (code != null) {
@@ -22,7 +22,7 @@ class LocaleCubit extends Cubit<LocaleState> {
     }
   }
 
-  /// تغيير اللغة وحفظها محلياً.
+  /// Changes the locale and saves it locally.
   Future<void> changeLocale(String languageCode) async {
     await _repository.saveLocaleCode(languageCode);
     emit(LocaleState(Locale(languageCode)));

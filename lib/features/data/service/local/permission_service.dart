@@ -1,11 +1,11 @@
 import 'package:permission_handler/permission_handler.dart';
 
-/// خدمات طلب الأذونات من الجهاز.
+/// Services for requesting device permissions.
 abstract class PermissionService {
-  /// التحقق من إذن الكاميرا وطلبه إذا لم يُمنح.
+  /// Checks and requests the camera permission if not granted.
   Future<bool> checkAndRequestCameraPermission();
 
-  /// التحقق من إذن الصور (المعرض) وطلبه إذا لم يُمنح.
+  /// Checks and requests the photos (gallery) permission if not granted.
   Future<bool> checkAndRequestPhotoPermission();
 }
 
@@ -18,7 +18,7 @@ class PermissionServiceImpl implements PermissionService {
   Future<bool> checkAndRequestPhotoPermission() =>
       _requestPermission(Permission.photos);
 
-  /// طلب إذن معين وفتح إعدادات الجهاز إذا رُفض بشكل دائم.
+  /// Requests a permission and opens device settings if permanently denied.
   Future<bool> _requestPermission(Permission permission) async {
     var status = await permission.status;
 

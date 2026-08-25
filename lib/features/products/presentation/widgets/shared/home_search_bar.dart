@@ -17,7 +17,7 @@ class HomeSearchBar extends StatelessWidget {
       child: Row(
         spacing: 10,
         children: [
-          Icon(IconsaxPlusLinear.search_normal_1, size: 18),
+          const Icon(IconsaxPlusLinear.search_normal_1, size: 18),
           Text(
             context.t.search,
             style: TextStyle(
@@ -33,7 +33,7 @@ class HomeSearchBar extends StatelessWidget {
             indent: 2,
             endIndent: 2,
           ),
-          Icon(IconsaxPlusLinear.filter_search),
+          const Icon(IconsaxPlusLinear.filter_search),
         ],
       ),
     );

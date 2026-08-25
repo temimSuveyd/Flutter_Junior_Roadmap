@@ -1,6 +1,6 @@
-/// Bildirim derin bağlantı (deep link) yükünü temsil eden model.
+/// Model representing a notification deep-link payload.
 ///
-/// Örnek gelen JSON:
+/// Example incoming JSON:
 /// ```json
 /// {
 ///   "type": "product",
@@ -8,8 +8,6 @@
 /// }
 /// ```
 class NotificationPayload {
-  final String? type;
-  final int? id;
 
   const NotificationPayload({this.type, this.id});
 
@@ -19,4 +17,6 @@ class NotificationPayload {
       id: json['id'] as int?,
     );
   }
+  final String? type;
+  final int? id;
 }

@@ -5,13 +5,13 @@ sealed class Result<T> {
 }
 
 final class Success<T> extends Result<T> {
-  final T data;
   const Success(this.data);
+  final T data;
 }
 
 final class Error<T> extends Result<T> {
-  final Failure error;
   const Error(this.error);
+  final Failure error;
 }
 
 Future<Result<T>> runCatching<T>(Future<T> Function() body) async {
@@ -21,7 +21,7 @@ Future<Result<T>> runCatching<T>(Future<T> Function() body) async {
     return Error(customFailure);
   } catch (unexpectedError) {
     return Error(
-      Failure("A system error occurred: ${unexpectedError.toString()}"),
+      Failure('A system error occurred: ${unexpectedError.toString()}'),
     );
   }
 }

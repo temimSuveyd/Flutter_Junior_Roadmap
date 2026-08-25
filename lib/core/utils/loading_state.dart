@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 class LoadingState extends StatelessWidget {
-  final String? message;
 
   const LoadingState({super.key, this.message});
+  final String? message;
 
   @override
   Widget build(BuildContext context) {

@@ -3,10 +3,10 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 class EmptyState extends StatelessWidget {
-  final String message;
-  final Widget? action;
 
   const EmptyState({super.key, required this.message, this.action});
+  final String message;
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {

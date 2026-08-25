@@ -52,10 +52,10 @@ String _extractHtmlTitle(String html) {
 }
 
 class Failure implements Exception {
-  final String message;
-  final int? statusCode;
 
   Failure(this.message, {this.statusCode});
+  final String message;
+  final int? statusCode;
 
   @override
   String toString() => message;
