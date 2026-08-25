@@ -3,20 +3,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/empty_state.dart';
 import 'package:juniorflutterroadmap/core/utils/error_state.dart';
 import 'package:juniorflutterroadmap/core/utils/loading_state.dart';
+import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/search_product_bloc/search_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/product_card.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SearchBloc(getIt<ProductRepository>()),
+      child: const _SearchPageView(),
+    );
+  }
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageView extends StatefulWidget {
+  const _SearchPageView();
+
+  @override
+  State<_SearchPageView> createState() => _SearchPageViewState();
+}
+
+class _SearchPageViewState extends State<_SearchPageView> {
   final TextEditingController _queryController = TextEditingController();
 
   @override

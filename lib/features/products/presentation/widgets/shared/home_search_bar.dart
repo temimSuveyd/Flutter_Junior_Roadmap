@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
 import '../../../../../core/common/helpers/helpers.dart';
@@ -8,33 +9,36 @@ class HomeSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: context.surface,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        spacing: 10,
-        children: [
-          const Icon(IconsaxPlusLinear.search_normal_1, size: 18),
-          Text(
-            context.t.search,
-            style: TextStyle(
-              fontSize: 12,
-              color: context.textSecondary,
+    return GestureDetector(
+      onTap: () => context.push(AppRoutes.search),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: context.surface,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Row(
+          spacing: 10,
+          children: [
+            const Icon(IconsaxPlusLinear.search_normal_1, size: 18),
+            Text(
+              context.t.search,
+              style: TextStyle(
+                fontSize: 12,
+                color: context.textSecondary,
+              ),
             ),
-          ),
-          const Spacer(),
-          VerticalDivider(
-            color: context.border,
-            thickness: 0.6,
-            width: 20,
-            indent: 2,
-            endIndent: 2,
-          ),
-          const Icon(IconsaxPlusLinear.filter_search),
-        ],
+            const Spacer(),
+            VerticalDivider(
+              color: context.border,
+              thickness: 0.6,
+              width: 20,
+              indent: 2,
+              endIndent: 2,
+            ),
+            const Icon(IconsaxPlusLinear.filter_search),
+          ],
+        ),
       ),
     );
   }

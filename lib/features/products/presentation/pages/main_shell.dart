@@ -17,6 +17,37 @@ class MainShell extends StatelessWidget {
   }
 }
 
+class _NavTab {
+  const _NavTab({
+    required this.route,
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+  });
+
+  final String route;
+  final IconData icon;
+  final IconData selectedIcon;
+  final String Function(BuildContext context) label;
+}
+
+/// Single source of truth for the bottom navigation tabs.
+/// Add a new tab here and the nav bar updates automatically.
+final List<_NavTab> _tabs = [
+  _NavTab(
+    route: AppRoutes.home,
+    icon: IconsaxPlusLinear.home_2,
+    selectedIcon: IconsaxPlusBold.home_2,
+    label: (context) => context.t.home,
+  ),
+  _NavTab(
+    route: AppRoutes.profile,
+    icon: IconsaxPlusLinear.profile,
+    selectedIcon: IconsaxPlusBold.profile,
+    label: (context) => context.t.profile,
+  ),
+];
+
 class _MainNavigationBar extends StatefulWidget {
   const _MainNavigationBar();
 
@@ -28,20 +59,14 @@ class _MainNavigationBarState extends State<_MainNavigationBar> {
   int? _pendingIndex;
 
   int _indexFor(String location) {
-    if (location == AppRoutes.profile) {
-      return 1;
-    }
-    return 0;
+    final index = _tabs.indexWhere((tab) => tab.route == location);
+    return index == -1 ? 0 : index;
   }
 
   void _onDestinationSelected(BuildContext context, int index) {
     if (_pendingIndex == index) return;
     setState(() => _pendingIndex = index);
-    final target = switch (index) {
-      1 => AppRoutes.profile,
-      _ => AppRoutes.home,
-    };
-    context.go(target);
+    context.go(_tabs[index].route);
   }
 
   @override
@@ -62,16 +87,12 @@ class _MainNavigationBarState extends State<_MainNavigationBar> {
       selectedIndex: selectedIndex,
       onDestinationSelected: (index) => _onDestinationSelected(context, index),
       destinations: [
-        NavigationDestination(
-          icon: const Icon(IconsaxPlusLinear.home_2),
-          selectedIcon: const Icon(IconsaxPlusBold.home_2),
-          label: context.t.home,
-        ),
-        NavigationDestination(
-          icon: const Icon(IconsaxPlusLinear.profile),
-          selectedIcon: const Icon(IconsaxPlusBold.profile),
-          label: context.t.profile,
-        ),
+        for (final tab in _tabs)
+          NavigationDestination(
+            icon: Icon(tab.icon),
+            selectedIcon: Icon(tab.selectedIcon),
+            label: tab.label(context),
+          ),
       ],
     );
   }

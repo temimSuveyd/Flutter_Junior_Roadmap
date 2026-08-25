@@ -5,15 +5,16 @@ import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_reposi
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/home_page.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/product_details_page.dart';
 import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_repository.dart';
 import 'package:juniorflutterroadmap/features/profile/presentation/pages/profile_page.dart';
 
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/products/data/models/product_model.dart';
 import '../../features/products/presentation/bloc/product_bloc/product_bloc.dart';
 import '../../features/products/presentation/pages/main_shell.dart';
+import '../../features/products/presentation/pages/search_page.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../di/injection.dart';
 import '../storage/auth_token_manager.dart';
@@ -39,6 +40,10 @@ final class AppRouter {
             child: const CreateAccountPage(),
           ),
         ),
+        GoRoute(
+          path: AppRoutes.search,
+          builder: (context, state) => const SearchPage(),
+        ),
         ShellRoute(
           builder: (context, state, child) => MainShell(child: child),
           routes: [
@@ -60,14 +65,12 @@ final class AppRouter {
             GoRoute(
               path: AppRoutes.productDetails,
               builder: (context, state) {
-                final productId = state.extra as int?;
-                return BlocProvider(
-                  create: (context) => ProductDetailsBloc(
-                    getIt<ProductRepository>(),
-                    productId: productId,
-                  )..add(ProductDetailsRequested()),
-                  child: const ProductDetailsPage(),
-                );
+                final extra = state.extra;
+                if (extra is ProductModel) {
+                  return ProductDetailsPage(product: extra);
+                }
+                final productId = extra is int ? extra : null;
+                return ProductDetailsPage(productId: productId);
               },
             ),
           ],
