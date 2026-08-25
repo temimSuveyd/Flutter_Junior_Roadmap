@@ -1,5 +1,4 @@
 class SignUpRequestDto {
-
   SignUpRequestDto({
     required this.name,
     required this.email,
@@ -12,10 +11,9 @@ class SignUpRequestDto {
   final String? avatar;
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'email': email,
-        'password': password,
-        // if (avatar != null) 
-        'avatar': 'https://i.imgur.com/LDOO4Qs.jpg',
-      };
+    'name': name,
+    'email': email,
+    'password': password,
+    'avatar': avatar ?? 'https://i.imgur.com/LDOO4Qs.jpg',
+  };
 }

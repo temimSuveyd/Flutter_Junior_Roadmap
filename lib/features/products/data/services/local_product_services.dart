@@ -1,7 +1,6 @@
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 import '../dtos/product_response.dart';
-import '../mappers/product_mapper.dart';
+import '../models/product_hive_model.dart';
 import '../models/product_model.dart';
 
 abstract class LocalProductServices {
@@ -11,21 +10,33 @@ abstract class LocalProductServices {
 }
 
 class LocalProductServicesImpl extends LocalProductServices {
+  LocalProductServicesImpl(this._box);
 
-  LocalProductServicesImpl(this._prefs);
-  final SharedPreferences _prefs;
+  final Box _box;
   static const String _cacheKey = 'cached_products';
 
   @override
   Future<void> cacheProducts({required List<dynamic> products}) async {
-    await _prefs.setString(_cacheKey, jsonEncode(products));
+    final hiveModels = products
+        .map(
+          (item) => ProductHiveModel.fromResponse(
+            ProductResponse.fromJson(item as Map<String, dynamic>),
+          ),
+        )
+        .toList();
+    await _box.put(_cacheKey, hiveModels);
   }
 
-  List<ProductModel> _mapProducts(List<dynamic> productsList) {
+  List<ProductModel> _mapProducts(List<ProductHiveModel> productsList) {
     return productsList
         .map(
-          (item) => ProductMapper.toProductModel(
-            ProductResponse.fromJson(item as Map<String, dynamic>),
+          (item) => ProductModel(
+            image: item.image,
+            title: item.title,
+            description: item.description,
+            price: item.price,
+            id: item.id,
+            category: item.category,
           ),
         )
         .toList();
@@ -33,10 +44,10 @@ class LocalProductServicesImpl extends LocalProductServices {
 
   @override
   List<ProductModel> getCachedProducts() {
-    final cached = _prefs.getString(_cacheKey);
     try {
-      final decoded = jsonDecode(cached!) as List<dynamic>;
-      return _mapProducts(decoded);
+      final cached = _box.get(_cacheKey) as List<dynamic>?;
+      if (cached == null) return [];
+      return _mapProducts(cached.cast<ProductHiveModel>());
     } catch (_) {
       return [];
     }
@@ -44,6 +55,6 @@ class LocalProductServicesImpl extends LocalProductServices {
 
   @override
   Future<void> clearProductCache() async {
-    await _prefs.remove(_cacheKey);
+    await _box.delete(_cacheKey);
   }
 }

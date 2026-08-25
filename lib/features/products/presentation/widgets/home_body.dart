@@ -39,6 +39,7 @@ class HomeContent extends StatelessWidget {
           const SliverToBoxAdapter(child: BannerSlider()),
           const SliverToBoxAdapter(child: SizedBox(height: 30)),
           const SliverToBoxAdapter(child: CategoryList()),
+          const SliverToBoxAdapter(child: SizedBox(height: 30)),
           BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
               if (state is ProductLoading) {
