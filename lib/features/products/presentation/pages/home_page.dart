@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_breakpoints.dart';
@@ -5,10 +7,25 @@ import '../bloc/product_bloc.dart';
 import '../widgets/mobile_home_body.dart';
 import '../widgets/tablet_home_body.dart';
 
+bool _isRefreshing = false;
+
 Future<void> _refreshProducts(BuildContext context) async {
-  final bloc = context.read<ProductBloc>();
-  bloc.add(ProductsRequested());
-  await bloc.stream.firstWhere((state) => state is! ProductLoading);
+  if (_isRefreshing) return;
+  _isRefreshing = true;
+  try {
+    final bloc = context.read<ProductBloc>();
+    final completer = Completer<void>();
+    final subscription = bloc.stream.listen((state) {
+      if (state is! ProductLoading && !completer.isCompleted) {
+        completer.complete();
+      }
+    });
+    bloc.add(ProductsRequested());
+    await completer.future.timeout(const Duration(seconds: 15));
+    await subscription.cancel();
+  } finally {
+    _isRefreshing = false;
+  }
 }
 
 class HomePage extends StatelessWidget {
