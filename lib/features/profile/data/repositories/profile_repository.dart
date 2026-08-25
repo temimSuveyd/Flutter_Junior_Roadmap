@@ -42,7 +42,6 @@ class ProfileRepositoryImpl extends ProfileRepository {
   @override
   Future<Result<UserProfileData>> updateAvatarFromSource(ImageSource source) {
     return runCatching(() async {
-      // التقاط الصورة من الكاميرا أو المعرض.
       final File? image;
       if (source == ImageSource.camera) {
         image = await _imagePickerService.pickImageFromCamera();
@@ -55,7 +54,6 @@ class ProfileRepositoryImpl extends ProfileRepository {
         return current;
       }
 
-      // رفع الصورة إلى الخادم وحفظ الرابط محلياً.
       final String avatarUrl;
       try {
         avatarUrl = await _profileService.uploadAvatar(image);
@@ -69,6 +67,10 @@ class ProfileRepositoryImpl extends ProfileRepository {
           'internet connection and try again.',
         );
       }
+
+      final userId = await _requireUserId();
+      await _profileService.updateAvatar(userId: userId, avatarUrl: avatarUrl);
+
       final current =
           await _userProfileStore.read() ?? const UserProfileData();
       final updated = current.copyWith(avatarUrl: avatarUrl);
@@ -80,11 +82,26 @@ class ProfileRepositoryImpl extends ProfileRepository {
   @override
   Future<Result<UserProfileData>> removeAvatar() {
     return runCatching(() async {
+      final userId = await _requireUserId();
+      await _profileService.removeAvatar(userId: userId);
+
       final current =
           await _userProfileStore.read() ?? const UserProfileData();
       final updated = current.copyWith(clearAvatarUrl: true);
       await _userProfileStore.save(updated);
       return updated;
     });
+  }
+
+  Future<int> _requireUserId() async {
+    final id = (await _userProfileStore.read())?.id;
+    if (id == null) {
+      throw Failure('User identifier not found.');
+    }
+    final parsed = int.tryParse(id);
+    if (parsed == null) {
+      throw Failure('Invalid user identifier.');
+    }
+    return parsed;
   }
 }

@@ -7,12 +7,15 @@ import '../dtos/avatar_upload_response_dto.dart';
 
 abstract class ProfileService {
   Future<String> uploadAvatar(File image);
+  Future<void> updateAvatar({required int userId, required String avatarUrl});
+  Future<void> removeAvatar({required int userId});
 }
 
 class ProfileServiceImpl extends ProfileService {
   ProfileServiceImpl(this._dioClient);
 
   final DioClient _dioClient;
+  static const String _defaultAvatarUrl = 'https://placeholder.com';
 
   @override
   Future<String> uploadAvatar(File image) async {
@@ -30,5 +33,24 @@ class ProfileServiceImpl extends ProfileService {
       response.data as Map<String, dynamic>,
     );
     return dto.avatarUrl;
+  }
+
+  @override
+  Future<void> updateAvatar({
+    required int userId,
+    required String avatarUrl,
+  }) async {
+    await _dioClient.put(
+      ApiEndpoints.userById(userId),
+      data: {'avatar': avatarUrl},
+    );
+  }
+
+  @override
+  Future<void> removeAvatar({required int userId}) async {
+    await _dioClient.put(
+      ApiEndpoints.userById(userId),
+      data: {'avatar': _defaultAvatarUrl},
+    );
   }
 }

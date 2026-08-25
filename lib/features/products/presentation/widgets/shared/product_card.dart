@@ -38,9 +38,6 @@ class ProductCard extends StatelessWidget {
                             height: 40,
                             color: context.textSecondary,
                           ),
-                          onError: (error, stackTrace) {
-                            // Görsel yüklenemezse errorBuilder devreye girer.
-                          },
                         )
                       : Image.asset(
                             AppImages.emptyImageIcon,

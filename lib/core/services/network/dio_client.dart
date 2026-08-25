@@ -90,6 +90,26 @@ class DioClient {
     }
   }
 
+  Future<Response> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    Options? options,
+  }) async {
+    try {
+      return await _dio.put(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        cancelToken: cancelToken,
+        options: options,
+      );
+    } on DioException catch (e) {
+      throw _toFailure(e);
+    }
+  }
+
   Failure _toFailure(DioException error) {
     final failure = error.error;
     if (failure is Failure) {

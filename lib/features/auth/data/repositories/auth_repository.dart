@@ -89,6 +89,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
     final userModel = AuthMapper.toUserModelFromProfile(response);
     await _saveProfile(
+      id: userModel.id,
       name: userModel.name,
       email: userModel.email,
       avatarUrl: userModel.image,
@@ -97,12 +98,18 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   Future<void> _saveProfile({
+    required String? id,
     required String? name,
     required String? email,
     String? avatarUrl,
   }) {
     return _userProfileStore.save(
-      UserProfileData(name: name, email: email, avatarUrl: avatarUrl),
+      UserProfileData(
+        id: id,
+        name: name,
+        email: email,
+        avatarUrl: avatarUrl,
+      ),
     );
   }
 }
