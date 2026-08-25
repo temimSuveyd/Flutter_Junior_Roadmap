@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../constants/app_constants.dart';
 import '../../storage/fcm_token_manager.dart';
+import 'local_notification_service.dart';
 import 'notification_payload.dart';
 
 @pragma('vm:entry-point')
@@ -21,10 +20,11 @@ abstract class NotificationService {
 }
 
 class FirebaseNotificationService implements NotificationService {
-  FirebaseNotificationService(this._fcmTokenManager);
+  FirebaseNotificationService(this._fcmTokenManager, this._localNotifications);
 
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   final FcmTokenManager _fcmTokenManager;
+  final LocalNotificationService _localNotifications;
   GoRouter? _router;
 
   @override
@@ -34,6 +34,8 @@ class FirebaseNotificationService implements NotificationService {
 
   @override
   Future<void> initializeNotificationPipeline() async {
+    await _localNotifications.initialize();
+
     // 1. Request notification permission from the OS (especially iOS and Android 13+).
     await _messaging.requestPermission();
 
@@ -54,10 +56,17 @@ class FirebaseNotificationService implements NotificationService {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     // 5. Listen for notifications while the app is open (foreground).
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (kDebugMode) log('app open: ${message.notification?.title}');
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      final notification = message.notification;
+      final title = notification?.title ?? message.data['title']?.toString() ?? '';
+      final body = notification?.body ?? message.data['body']?.toString() ?? '';
+      if (title.isEmpty && body.isEmpty) return;
 
-      ///TODO: show snack bar or any action
+      await _localNotifications.showNotification(
+        title: title,
+        body: body,
+        data: message.data,
+      );
     });
 
     // 6. Listen for notification taps while the app is in the background.
