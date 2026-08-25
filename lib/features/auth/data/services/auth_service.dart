@@ -60,11 +60,11 @@ class AuthServiceImpl extends AuthService {
   Future<String?> refreshUserToken(String refreshToken, Dio dio) async {
     final response = await dio.post(
       ApiEndpoints.refreshToken,
-      data: {'refresh_token': refreshToken},
+      data: {'refreshToken': refreshToken},
       options: Options(extra: {RefreshTokenProvider.isRefreshRequestKey: true}),
     );
     final data = response.data as Map<String, dynamic>;
-    return data['accessToken'] as String?;
+    return data['access_token'] as String?;
   }
 
   @override
