@@ -47,16 +47,16 @@ class _ProfilePageState extends State<ProfilePage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(context.t.removePhoto),
-        content: Text(context.t.removePhotoConfirm),
+        title: Text(context.l10n.t.removePhoto),
+        content: Text(context.l10n.t.removePhotoConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(context.t.cancel),
+            child: Text(context.l10n.t.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(context.t.remove),
+            child: Text(context.l10n.t.remove),
           ),
         ],
       ),
@@ -76,18 +76,18 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_camera_outlined),
-              title: Text(context.t.camera),
+              title: Text(context.l10n.t.camera),
               onTap: () => Navigator.pop(context, _AvatarAction.camera),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library_outlined),
-              title: Text(context.t.gallery),
+              title: Text(context.l10n.t.gallery),
               onTap: () => Navigator.pop(context, _AvatarAction.gallery),
             ),
             if (_hasAvatar)
               ListTile(
                 leading: const Icon(Icons.delete_outline),
-                title: Text(context.t.removePhoto),
+                title: Text(context.l10n.t.removePhoto),
                 onTap: () => Navigator.pop(context, _AvatarAction.remove),
               ),
           ],
@@ -118,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, state) {
         return switch (state) {
           ProfileInitial() || ProfileLoading() =>
-            LoadingState(message: context.t.loadingProfile),
+            LoadingState(message: context.l10n.t.loadingProfile),
           ProfileError(:final message) => ErrorState(
             message: message,
             onRetry: () => context.read<ProfileBloc>().add(ProfileRequested()),
@@ -152,7 +152,7 @@ class _ProfileContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: context.insetXl,
+        padding: context.spacing.insetXl,
         child: Column(
           children: [
             const Spacer(),
@@ -161,21 +161,21 @@ class _ProfileContent extends StatelessWidget {
               isUploading: isUploading,
               onTap: onChangePhoto,
             ),
-            context.vGapXl,
+            context.spacing.vGapXl,
             Text(
-              profile.name?.isNotEmpty == true ? profile.name! : context.t.anonymousUser,
-              style: context.titleLarge,
+              profile.name?.isNotEmpty == true ? profile.name! : context.l10n.t.anonymousUser,
+              style: context.textTheme.titleLarge,
             ),
-            context.vGapSm,
+            context.spacing.vGapSm,
             Text(
               profile.email?.isNotEmpty == true ? profile.email! : '',
-              style: context.bodyMedium.copyWith(color: context.textSecondary),
+              style: context.textTheme.bodyMedium!.copyWith(color: context.colors.textSecondary),
             ),
-            context.vGapLg,
+            context.spacing.vGapLg,
             TextButton.icon(
               onPressed: onChangePhoto,
               icon: const Icon(Icons.edit_outlined, size: 18),
-              label: Text(context.t.changePhoto),
+              label: Text(context.l10n.t.changePhoto),
             ),
             const Spacer(),
           ],

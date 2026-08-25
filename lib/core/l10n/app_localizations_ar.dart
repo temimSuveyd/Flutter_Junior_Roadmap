@@ -69,6 +69,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noProducts => 'لا توجد منتجات متاحة';
   @override
   String get loadingProfile => 'جاري تحميل الملف الشخصي...';
+  @override
+  String get emptyList => 'وصلت إلى نهاية القائمة';
+  @override
+  String get productDetails => 'تفاصيل المنتج';
+  @override
+  String get searchHint => 'ابحث عن المنتجات...';
+  @override
+  String get locationPermissionDenied => 'تم رفض إذن الموقع';
+  @override
+  String get locationError => 'تعذر تحديد موقعك';
+  @override
+  String get addressTitle => 'عنوانك';
+  @override
+  String get addressHint => 'أدخل تفاصيل عنوان التوصيل';
+  @override
+  String get cityLabel => 'المدينة';
+  @override
+  String get addressLabel => 'العنوان';
+  @override
+  String get saveAddress => 'حفظ العنوان';
+  @override
+  String get useMyLocation => 'استخدام موقعي';
 
   // ── أزرار عامة ──
   @override

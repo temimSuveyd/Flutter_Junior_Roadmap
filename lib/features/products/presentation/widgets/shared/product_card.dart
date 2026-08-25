@@ -4,13 +4,16 @@ import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  final ProductModel product;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, this.onTap});
+  final ProductModel product;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
       children: [
         Container(
           padding: const EdgeInsets.all(15),
@@ -119,6 +122,8 @@ class ProductCard extends StatelessWidget {
           ),
         ),
       ],
+    )
     );
+
   }
 }

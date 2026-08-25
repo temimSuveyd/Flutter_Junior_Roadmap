@@ -70,6 +70,17 @@ abstract class AppLocalizations {
   String get loadingProducts;
   String get noProducts;
   String get loadingProfile;
+  String get emptyList;
+  String get productDetails;
+  String get searchHint;
+  String get locationPermissionDenied;
+  String get locationError;
+  String get addressTitle;
+  String get addressHint;
+  String get cityLabel;
+  String get addressLabel;
+  String get saveAddress;
+  String get useMyLocation;
 
   // ── أزرار عامة ──
   String get retry;

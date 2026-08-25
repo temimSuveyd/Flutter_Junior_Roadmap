@@ -68,6 +68,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noProducts => 'No products available';
   @override
   String get loadingProfile => 'Loading profile...';
+  @override
+  String get emptyList => 'You have reached the end of the list';
+  @override
+  String get productDetails => 'Product Details';
+  @override
+  String get searchHint => 'Search products...';
+  @override
+  String get locationPermissionDenied => 'Location permission denied';
+  @override
+  String get locationError => 'Could not detect your location';
+  @override
+  String get addressTitle => 'Your Address';
+  @override
+  String get addressHint => 'Enter your delivery address details';
+  @override
+  String get cityLabel => 'City';
+  @override
+  String get addressLabel => 'Address';
+  @override
+  String get saveAddress => 'Save Address';
+  @override
+  String get useMyLocation => 'Use my location';
 
   // ── أزرار عامة ──
   @override

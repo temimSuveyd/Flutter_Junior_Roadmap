@@ -1,16 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
-
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
-import 'package:juniorflutterroadmap/features/profile/presentation/pages/profile_page.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/home_page.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/main_shell.dart';
-
+import 'package:juniorflutterroadmap/features/profile/presentation/pages/profile_page.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
-import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/products/presentation/bloc/product_bloc.dart';
+import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../di/injection.dart';
 import '../storage/auth_token_manager.dart';
 

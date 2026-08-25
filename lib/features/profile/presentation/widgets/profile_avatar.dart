@@ -25,15 +25,15 @@ class ProfileAvatar extends StatelessWidget {
           onTap: onTap,
           child: CircleAvatar(
             radius: 56,
-            backgroundColor: context.primary.withValues(alpha: 0.15),
+            backgroundColor: context.colors.primary.withValues(alpha: 0.15),
             backgroundImage: avatarUrl != null
                 ? NetworkImage(avatarUrl)
                 : null,
             child: avatarUrl == null
                 ? Text(
                     _initials(profile.name),
-                    style: context.titleLarge.copyWith(
-                      color: context.primary,
+                    style: context.textTheme.titleLarge!.copyWith(
+                      color: context.colors.primary,
                     ),
                   )
                 : null,
@@ -55,13 +55,13 @@ class ProfileAvatar extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: context.surface,
+              color: context.colors.surface,
               shape: BoxShape.circle,
             ),
             child: Icon(
               IconsaxPlusLinear.camera,
               size: 20,
-              color: context.textPrimary,
+              color: context.colors.textPrimary,
             ),
           ),
         ),

@@ -26,21 +26,13 @@ final class AppConstants {
   static const Duration showDelay = Duration(milliseconds: 200);
 }
 
-/// مسارات أصول الوسائط (صور وأيقونات) المستخدمة في التطبيق.
-final class AppAssets {
-  AppAssets._();
-
-  static const String logo = 'assets/images/logo.png';
-  static const String logoOutline = 'assets/images/log_outline.png';
-  static const String pdfIcon = 'assets/icons/pdf_icon.png';
-  static const String quizIcon = 'assets/icons/quiz_icon.png';
-}
-
 /// صور مخصصة للشاشات مثل صفحة المصادقة.
 final class AppImages {
   AppImages._();
 
-  static const String authPages = 'assets/images/auth_pages.png';
+  static const String authBackgroundImapge = 'assets/images/auth_background_image.png';
+  static const String emptyImageIcon= 'assets/icons/empty_image_icon.png';
+
 }
 
 

@@ -9,7 +9,6 @@ import 'interceptors/retry_interceptor.dart';
 import 'interceptors/token_refresh_interceptor.dart';
 
 class DioClient {
-  late final Dio _dio;
 
   DioClient(
     this._secureStorage, 
@@ -49,6 +48,7 @@ class DioClient {
 
     _dio.interceptors.addAll(interceptors);
   }
+  late final Dio _dio;
 
   final AuthTokenManager _secureStorage;
 

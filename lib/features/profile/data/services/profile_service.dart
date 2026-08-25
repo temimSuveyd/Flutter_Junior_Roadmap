@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/services/network/api_endpoints.dart';
-import 'package:juniorflutterroadmap/core/services/network/dio_clint.dart';
+import 'package:juniorflutterroadmap/core/services/network/dio_client.dart';
 import '../dtos/avatar_upload_response_dto.dart';
 
 abstract class ProfileService {

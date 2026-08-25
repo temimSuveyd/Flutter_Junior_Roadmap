@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/services/auth/refresh_token_provider.dart';
-import 'package:juniorflutterroadmap/core/services/network/dio_clint.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_response_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_response_dto.dart';
 
 import '../../../../core/services/network/api_endpoints.dart';
+import '../../../../core/services/network/dio_client.dart';
 import '../dtos/profile/profile_response_dto.dart';
 
 abstract class AuthService extends RefreshTokenProvider {
@@ -26,9 +26,9 @@ abstract class AuthService extends RefreshTokenProvider {
 }
 
 class AuthServiceImpl extends AuthService {
-  final DioClient _client;
 
   AuthServiceImpl(this._client);
+  final DioClient _client;
 
   @override
   Future<SignInResponseDto> signIn(

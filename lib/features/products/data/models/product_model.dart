@@ -1,10 +1,4 @@
 class ProductModel {
-  final List<dynamic> image;
-  final String title;
-  final String description;
-  final double price;
-  final String id;
-  final String category;
   ProductModel({
     required this.image,
     required this.title,
@@ -13,4 +7,10 @@ class ProductModel {
     required this.id,
     required this.category,
   });
+  final List<dynamic> image;
+  final String title;
+  final String description;
+  final double price;
+  final String id;
+  final String category;
 }

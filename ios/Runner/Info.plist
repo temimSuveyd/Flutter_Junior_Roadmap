@@ -51,5 +51,7 @@
 	<string>Photo library access is used to choose a profile photo.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone access is required if you record a video with the camera.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Konumunuz, adresinizi otomatik belirlemek için kullanılır.</string>
 </dict>
 </plist>

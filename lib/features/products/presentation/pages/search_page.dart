@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
+import 'package:juniorflutterroadmap/core/utils/empty_state.dart';
+import 'package:juniorflutterroadmap/core/utils/error_state.dart';
+import 'package:juniorflutterroadmap/core/utils/loading_state.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/bloc/search_product_bloc/search_bloc.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/product_card.dart';
+
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  final TextEditingController _queryController = TextEditingController();
+
+  @override
+  void dispose() {
+    _queryController.dispose();
+    super.dispose();
+  }
+
+  void _search(String value) {
+    context.read<SearchBloc>().add(Search(value));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.pop(),
+        ),
+        title: TextField(
+          controller: _queryController,
+          autofocus: true,
+          onChanged: _search,
+          decoration: InputDecoration(
+            hintText: context.l10n.t.search,
+            border: InputBorder.none,
+            prefixIcon: const Icon(IconsaxPlusLinear.search_normal_1),
+          ),
+        ),
+        actions: [
+          if (_queryController.text.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                _queryController.clear();
+                _search('');
+              },
+            ),
+        ],
+      ),
+      body: BlocBuilder<SearchBloc, SearchProductState>(
+        builder: (context, state) {
+          return switch (state) {
+            SearchInitial() => EmptyState(message: context.l10n.t.searchHint),
+            SearchLoading() => LoadingState(
+                message: context.l10n.t.loadingProducts,
+              ),
+            SearchError(:final message) => ErrorState(
+                message: message,
+                onRetry: () => context
+                    .read<SearchBloc>()
+                    .add(Search(_queryController.text)),
+              ),
+            SearchEmpty() => EmptyState(message: context.l10n.t.noProducts),
+            SearchLoaded(:final products) => CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16),
+                    sliver: SliverGrid.builder(
+                      gridDelegate:
+                          SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: context.responsive.isMobile ? 2 : 4,
+                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final product = products[index];
+                        return ProductCard(
+                          product: product,
+                          onTap: () => context.push(
+                            AppRoutes.productDetails,
+                            extra: product,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+          };
+        },
+      ),
+    );
+  }
+}
