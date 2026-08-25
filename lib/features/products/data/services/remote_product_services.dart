@@ -16,7 +16,7 @@ class RemoteProductServicesImpl extends RemoteProductServices {
   Future<List<dynamic>> getProducts({int? offset, int? categoryId}) async {
     final queryParameters = <String, dynamic>{};
     if (offset != null) queryParameters['offset'] = offset;
-    queryParameters['limit'] = 20;
+    queryParameters['limit'] = 10;
     if (categoryId != null) queryParameters['categoryId'] = categoryId;
     final response = await _dioClient.get(
       ApiEndpoints.getProducts,
