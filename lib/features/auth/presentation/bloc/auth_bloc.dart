@@ -12,6 +12,8 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
+  final CancelToken _cancelToken = CancelToken();
+  bool _isProcessing = false;
 
   AuthBloc(this._authRepository) : super(AuthInitial()) {
     on<SignInRequested>(
@@ -24,16 +26,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
+  CancelToken _tokenFor(CancelToken? provided) => provided ?? _cancelToken;
+
   Future<void> _onLoginRequested(
     SignInRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (_isProcessing) return;
+    _isProcessing = true;
     emit(AuthLoading());
+    final cancelToken = _tokenFor(event.cancelToken);
     final result = await _authRepository.loginUser(
       event.signInRequestDto,
-      cancelToken: event.cancelToken,
+      cancelToken: cancelToken,
     );
-    if (isClosed) return;
+    _isProcessing = false;
+    if (isClosed || cancelToken.isCancelled) return;
     switch (result) {
       case Success():
         emit(AuthSignInSuccess());
@@ -46,17 +54,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     SignUpRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (_isProcessing) return;
+    _isProcessing = true;
     emit(AuthLoading());
+    final cancelToken = _tokenFor(event.cancelToken);
     final result = await _authRepository.registerUser(
       event.signUpRequestDto,
-      cancelToken: event.cancelToken,
+      cancelToken: cancelToken,
     );
-    if (isClosed) return;
+    _isProcessing = false;
+    if (isClosed || cancelToken.isCancelled) return;
     switch (result) {
       case Success():
         emit(AuthSignUpSuccess());
       case Error(:final error):
         emit(AuthError(error.message));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _cancelToken.cancel('AuthBloc closed');
+    return super.close();
   }
 }

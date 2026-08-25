@@ -53,7 +53,10 @@ class AuthRepositoryImpl extends AuthRepository {
         refreshToken: loginResponse.refreshToken,
       );
 
-      final response = await _authService.getProfileData(accessToken);
+      final response = await _authService.getProfileData(
+        accessToken,
+        cancelToken: cancelToken,
+      );
 
       final userModel = AuthMapper.toUserModelFromProfile(response);
       await _saveProfile(
