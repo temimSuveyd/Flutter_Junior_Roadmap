@@ -17,8 +17,15 @@ class MainShell extends StatelessWidget {
   }
 }
 
-class _MainNavigationBar extends StatelessWidget {
+class _MainNavigationBar extends StatefulWidget {
   const _MainNavigationBar();
+
+  @override
+  State<_MainNavigationBar> createState() => _MainNavigationBarState();
+}
+
+class _MainNavigationBarState extends State<_MainNavigationBar> {
+  int? _pendingIndex;
 
   int _indexFor(String location) {
     if (location == AppRoutes.profile) {
@@ -28,23 +35,31 @@ class _MainNavigationBar extends StatelessWidget {
   }
 
   void _onDestinationSelected(BuildContext context, int index) {
-    final current = GoRouterState.of(context).uri.path;
+    if (_pendingIndex == index) return;
+    setState(() => _pendingIndex = index);
     final target = switch (index) {
       1 => AppRoutes.profile,
       _ => AppRoutes.home,
     };
-    if (current != target) {
-      context.go(target);
-    }
+    context.go(target);
   }
 
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
+    final actualIndex = _indexFor(location);
+    if (_pendingIndex != null && _pendingIndex == actualIndex) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() => _pendingIndex = null);
+        }
+      });
+    }
+    final selectedIndex = _pendingIndex ?? actualIndex;
     return NavigationBar(
       backgroundColor: context.background,
       indicatorColor: context.primary.withValues(alpha: 0.5),
-      selectedIndex: _indexFor(location),
+      selectedIndex: selectedIndex,
       onDestinationSelected: (index) => _onDestinationSelected(context, index),
       destinations: [
         NavigationDestination(
