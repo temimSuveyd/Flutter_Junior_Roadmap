@@ -44,6 +44,6 @@ class LocalProductServicesImpl extends LocalProductServices {
 
   @override
   Future<void> clearProductCache() async {
-    await _prefs.clear();
+    await _prefs.remove(_cacheKey);
   }
 }
