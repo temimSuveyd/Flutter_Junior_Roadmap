@@ -38,6 +38,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchProductState> {
 
     if (query.isEmpty) {
       emit(SearchInitial());
+      return;
     }
     if (query.length < 2) {
       return;

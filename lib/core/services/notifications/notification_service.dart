@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../constants/app_constants.dart';
 import '../../storage/fcm_token_manager.dart';
+import 'notification_payload.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -72,14 +73,14 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   void _handleDeepLinkNavigation(RemoteMessage message) {
-    Map<String, dynamic> data = message.data;
+    if (_router == null) return;
 
-    if (data.containsKey('page') && _router != null) {
-      String targetPage = data['page'] as String;
+    final payload = NotificationPayload.fromJson(message.data);
+    if (payload.type != 'product' || payload.id == null) return;
 
-      if (targetPage == 'profile') {
-        _router!.go(AppRoutes.profile);
-      }
-    }
+    _router!.go(
+      AppRoutes.productDetails,
+      extra: payload.id,
+    );
   }
 }

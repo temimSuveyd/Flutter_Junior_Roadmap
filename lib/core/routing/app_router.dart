@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
+import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/home_page.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/pages/main_shell.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/pages/product_details_page.dart';
 import 'package:juniorflutterroadmap/features/profile/presentation/pages/profile_page.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/products/presentation/bloc/product_bloc.dart';
@@ -49,6 +51,19 @@ final class AppRouter {
                 create: (context) => getIt<ProfileBloc>(),
                 child: const ProfilePage(),
               ),
+            ),
+            GoRoute(
+              path: AppRoutes.productDetails,
+              builder: (context, state) {
+                final productId = state.extra as int?;
+                return BlocProvider(
+                  create: (context) => ProductDetailsBloc(
+                    getIt<ProductRepository>(),
+                    productId: productId,
+                  )..add(ProductDetailsRequested()),
+                  child: const ProductDetailsPage(),
+                );
+              },
             ),
           ],
         ),

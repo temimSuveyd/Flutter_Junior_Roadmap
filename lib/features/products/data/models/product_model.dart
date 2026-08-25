@@ -13,4 +13,7 @@ class ProductModel {
   final double price;
   final String id;
   final String category;
+
+  String? get thumbnailImage =>
+      image.isNotEmpty && image.first is String ? image.first as String : null;
 }
