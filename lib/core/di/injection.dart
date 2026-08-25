@@ -18,13 +18,13 @@ import 'package:juniorflutterroadmap/features/data/service/local/image_picker_se
 import 'package:juniorflutterroadmap/features/data/service/local/permission_service.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/data/services/local_product_services.dart';
-import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_bloc.dart';
 import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_repository.dart';
 import 'package:juniorflutterroadmap/features/profile/data/services/profile_service.dart';
 import 'package:juniorflutterroadmap/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/products/data/services/remote_product_services.dart';
+import '../../features/products/presentation/bloc/product_bloc/product_bloc.dart';
 import '../services/auth/token_refresher.dart';
 import '../services/network/dio_client.dart';
 import '../services/notifications/firebase_initializer.dart';

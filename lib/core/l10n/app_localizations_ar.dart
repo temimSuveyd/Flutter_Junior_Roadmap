@@ -61,6 +61,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profile => 'الملف الشخصي';
   @override
   String get search => 'بحث..';
+  @override
+  String get all => 'الكل';
 
   // ── حالات التحميل ──
   @override

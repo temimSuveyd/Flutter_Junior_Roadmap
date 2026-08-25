@@ -65,6 +65,7 @@ abstract class AppLocalizations {
   String get home;
   String get profile;
   String get search;
+  String get all;
 
   // ── حالات التحميل ──
   String get loadingProducts;

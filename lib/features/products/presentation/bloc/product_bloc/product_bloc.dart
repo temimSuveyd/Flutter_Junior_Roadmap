@@ -70,9 +70,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ) async {
     final currentCategories = state.categories;
     emit(ProductLoading(selectedCategoryId: event.categoryId));
-    final result = await _productRepository.getProducts(
-      categoryId: event.categoryId,
-    );
+    final result = event.categoryId == null
+        ? await _productRepository.getProducts()
+        : await _productRepository.getProductsByCategory(event.categoryId!);
     switch (result) {
       case Success(:final data):
         if (data.isEmpty) {

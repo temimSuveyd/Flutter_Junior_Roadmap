@@ -11,10 +11,10 @@ abstract class LocalProductServices {
 }
 
 class LocalProductServicesImpl extends LocalProductServices {
-  final SharedPreferences _prefs;
-  static const String _cacheKey = 'cached_products';
 
   LocalProductServicesImpl(this._prefs);
+  final SharedPreferences _prefs;
+  static const String _cacheKey = 'cached_products';
 
   @override
   Future<void> cacheProducts({required List<dynamic> products}) async {

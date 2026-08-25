@@ -13,17 +13,18 @@ abstract class ProductRepository {
     int? categoryId,
   });
   Future<Result<List<CategoryModel>>> getCategories();
+  Future<Result<List<ProductModel>>> getProductsByCategory(int categoryId);
   Future<Result<ProductModel>> getProductById(int id);
   Future<Result<List<ProductModel>>> searchProducts(String query);
 }
 
 class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
-  final RemoteProductServices _remoteProductServices;
-  final LocalProductServices _localProductServices;
   ProductRepositoryImpl(
     this._localProductServices,
     this._remoteProductServices,
   );
+  final RemoteProductServices _remoteProductServices;
+  final LocalProductServices _localProductServices;
 
   @override
   Future<Result<List<ProductModel>>> getProducts({
@@ -36,6 +37,7 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
           offset: offset,
           categoryId: categoryId,
         );
+
         if (offset == null && categoryId == null) {
           await _localProductServices.clearProductCache();
           await _localProductServices.cacheProducts(products: remoteProducts);
@@ -60,6 +62,23 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
       return remoteCategories
           .map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
           .toList();
+    });
+  }
+
+  @override
+  Future<Result<List<ProductModel>>> getProductsByCategory(int categoryId) {
+    return runCatching(() async {
+      final remoteProducts =
+          await _remoteProductServices.getProductsByCategory(categoryId);
+      final products = <ProductModel>[];
+      for (final item in remoteProducts) {
+        products.add(
+          ProductMapper.toProductModel(
+            ProductResponce.fromJson(item as Map<String, dynamic>),
+          ),
+        );
+      }
+      return products;
     });
   }
 

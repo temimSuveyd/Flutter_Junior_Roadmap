@@ -60,6 +60,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
   @override
   String get search => 'Search..';
+  @override
+  String get all => 'All';
 
   // ── حالات التحميل ──
   @override
