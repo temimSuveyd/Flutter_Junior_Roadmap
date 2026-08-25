@@ -6,9 +6,12 @@ import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/l10n/app_localizations.dart';
 import 'package:juniorflutterroadmap/core/local/cubit/local_cubit.dart';
 import 'package:juniorflutterroadmap/core/local/shared_prefs_locale_repository.dart';
+import 'package:juniorflutterroadmap/core/services/device_features/location_service.dart';
 import 'package:juniorflutterroadmap/core/services/notifications/notification_service.dart';
+import 'package:juniorflutterroadmap/core/storage/address_store.dart';
 import 'package:juniorflutterroadmap/core/theme/app_theme.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
+import 'package:juniorflutterroadmap/features/address/presentation/cubit/address_cubit.dart';
 import 'package:juniorflutterroadmap/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +39,12 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => ThemeCubit(getIt<SharedPreferences>())),
         BlocProvider(create: (_) => LocaleCubit(getIt<LocaleRepository>())),
+        BlocProvider(
+          create: (_) => AddressCubit(
+            getIt<LocationService>(),
+            getIt<AddressStore>(),
+          ),
+        ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
@@ -45,7 +54,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             themeMode: themeMode,
             locale: locale,
-            title: 'Flutter Demo',
+            title: 'E commerce',
             routerConfig: getIt<GoRouter>(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
-import 'permission_service.dart';
+import 'package:juniorflutterroadmap/core/services/device_features/permission_service.dart';
 
 /// Image picking services from the camera or gallery.
 abstract class ImagePickerService {

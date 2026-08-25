@@ -3,16 +3,19 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/local/shared_prefs_locale_repository.dart';
 import 'package:juniorflutterroadmap/core/routing/app_router.dart';
+import 'package:juniorflutterroadmap/core/services/device_features/location_service.dart';
+import 'package:juniorflutterroadmap/core/services/device_features/permission_service.dart';
+import 'package:juniorflutterroadmap/core/storage/address_store.dart';
 import 'package:juniorflutterroadmap/core/storage/auth_token_manager.dart';
 import 'package:juniorflutterroadmap/core/storage/fcm_token_manager.dart';
 import 'package:juniorflutterroadmap/core/storage/secure_storage_token_manager.dart';
+import 'package:juniorflutterroadmap/core/storage/shared_preferences_address_store.dart';
 import 'package:juniorflutterroadmap/core/storage/shared_preferences_user_profile_store.dart';
 import 'package:juniorflutterroadmap/core/storage/shared_prefs_fcm_token_manager.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_store.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
 import 'package:juniorflutterroadmap/features/data/service/local/image_picker_service.dart';
-import 'package:juniorflutterroadmap/features/data/service/local/permission_service.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/data/services/local_product_services.dart';
 import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_repository.dart';
@@ -80,6 +83,14 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<PermissionService>(() => PermissionServiceImpl());
   getIt.registerLazySingleton<ImagePickerService>(
     () => ImagePickerServiceImpl(getIt<PermissionService>()),
+  );
+
+  // Location + persistent address store.
+  getIt.registerLazySingleton<LocationService>(
+    () => LocationServiceImpl(getIt<PermissionService>()),
+  );
+  getIt.registerLazySingleton<AddressStore>(
+    () => SharedPreferencesAddressStore(getIt<SharedPreferences>()),
   );
   // ── Repositories ──
   getIt.registerLazySingleton<AuthRepository>(
