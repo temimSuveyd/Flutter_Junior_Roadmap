@@ -9,7 +9,8 @@ import 'package:juniorflutterroadmap/features/products/presentation/pages/home_p
 import 'package:juniorflutterroadmap/features/products/presentation/pages/product_details_page.dart';
 import 'package:juniorflutterroadmap/features/profile/presentation/pages/profile_page.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
-import '../../features/products/presentation/bloc/product_bloc.dart';
+import '../../features/products/presentation/bloc/product_bloc/product_bloc.dart';
+import '../../features/products/presentation/pages/main_shell.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../di/injection.dart';
 import '../storage/auth_token_manager.dart';

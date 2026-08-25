@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_bloc/product_bloc.dart';
 import '../../../../core/common/helpers/helpers.dart';
 import '../../../../core/utils/empty_state.dart';
 import '../../../../core/utils/error_state.dart';
 import '../../../../core/utils/loading_state.dart';
-import '../bloc/product_bloc.dart';
 import 'mobile/phone_product_grid.dart';
 import 'shared/banner_slider.dart';
 import 'shared/category_list.dart';
@@ -21,10 +21,10 @@ class MobileContant extends StatelessWidget {
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: const HomeHeader(),
+              padding: EdgeInsets.only(bottom: 20),
+              child: HomeHeader(),
             ),
           ),
 

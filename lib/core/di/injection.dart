@@ -25,6 +25,7 @@ import 'package:juniorflutterroadmap/features/profile/presentation/bloc/profile_
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/products/data/services/remote_product_services.dart';
+import '../services/auth/token_refresher.dart';
 import '../services/network/dio_client.dart';
 import '../services/notifications/firebase_initializer.dart';
 import '../services/notifications/notification_service.dart';
@@ -57,12 +58,15 @@ Future<void> setupLocator() async {
     () => SharedPreferencesUserProfileStore(getIt<SharedPreferences>()),
   );
 
+  // ── Token Refresh (DioClient döngüsünü kırmak için bağımsız) ──
+  getIt.registerLazySingleton<TokenRefresher>(() => const TokenRefresher());
+
   // ── Dio ──
   getIt.registerLazySingleton<DioClient>(
     () => DioClient(
       getIt<AuthTokenManager>(),
       tokenManager: getIt<AuthTokenManager>(),
-      refreshTokenProvider: () => getIt<AuthService>(),
+      refreshTokenProvider: () => getIt<TokenRefresher>(),
     ),
   );
 

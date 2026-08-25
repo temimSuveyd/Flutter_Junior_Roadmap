@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:juniorflutterroadmap/core/services/auth/refresh_token_provider.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_response_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_up/sign_up_request_dto.dart';
@@ -9,7 +8,7 @@ import '../../../../core/services/network/api_endpoints.dart';
 import '../../../../core/services/network/dio_client.dart';
 import '../dtos/profile/profile_response_dto.dart';
 
-abstract class AuthService extends RefreshTokenProvider {
+abstract class AuthService {
   Future<SignInResponseDto> signIn(
     SignInRequestDto loginDto, {
     CancelToken? cancelToken,
@@ -54,17 +53,6 @@ class AuthServiceImpl extends AuthService {
       cancelToken: cancelToken,
     );
     return SignUpResponseDto.fromJson(response.data as Map<String, dynamic>);
-  }
-
-  @override
-  Future<String?> refreshUserToken(String refreshToken, Dio dio) async {
-    final response = await dio.post(
-      ApiEndpoints.refreshToken,
-      data: {'refreshToken': refreshToken},
-      options: Options(extra: {RefreshTokenProvider.isRefreshRequestKey: true}),
-    );
-    final data = response.data as Map<String, dynamic>;
-    return data['access_token'] as String?;
   }
 
   @override
