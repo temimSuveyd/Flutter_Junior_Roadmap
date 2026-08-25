@@ -9,6 +9,7 @@ import 'package:juniorflutterroadmap/core/local/shared_prefs_locale_repository.d
 import 'package:juniorflutterroadmap/core/services/device_features/location_service.dart';
 import 'package:juniorflutterroadmap/core/services/notifications/notification_service.dart';
 import 'package:juniorflutterroadmap/core/storage/address_store.dart';
+import 'package:juniorflutterroadmap/core/storage/auth_token_manager.dart';
 import 'package:juniorflutterroadmap/core/theme/app_theme.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 import 'package:juniorflutterroadmap/features/address/presentation/cubit/address_cubit.dart';
@@ -19,6 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await setupLocator();
+  await getIt<AuthTokenManager>().load();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // After Firebase starts, create NotificationService and connect the router,
