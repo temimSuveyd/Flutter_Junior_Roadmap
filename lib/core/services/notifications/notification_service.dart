@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
+import 'package:juniorflutterroadmap/firebase_options.dart';
 
 import '../../constants/app_constants.dart';
 import '../../storage/fcm_token_manager.dart';
@@ -9,9 +12,21 @@ import 'notification_payload.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (kDebugMode) {
-    print('تم القبض على الإخطار في الخلفية: ${message.messageId}');
-  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  final local = FlutterLocalNotificationsService(FlutterLocalNotificationsPlugin());
+  await local.initialize();
+
+  final notification = message.notification;
+  final title = notification?.title ?? message.data['title']?.toString() ?? '';
+  final body = notification?.body ?? message.data['body']?.toString() ?? '';
+  if (title.isEmpty && body.isEmpty) return;
+
+  await local.showNotification(
+    title: title,
+    body: body,
+    data: message.data,
+  );
 }
 
 abstract class NotificationService {
@@ -35,6 +50,7 @@ class FirebaseNotificationService implements NotificationService {
   @override
   Future<void> initializeNotificationPipeline() async {
     await _localNotifications.initialize();
+    _localNotifications.setOnNotificationTapped(_navigateFromData);
 
     // 1. Request notification permission from the OS (especially iOS and Android 13+).
     await _messaging.requestPermission();
@@ -71,20 +87,20 @@ class FirebaseNotificationService implements NotificationService {
 
     // 6. Listen for notification taps while the app is in the background.
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      _handleDeepLinkNavigation(message);
+      _navigateFromData(message.data);
     });
 
     // 7. Check the open state via a notification tap when the app is fully closed.
     RemoteMessage? initialMessage = await _messaging.getInitialMessage();
     if (initialMessage != null) {
-      _handleDeepLinkNavigation(initialMessage);
+      _navigateFromData(initialMessage.data);
     }
   }
 
-  void _handleDeepLinkNavigation(RemoteMessage message) {
-    if (_router == null) return;
+  void _navigateFromData(Map<String, dynamic>? data) {
+    if (_router == null || data == null) return;
 
-    final payload = NotificationPayload.fromJson(message.data);
+    final payload = NotificationPayload.fromJson(data);
     if (payload.type != 'product' || payload.id == null) return;
 
     _router!.go(

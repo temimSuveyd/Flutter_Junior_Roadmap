@@ -12,9 +12,11 @@ class NotificationPayload {
   const NotificationPayload({this.type, this.id});
 
   factory NotificationPayload.fromJson(Map<String, dynamic> json) {
+    final rawId = json['id'];
+    final id = rawId is int ? rawId : int.tryParse(rawId?.toString() ?? '');
     return NotificationPayload(
       type: json['type'] as String?,
-      id: json['id'] as int?,
+      id: id,
     );
   }
   final String? type;

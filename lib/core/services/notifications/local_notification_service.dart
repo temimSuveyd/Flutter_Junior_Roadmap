@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 abstract class LocalNotificationService {
@@ -7,15 +9,22 @@ abstract class LocalNotificationService {
     required String body,
     Map<String, dynamic>? data,
   });
+  void setOnNotificationTapped(void Function(Map<String, dynamic>? data) onTap);
 }
 
 class FlutterLocalNotificationsService implements LocalNotificationService {
   FlutterLocalNotificationsService(this._plugin);
 
   final FlutterLocalNotificationsPlugin _plugin;
+  void Function(Map<String, dynamic>? data)? _onTap;
 
   static const _channelId = 'high_importance_channel';
   static const _channelName = 'High Importance Notifications';
+
+  @override
+  void setOnNotificationTapped(void Function(Map<String, dynamic>? data) onTap) {
+    _onTap = onTap;
+  }
 
   @override
   Future<void> initialize() async {
@@ -32,6 +41,7 @@ class FlutterLocalNotificationsService implements LocalNotificationService {
         android: androidSettings,
         iOS: iosSettings,
       ),
+      onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
     );
 
     await _plugin
@@ -51,6 +61,20 @@ class FlutterLocalNotificationsService implements LocalNotificationService {
           IOSFlutterLocalNotificationsPlugin
         >()
         ?.requestPermissions(alert: true, badge: true, sound: true);
+  }
+
+  void _onDidReceiveNotificationResponse(NotificationResponse response) {
+    _onTap?.call(_payloadToData(response.payload));
+  }
+
+  Map<String, dynamic>? _payloadToData(String? payload) {
+    if (payload == null) return null;
+    try {
+      final decoded = jsonDecode(payload);
+      return decoded is Map ? Map<String, dynamic>.from(decoded) : null;
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
@@ -76,7 +100,7 @@ class FlutterLocalNotificationsService implements LocalNotificationService {
       title: title,
       body: body,
       notificationDetails: details,
-      payload: data?.toString(),
+      payload: data == null ? null : jsonEncode(data),
     );
   }
 }
