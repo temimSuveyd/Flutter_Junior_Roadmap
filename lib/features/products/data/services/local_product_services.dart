@@ -25,7 +25,7 @@ class LocalProductServicesImpl extends LocalProductServices {
     return productsList
         .map(
           (item) => ProductMapper.toProductModel(
-            ProductResponce.fromJson(item as Map<String, dynamic>),
+            ProductResponse.fromJson(item as Map<String, dynamic>),
           ),
         )
         .toList();

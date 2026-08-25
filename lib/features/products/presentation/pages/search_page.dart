@@ -48,7 +48,7 @@ class _SearchPageViewState extends State<_SearchPageView> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(context.isRtl ? Icons.arrow_forward : Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
         title: TextField(

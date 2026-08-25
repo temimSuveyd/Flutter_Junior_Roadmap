@@ -11,7 +11,7 @@ import 'interceptors/token_refresh_interceptor.dart';
 class DioClient {
 
   DioClient(
-    this._secureStorage, 
+    this._tokenManager, 
     {
     AuthTokenManager? tokenManager,
     RefreshTokenProvider Function()? refreshTokenProvider,
@@ -29,10 +29,9 @@ class DioClient {
     );
 
     final interceptors = <Interceptor>[
-      AuthInterceptor(_secureStorage),
+      AuthInterceptor(_tokenManager),
       ErrorInterceptor(),
       AutoRetryInterceptor(dio: _dio),
-      LogInterceptor(requestBody: true, responseBody: true),
     ];
 
     if (tokenManager != null && refreshTokenProvider != null) {
@@ -50,7 +49,7 @@ class DioClient {
   }
   late final Dio _dio;
 
-  final AuthTokenManager _secureStorage;
+  final AuthTokenManager _tokenManager;
 
   Future<Response> get(
     String path, {

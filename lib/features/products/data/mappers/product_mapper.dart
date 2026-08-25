@@ -2,14 +2,14 @@ import 'package:juniorflutterroadmap/features/products/data/dtos/product_respons
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 
 class ProductMapper {
-  static ProductModel toProductModel(ProductResponce productResponce) {
+  static ProductModel toProductModel(ProductResponse productResponse) {
     return ProductModel(
-      category: productResponce.category,
-      description: productResponce.description,
-      id: productResponce.id,
-      image: productResponce.image,
-      price: productResponce.price,
-      title: productResponce.title,
+      category: productResponse.category,
+      description: productResponse.description,
+      id: productResponse.id,
+      image: productResponse.image,
+      price: productResponse.price,
+      title: productResponse.title,
     );
   }
 }

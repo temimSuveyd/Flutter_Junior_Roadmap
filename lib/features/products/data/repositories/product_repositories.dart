@@ -45,7 +45,7 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
         return remoteProducts
             .map(
               (item) => ProductMapper.toProductModel(
-                ProductResponce.fromJson(item as Map<String, dynamic>),
+                ProductResponse.fromJson(item as Map<String, dynamic>),
               ),
             )
             .toList();
@@ -74,7 +74,7 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
       for (final item in remoteProducts) {
         products.add(
           ProductMapper.toProductModel(
-            ProductResponce.fromJson(item as Map<String, dynamic>),
+            ProductResponse.fromJson(item as Map<String, dynamic>),
           ),
         );
       }
@@ -86,7 +86,7 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
   Future<Result<ProductModel>> getProductById(int id) async {
     return runCatching(() async {
       final data = await _remoteProductServices.getProductById(id);
-      return ProductMapper.toProductModel(ProductResponce.fromJson(data));
+      return ProductMapper.toProductModel(ProductResponse.fromJson(data));
     });
   }
 
@@ -97,7 +97,7 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
       return remoteProducts
           .map(
             (item) => ProductMapper.toProductModel(
-              ProductResponce.fromJson(item as Map<String, dynamic>),
+              ProductResponse.fromJson(item as Map<String, dynamic>),
             ),
           )
           .toList();
