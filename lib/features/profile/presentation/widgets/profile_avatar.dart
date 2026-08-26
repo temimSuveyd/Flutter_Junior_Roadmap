@@ -51,8 +51,8 @@ class ProfileAvatar extends StatelessWidget {
               ),
             ),
           ),
-        Positioned(
-          right: 0,
+        PositionedDirectional(
+          end: 0,
           bottom: 0,
           child: Container(
             padding: const EdgeInsets.all(6),

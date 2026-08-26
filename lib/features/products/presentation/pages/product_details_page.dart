@@ -39,7 +39,7 @@ class _ProductDetailsView extends StatelessWidget {
         backgroundColor: context.colors.background,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(context.isRtl ? Icons.arrow_forward : Icons.arrow_back),
+          icon: Icon(Icons.adaptive.arrow_back),
           onPressed: () => context.pop(),
         ),
         title: Text(

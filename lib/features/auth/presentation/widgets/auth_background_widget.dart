@@ -18,10 +18,10 @@ class AuthBackgroundWidget extends StatelessWidget {
         final availableHeight = constraints.maxHeight;
         return Stack(
           children: [
-            Positioned(
+            PositionedDirectional(
               top: 0,
-              left: 0,
-              right: 0,
+              start: 0,
+              end: 0,
               child: Stack(
                 children: [
                   Container(
@@ -53,9 +53,9 @@ class AuthBackgroundWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
-              left: 0,
-              right: 0,
+            PositionedDirectional(
+              start: 0,
+              end: 0,
               bottom: 0,
               child: ClipPath(
                 clipper: WelcomeCustomClipper(),

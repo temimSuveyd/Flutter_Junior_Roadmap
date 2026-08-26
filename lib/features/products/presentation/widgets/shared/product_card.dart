@@ -100,16 +100,16 @@ class ProductCard extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(
+          PositionedDirectional(
             top: 0,
-            right: 0,
+            end: 0,
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: context.primary,
                 borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                  topLeft: Radius.circular(20),
                 ),
               ),
               child: const Icon(
