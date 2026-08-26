@@ -17,7 +17,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   final ProfileRepository _profileRepository;
-  bool _isAvatarBusy = false;
 
   /// Loads the profile data.
   Future<void> _onProfileRequested(
@@ -40,16 +39,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     AvatarChanged event,
     Emitter<ProfileState> emit,
   ) async {
-    if (_isAvatarBusy) return;
-    _isAvatarBusy = true;
     final currentProfile = switch (state) {
       ProfileLoaded(:final profile) => profile,
       AvatarUploading(:final profile) => profile,
       _ => const UserProfileData(),
     };
     emit(AvatarUploading(currentProfile));
-    final result = await _profileRepository.updateAvatarFromSource(event.source);
-    _isAvatarBusy = false;
+    final result = await _profileRepository.updateAvatarFromSource(
+      event.source,
+    );
     if (isClosed) return;
     switch (result) {
       case Success(:final data):
@@ -64,10 +62,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     AvatarRemoved event,
     Emitter<ProfileState> emit,
   ) async {
-    if (_isAvatarBusy) return;
-    _isAvatarBusy = true;
     final result = await _profileRepository.removeAvatar();
-    _isAvatarBusy = false;
     if (isClosed) return;
     switch (result) {
       case Success(:final data):
