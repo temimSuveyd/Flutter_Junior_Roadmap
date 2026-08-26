@@ -2,28 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
-import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/error_state.dart';
-import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
+import '../../../../core/utils/loading_state.dart';
 import '../widgets/mobile/product_details_mobile_body.dart';
 import '../widgets/tablet/product_details_tablet_body.dart';
 
 class ProductDetailsPage extends StatelessWidget {
-  const ProductDetailsPage({super.key, this.productId});
-
-  final int? productId;
+  const ProductDetailsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ProductDetailsBloc(
-        getIt<ProductRepository>(),
-        productId: productId,
-      )..add(ProductDetailsRequested()),
-      child: const _ProductDetailsView(),
-    );
-  }
+  Widget build(BuildContext context) => const _ProductDetailsView();
 }
 
 class _ProductDetailsView extends StatelessWidget {
@@ -47,20 +36,26 @@ class _ProductDetailsView extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
           builder: (context, state) {
-            if (state is ProductDetailsError) {
-              return ErrorState(
-                message: state.message,
-                onRetry: () => context
-                    .read<ProductDetailsBloc>()
-                    .add(ProductDetailsRequested()),
-              );
-            }
-            if (state is ProductDetailsLoaded) {
-              return context.responsive.isMobile
-                  ? ProductDetailsMobileBody(product: state.product)
-                  : ProductDetailsTabletBody(product: state.product);
-            }
-            return const Center(child: CircularProgressIndicator());
+            return switch (state) {
+              ProductDetailsInitial() =>  LoadingState(
+                message: context.t.loadingProductDetails,
+              ),
+              ProductDetailsLoading() => LoadingState(
+                message: context.t.loadingProductDetails,
+              ),
+              ProductDetailsError() => ErrorState(
+                message: state.message == 'product_not_found'
+                    ? context.t.productNotFound
+                    : state.message,
+                onRetry: () => context.read<ProductDetailsBloc>().add(
+                  ProductDetailsRequested(),
+                ),
+              ),
+              ProductDetailsLoaded() =>
+                context.responsive.isMobile
+                    ? ProductDetailsMobileBody(product: state.product)
+                    : ProductDetailsTabletBody(product: state.product),
+            };
           },
         ),
       ),

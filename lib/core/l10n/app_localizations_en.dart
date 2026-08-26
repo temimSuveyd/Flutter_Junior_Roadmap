@@ -67,6 +67,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get loadingProducts => 'Loading products...';
   @override
+  String get loadingProductDetails => 'Loading product details...';
+  @override
   String get noProducts => 'No products available';
   @override
   String get loadingProfile => 'Loading profile...';
@@ -74,6 +76,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emptyList => 'You have reached the end of the list';
   @override
   String get productDetails => 'Product Details';
+  @override
+  String get productNotFound => 'Product not found';
   @override
   String get searchHint => 'Search products...';
   @override

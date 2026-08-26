@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
@@ -5,6 +7,7 @@ import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_reposi
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
+import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/home_page.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/product_details_page.dart';
 import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_repository.dart';
@@ -49,8 +52,9 @@ final class AppRouter {
             GoRoute(
               path: AppRoutes.home,
               builder: (context, state) => BlocProvider(
-                    create: (context) =>
-                        ProductBloc(getIt<ProductRepository>())..add(ProductsRequested()),
+                create: (context) =>
+                    ProductBloc(getIt<ProductRepository>())
+                      ..add(ProductsRequested()),
                 child: const HomePage(),
               ),
             ),
@@ -64,8 +68,16 @@ final class AppRouter {
             GoRoute(
               path: AppRoutes.productDetails,
               builder: (context, state) {
-                final productId = state.extra is int ? state.extra as int : null;
-                return ProductDetailsPage(productId: productId);
+                final productId = state.extra is int
+                    ? state.extra as int
+                    : null;
+                return BlocProvider(
+                  create: (_) => ProductDetailsBloc(
+                    getIt<ProductRepository>(),
+                    productId: productId,
+                  )..add(ProductDetailsRequested()),
+                  child: const ProductDetailsPage(),
+                );
               },
             ),
           ],

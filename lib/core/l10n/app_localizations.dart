@@ -69,10 +69,12 @@ abstract class AppLocalizations {
 
   // ── Loading States ──
   String get loadingProducts;
+  String get loadingProductDetails;
   String get noProducts;
   String get loadingProfile;
   String get emptyList;
   String get productDetails;
+  String get productNotFound;
   String get searchHint;
   String get locationPermissionDenied;
   String get locationError;

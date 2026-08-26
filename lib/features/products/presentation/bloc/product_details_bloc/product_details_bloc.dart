@@ -24,7 +24,7 @@ class ProductDetailsBloc
     Emitter<ProductDetailsState> emit,
   ) async {
     if (productId == null) {
-      emit(ProductDetailsError('Product not found.'));
+      emit(ProductDetailsError('product_not_found'));
       return;
     }
 

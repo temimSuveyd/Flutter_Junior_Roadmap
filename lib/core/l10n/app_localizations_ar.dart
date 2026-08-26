@@ -68,6 +68,8 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get loadingProducts => 'جاري تحميل المنتجات...';
   @override
+  String get loadingProductDetails => 'جاري تحميل تفاصيل المنتج...';
+  @override
   String get noProducts => 'لا توجد منتجات متاحة';
   @override
   String get loadingProfile => 'جاري تحميل الملف الشخصي...';
@@ -75,6 +77,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emptyList => 'وصلت إلى نهاية القائمة';
   @override
   String get productDetails => 'تفاصيل المنتج';
+  @override
+  String get productNotFound => 'المنتج غير موجود';
   @override
   String get searchHint => 'ابحث عن المنتجات...';
   @override
