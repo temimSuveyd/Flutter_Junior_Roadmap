@@ -11,7 +11,7 @@ class ProductModel {
   final String title;
   final String description;
   final double price;
-  final String id;
+  final int id;
   final String category;
 
   String? get thumbnailImage =>

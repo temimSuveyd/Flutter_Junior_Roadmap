@@ -26,7 +26,7 @@ class ProductHiveModel {
   final String title;
   final String description;
   final double price;
-  final String id;
+  final int id;
   final String category;
 }
 
@@ -45,7 +45,9 @@ class ProductHiveModelAdapter extends TypeAdapter<ProductHiveModel> {
       title: fields[1] as String,
       description: fields[2] as String,
       price: fields[3] as double,
-      id: fields[4] as String,
+      id: fields[4] is int
+          ? fields[4] as int
+          : int.tryParse(fields[4]?.toString() ?? '') ?? 0,
       category: fields[5] as String,
     );
   }

@@ -9,11 +9,8 @@ part 'product_details_state.dart';
 
 class ProductDetailsBloc
     extends Bloc<ProductDetailsEvent, ProductDetailsState> {
-
-  ProductDetailsBloc(
-    this._repository, {
-    this.productId,
-  }) : super(ProductDetailsInitial()) {
+  ProductDetailsBloc(this._repository, {this.productId})
+    : super(ProductDetailsInitial()) {
     on<ProductDetailsRequested>(_onRequested);
   }
   final ProductRepository _repository;
@@ -27,7 +24,6 @@ class ProductDetailsBloc
       emit(ProductDetailsError('product_not_found'));
       return;
     }
-
     emit(ProductDetailsLoading());
     final result = await _repository.getProductById(productId!);
     if (isClosed) return;
