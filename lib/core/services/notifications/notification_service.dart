@@ -1,17 +1,29 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/app_constants.dart';
 import '../../storage/fcm_token_manager.dart';
 import 'local_notification_service.dart';
 import 'notification_payload.dart';
 
+/// Key used to persist a data-only FCM payload from the background isolate
+/// so the main isolate can navigate once the app is opened/resumed.
+const String _pendingNotificationKey = 'pending_notification_payload';
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Runs in a separate isolate: no router/context available. Persist the
+  // payload instead of navigating; the main isolate consumes it on resume.
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString(_pendingNotificationKey, jsonEncode(message.data));
 }
 
 abstract class NotificationService {
@@ -19,7 +31,8 @@ abstract class NotificationService {
   Future<void> initializeNotificationPipeline();
 }
 
-class FirebaseNotificationService implements NotificationService {
+class FirebaseNotificationService extends NotificationService
+    with WidgetsBindingObserver {
   FirebaseNotificationService(this._fcmTokenManager, this._localNotifications);
 
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
@@ -34,6 +47,7 @@ class FirebaseNotificationService implements NotificationService {
 
   @override
   Future<void> initializeNotificationPipeline() async {
+    WidgetsBinding.instance.addObserver(this);
     await _localNotifications.initialize();
     _localNotifications.setOnNotificationTapped(_navigateFromData);
 
@@ -81,6 +95,28 @@ class FirebaseNotificationService implements NotificationService {
     if (initialMessage != null) {
       _navigateFromData(initialMessage.data);
     }
+
+    // 8. Consume any data-only payload left by the background isolate.
+    await _consumePendingPayload();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _consumePendingPayload();
+    }
+  }
+
+  /// Reads a payload persisted by [_firebaseMessagingBackgroundHandler] and
+  /// navigates to the target screen. No-op if none or router not ready.
+  Future<void> _consumePendingPayload() async {
+    if (_router == null) return;
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_pendingNotificationKey);
+    if (raw == null) return;
+    await prefs.remove(_pendingNotificationKey);
+    final data = jsonDecode(raw) as Map<String, dynamic>;
+    _navigateFromData(data);
   }
 
   void _navigateFromData(Map<String, dynamic>? data) {
