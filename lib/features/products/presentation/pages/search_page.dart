@@ -105,7 +105,7 @@ class _SearchPageViewState extends State<_SearchPageView> {
                           product: product,
                           onTap: () => context.push(
                             AppRoutes.productDetails,
-                            extra: product,
+                            extra: product.id,
                           ),
                         );
                       },

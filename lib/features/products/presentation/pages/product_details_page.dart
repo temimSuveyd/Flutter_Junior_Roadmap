@@ -4,16 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/core/di/injection.dart';
 import 'package:juniorflutterroadmap/core/utils/error_state.dart';
-import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
 import '../widgets/mobile/product_details_mobile_body.dart';
 import '../widgets/tablet/product_details_tablet_body.dart';
 
 class ProductDetailsPage extends StatelessWidget {
-  const ProductDetailsPage({super.key, this.product, this.productId});
+  const ProductDetailsPage({super.key, this.productId});
 
-  final ProductModel? product;
   final int? productId;
 
   @override
@@ -21,7 +19,6 @@ class ProductDetailsPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => ProductDetailsBloc(
         getIt<ProductRepository>(),
-        product: product,
         productId: productId,
       )..add(ProductDetailsRequested()),
       child: const _ProductDetailsView(),

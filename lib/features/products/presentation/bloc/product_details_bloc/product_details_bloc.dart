@@ -12,23 +12,17 @@ class ProductDetailsBloc
 
   ProductDetailsBloc(
     this._repository, {
-    this.product,
     this.productId,
   }) : super(ProductDetailsInitial()) {
     on<ProductDetailsRequested>(_onRequested);
   }
   final ProductRepository _repository;
-  final ProductModel? product;
   final int? productId;
 
   Future<void> _onRequested(
     ProductDetailsRequested event,
     Emitter<ProductDetailsState> emit,
   ) async {
-    if (product != null) {
-      emit(ProductDetailsLoaded(product!));
-      return;
-    }
     if (productId == null) {
       emit(ProductDetailsError('Product not found.'));
       return;

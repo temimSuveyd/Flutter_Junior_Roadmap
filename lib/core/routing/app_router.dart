@@ -11,7 +11,6 @@ import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_
 import 'package:juniorflutterroadmap/features/profile/presentation/pages/profile_page.dart';
 
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
-import '../../features/products/data/models/product_model.dart';
 import '../../features/products/presentation/bloc/product_bloc/product_bloc.dart';
 import '../../features/products/presentation/pages/main_shell.dart';
 import '../../features/products/presentation/pages/search_page.dart';
@@ -65,11 +64,7 @@ final class AppRouter {
             GoRoute(
               path: AppRoutes.productDetails,
               builder: (context, state) {
-                final extra = state.extra;
-                if (extra is ProductModel) {
-                  return ProductDetailsPage(product: extra);
-                }
-                final productId = extra is int ? extra : null;
+                final productId = state.extra is int ? state.extra as int : null;
                 return ProductDetailsPage(productId: productId);
               },
             ),
