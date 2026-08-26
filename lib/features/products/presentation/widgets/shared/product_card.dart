@@ -52,16 +52,18 @@ class ProductCard extends StatelessWidget {
                       const SizedBox(height: 5),
                       Row(
                         children: [
-                          Text(
-                            '${product.price}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: context.textPrimary,
+                          Expanded(
+                            child: Text(
+                              '${product.price}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: context.textPrimary,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 1,
                           ),
-                          const Spacer(),
                           ...List.generate(
                             3,
                             (colorIndex) => Container(
@@ -107,9 +109,10 @@ class ProductCard extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: context.primary,
-                borderRadius: const BorderRadius.only(
-                  bottomRight: Radius.circular(20),
-                  topLeft: Radius.circular(20),
+                borderRadius: const BorderRadiusDirectional.only(
+                  topStart: Radius.circular(20),
+                  // bottomEnd: Radius.circular(20),
+              
                 ),
               ),
               child: const Icon(

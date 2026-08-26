@@ -9,23 +9,28 @@ class ProductDetailsInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: context.colors.surface,
-      shape: RoundedRectangleBorder(borderRadius: context.radius.lg),
-      elevation: 0,
-      child: Padding(
-        padding: context.spacing.insetLg,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ProductDetailsTitle(title: product.title),
-            context.spacing.vGapSm,
-            ProductDetailsPrice(price: product.price),
-            context.spacing.vGapMd,
-            ProductDetailsCategory(category: product.category),
-            context.spacing.vGapMd,
-            ProductDetailsDescription(description: product.description),
-          ],
+    return LayoutBuilder(
+      builder: (context, constraints) => SizedBox(
+        width: constraints.maxWidth,
+        child: Card(
+          color: context.colors.surface,
+          shape: RoundedRectangleBorder(borderRadius: context.radius.lg),
+          elevation: 0,
+          child: Padding(
+            padding: context.spacing.insetLg,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ProductDetailsTitle(title: product.title),
+                context.spacing.vGapSm,
+                ProductDetailsPrice(price: product.price),
+                context.spacing.vGapMd,
+                ProductDetailsCategory(category: product.category),
+                context.spacing.vGapMd,
+                ProductDetailsDescription(description: product.description),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -38,9 +43,9 @@ class ProductDetailsTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        title,
-        style: context.typography.titleLarge.copyWith(fontWeight: FontWeight.bold),
-      );
+    title,
+    style: context.typography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+  );
 }
 
 class ProductDetailsPrice extends StatelessWidget {
@@ -49,9 +54,11 @@ class ProductDetailsPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        '\$${price.toStringAsFixed(2)}',
-        style: context.typography.titleMedium.copyWith(color: context.colors.primary),
-      );
+    '\$${price.toStringAsFixed(2)}',
+    style: context.typography.titleMedium.copyWith(
+      color: context.colors.primary,
+    ),
+  );
 }
 
 class ProductDetailsCategory extends StatelessWidget {
@@ -60,9 +67,9 @@ class ProductDetailsCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Chip(
-        label: Text(category, style: context.typography.labelSmall),
-        backgroundColor: context.colors.primary.withValues(alpha: 0.12),
-      );
+    label: Text(category, style: context.typography.labelSmall),
+    backgroundColor: context.colors.primary.withValues(alpha: 0.12),
+  );
 }
 
 class ProductDetailsDescription extends StatelessWidget {
@@ -71,7 +78,9 @@ class ProductDetailsDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        description,
-        style: context.typography.bodyMedium.copyWith(color: context.colors.textSecondary),
-      );
+    description,
+    style: context.typography.bodyMedium.copyWith(
+      color: context.colors.textSecondary,
+    ),
+  );
 }
