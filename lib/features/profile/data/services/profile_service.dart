@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:juniorflutterroadmap/core/services/network/api_endpoints.dart';
 import 'package:juniorflutterroadmap/core/services/network/dio_client.dart';
@@ -26,7 +25,7 @@ class ProfileServiceImpl extends ProfileService {
     final response = await _dioClient.post(
       ApiEndpoints.uploadAvatar,
       data: formData,
-      // options: Options(contentType: 'multipart/form-data'),
+      options: Options(contentType: 'multipart/form-data'),
     );
 
     final dto = AvatarUploadResponseDto.fromJson(
@@ -34,6 +33,7 @@ class ProfileServiceImpl extends ProfileService {
     );
     return dto.avatarUrl;
   }
+
 
   @override
   Future<void> updateAvatar({

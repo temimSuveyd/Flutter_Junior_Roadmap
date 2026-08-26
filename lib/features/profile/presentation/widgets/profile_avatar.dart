@@ -24,22 +24,23 @@ class ProfileAvatar extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: onTap,
-            child: CircleAvatar(
-              radius: 56,
-              backgroundColor: context.colors.primary.withValues(alpha: 0.15),
-              child: avatarUrl != null
-                  ? AppNetworkImage(
-                      url: avatarUrl,
-                      width: 112,
-                      height: 112,
-                    )
-                  : Text(
-                      _initials(profile.name),
-                      style: context.textTheme.titleLarge!.copyWith(
-                        color: context.colors.primary,
-                      ),
+          child: CircleAvatar(
+            radius: 50,
+            backgroundColor: context.colors.primary.withValues(alpha: 0.15),
+            child: avatarUrl != null
+                ? AppNetworkImage(
+                    url: avatarUrl,
+                    width: 112,
+                    height: 112,
+                    borderRadius: BorderRadius.circular(106),
+                  )
+                : Text(
+                    _initials(profile.name),
+                    style: context.textTheme.titleLarge!.copyWith(
+                      color: context.colors.primary,
                     ),
-            ),
+                  ),
+          ),
         ),
         if (isUploading)
           const Positioned.fill(
