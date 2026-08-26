@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
@@ -46,6 +44,20 @@ final class AppRouter {
           path: AppRoutes.search,
           builder: (context, state) => const SearchPage(),
         ),
+        GoRoute(
+          path: AppRoutes.productDetails,
+          builder: (context, state) {
+            final productId = state.extra is int ? state.extra as int : null;
+
+            return BlocProvider(
+              create: (_) => ProductDetailsBloc(
+                getIt<ProductRepository>(),
+                productId: productId,
+              )..add(ProductDetailsRequested()),
+              child: const ProductDetailsPage(),
+            );
+          },
+        ),
         ShellRoute(
           builder: (context, state, child) => MainShell(child: child),
           routes: [
@@ -64,21 +76,6 @@ final class AppRouter {
                 create: (context) => ProfileBloc(getIt<ProfileRepository>()),
                 child: const ProfilePage(),
               ),
-            ),
-            GoRoute(
-              path: AppRoutes.productDetails,
-              builder: (context, state) {
-                final productId = state.extra is int
-                    ? state.extra as int
-                    : null;
-                return BlocProvider(
-                  create: (_) => ProductDetailsBloc(
-                    getIt<ProductRepository>(),
-                    productId: productId,
-                  )..add(ProductDetailsRequested()),
-                  child: const ProductDetailsPage(),
-                );
-              },
             ),
           ],
         ),
