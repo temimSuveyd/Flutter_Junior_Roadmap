@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
+import '../../../../../core/constants/app_constants.dart';
 import '../shared/product_card.dart';
 
 class MobileProductGrid extends StatelessWidget {
-
   const MobileProductGrid({super.key, required this.products});
   final List<ProductModel> products;
 
@@ -17,7 +18,16 @@ class MobileProductGrid extends StatelessWidget {
         mainAxisSpacing: 20,
       ),
       itemCount: products.length,
-      itemBuilder: (context, index) => ProductCard(product: products[index]),
+      itemBuilder: (context, index) {
+        final int id = products[index].id;
+        final ProductModel product = products[index];
+        return ProductCard(
+          product: product,
+          onTap: () {
+            context.push(AppRoutes.productDetails, extra: id);
+          },
+        );
+      },
     );
   }
 }

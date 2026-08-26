@@ -16,8 +16,9 @@ class BannerSlider extends StatelessWidget {
           (previous is ProductLoaded ? previous.products : const []) !=
           (current is ProductLoaded ? current.products : const []),
       builder: (context, state) {
-        final products =
-            state is ProductLoaded ? state.products : const <ProductModel>[];
+        final products = state is ProductLoaded
+            ? state.products
+            : const <ProductModel>[];
         final banners = products.take(5).toList();
 
         if (banners.isEmpty) {
@@ -40,7 +41,9 @@ class BannerSlider extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Container(
-                  color: product.thumbnailImage == null ? context.surface : null,
+                  color: product.thumbnailImage == null
+                      ? context.surface
+                      : null,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
@@ -48,6 +51,7 @@ class BannerSlider extends StatelessWidget {
                         Positioned.fill(
                           child: AppNetworkImage(
                             url: product.thumbnailImage!,
+                            borderRadius: BorderRadius.circular(0),
                           ),
                         ),
                       Container(
@@ -62,26 +66,29 @@ class BannerSlider extends StatelessWidget {
                           ),
                         ),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.all(20),
                         child: Align(
-                          alignment: Alignment.bottomLeft,
+                          alignment: AlignmentDirectional.bottomStart,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 product.title,
-                                style: context.titleMedium
-                                    .copyWith(color: Colors.white),
+                                style: context.titleMedium.copyWith(
+                                  color: Colors.white,
+                                ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 '\$${product.price.toStringAsFixed(2)}',
-                                style: context.titleSmall
-                                    .copyWith(color: Colors.white70),
+                                style: context.titleSmall.copyWith(
+                                  color: Colors.white70,
+                                ),
                               ),
                             ],
                           ),

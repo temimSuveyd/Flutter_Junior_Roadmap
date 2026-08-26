@@ -17,7 +17,9 @@ class TabletProductGrid extends StatelessWidget {
         mainAxisSpacing: 20,
       ),
       itemCount: products.length,
-      itemBuilder: (context, index) => ProductCard(product: products[index]),
+      itemBuilder: (context, index) => ProductCard(product: products[index],
+      
+      ),
     );
   }
 }
