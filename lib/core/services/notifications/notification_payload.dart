@@ -1,21 +1,14 @@
-/// Model representing a notification deep-link payload.
-///
-/// Example incoming JSON:
-/// ```json
-/// {
-///   "type": "product",
-///   "id": 25
-/// }
-/// ```
 class NotificationPayload {
 
   const NotificationPayload({this.type, this.id});
 
   factory NotificationPayload.fromJson(Map<String, dynamic> json) {
-    final rawId = json['id'];
+    final rawId = json['product'] ?? json['id'];
     final id = rawId is int ? rawId : int.tryParse(rawId?.toString() ?? '');
+    final type = json['type'] as String? ??
+        (json.containsKey('product') ? 'product' : null);
     return NotificationPayload(
-      type: json['type'] as String?,
+      type: type,
       id: id,
     );
   }

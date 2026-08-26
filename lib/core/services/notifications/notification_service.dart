@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -13,8 +11,6 @@ import 'notification_payload.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // App is not fully open here (background/terminated). FCM already displays
-  // the notification natively, so we must not show a local notification.
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
@@ -88,11 +84,9 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   void _navigateFromData(Map<String, dynamic>? data) {
-    log(message)
     if (_router == null || data == null) return;
     final payload = NotificationPayload.fromJson(data);
     if (payload.type != 'product' || payload.id == null) return;
-    log(payload.id.toString());
-    _router!.go(AppRoutes.productDetails, extra: payload.id);
+    _router!.push(AppRoutes.productDetails, extra: payload.id);
   }
 }
