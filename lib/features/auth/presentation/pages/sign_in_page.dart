@@ -24,8 +24,8 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordFocus = FocusNode();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: 'tamimswid2@gmail.com');
+  final _passwordController = TextEditingController(text: 'testtest10');
   final _cancelToken = CancelToken();
   bool passwordIsAccepted = false;
   bool emailIsAccepted = false;

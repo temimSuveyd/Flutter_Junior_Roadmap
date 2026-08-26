@@ -104,12 +104,7 @@ class AuthRepositoryImpl extends AuthRepository {
     String? avatarUrl,
   }) {
     return _userProfileStore.save(
-      UserProfileData(
-        id: id,
-        name: name,
-        email: email,
-        avatarUrl: avatarUrl,
-      ),
+      UserProfileData(id: id, name: name, email: email, avatarUrl: avatarUrl),
     );
   }
 }
