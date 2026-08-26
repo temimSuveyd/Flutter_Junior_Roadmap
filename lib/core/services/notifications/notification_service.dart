@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/firebase_options.dart';
 
@@ -12,21 +13,9 @@ import 'notification_payload.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // App is not fully open here (background/terminated). FCM already displays
+  // the notification natively, so we must not show a local notification.
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  final local = FlutterLocalNotificationsService(FlutterLocalNotificationsPlugin());
-  await local.initialize();
-
-  final notification = message.notification;
-  final title = notification?.title ?? message.data['title']?.toString() ?? '';
-  final body = notification?.body ?? message.data['body']?.toString() ?? '';
-  if (title.isEmpty && body.isEmpty) return;
-
-  await local.showNotification(
-    title: title,
-    body: body,
-    data: message.data,
-  );
 }
 
 abstract class NotificationService {
@@ -74,7 +63,8 @@ class FirebaseNotificationService implements NotificationService {
     // 5. Listen for notifications while the app is open (foreground).
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       final notification = message.notification;
-      final title = notification?.title ?? message.data['title']?.toString() ?? '';
+      final title =
+          notification?.title ?? message.data['title']?.toString() ?? '';
       final body = notification?.body ?? message.data['body']?.toString() ?? '';
       if (title.isEmpty && body.isEmpty) return;
 
@@ -98,14 +88,11 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   void _navigateFromData(Map<String, dynamic>? data) {
+    log(message)
     if (_router == null || data == null) return;
-
     final payload = NotificationPayload.fromJson(data);
     if (payload.type != 'product' || payload.id == null) return;
-
-    _router!.go(
-      AppRoutes.productDetails,
-      extra: payload.id,
-    );
+    log(payload.id.toString());
+    _router!.go(AppRoutes.productDetails, extra: payload.id);
   }
 }
