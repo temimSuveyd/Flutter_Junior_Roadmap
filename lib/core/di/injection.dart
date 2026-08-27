@@ -17,7 +17,6 @@ import 'package:juniorflutterroadmap/core/storage/shared_prefs_fcm_token_manager
 import 'package:juniorflutterroadmap/core/storage/user_profile_store.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
-import 'package:juniorflutterroadmap/features/data/service/local/image_picker_service.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_hive_model.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/data/services/local_product_services.dart';
@@ -27,6 +26,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/products/data/services/remote_product_services.dart';
 import '../services/auth/token_refresher.dart';
+import '../services/device_features/image_picker_service.dart';
 import '../services/network/dio_client.dart';
 
 import '../services/notifications/firebase_initializer.dart';

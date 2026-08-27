@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/profile/profile_response_dto.dart';
 import 'package:juniorflutterroadmap/features/auth/data/mappers/auth_mapper.dart';
-import 'package:juniorflutterroadmap/features/auth/data/models/user_model.dart';
 
 /// Tests that a profile response is mapped into the user model.
 void main() {

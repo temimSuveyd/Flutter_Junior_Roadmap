@@ -5,8 +5,7 @@ import 'package:juniorflutterroadmap/core/errors/result.dart';
 import 'package:juniorflutterroadmap/core/services/network/failure.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_data.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_store.dart';
-import 'package:juniorflutterroadmap/features/data/service/local/image_picker_service.dart';
-
+import '../../../../core/services/device_features/image_picker_service.dart';
 import '../services/profile_service.dart';
 
 /// Profile repository interface.

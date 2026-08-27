@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:juniorflutterroadmap/features/products/data/dtos/product_response.dart';
 import 'package:juniorflutterroadmap/features/products/data/mappers/product_mapper.dart';
-import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 
 /// Tests that the API response is mapped into the UI model correctly.
 void main() {
