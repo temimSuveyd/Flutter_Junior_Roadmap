@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/common/helpers/helpers.dart';
 import '../../../../core/storage/user_profile_data.dart';
+import '../../../../core/utils/app_primary_button.dart';
 import '../../../../core/utils/error_state.dart';
 import '../../../../core/utils/loading_state.dart';
 import '../bloc/profile_bloc.dart';
@@ -111,14 +112,16 @@ class _ProfilePageState extends State<ProfilePage> {
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (state is ProfileError) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(state.message)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       builder: (context, state) {
         return switch (state) {
-          ProfileInitial() || ProfileLoading() =>
-            LoadingState(message: context.l10n.t.loadingProfile),
+          ProfileInitial() || ProfileLoading() => LoadingState(
+            message: context.l10n.t.loadingProfile,
+          ),
           ProfileError(:final message) => ErrorState(
             message: message,
             onRetry: () => context.read<ProfileBloc>().add(ProfileRequested()),
@@ -128,8 +131,10 @@ class _ProfilePageState extends State<ProfilePage> {
             isUploading: true,
             onChangePhoto: _onChangePhoto,
           ),
-          ProfileLoaded(:final profile) =>
-            _ProfileContent(profile: profile, onChangePhoto: _onChangePhoto),
+          ProfileLoaded(:final profile) => _ProfileContent(
+            profile: profile,
+            onChangePhoto: _onChangePhoto,
+          ),
         };
       },
     );
@@ -163,19 +168,23 @@ class _ProfileContent extends StatelessWidget {
             ),
             context.spacing.vGapXl,
             Text(
-              profile.name?.isNotEmpty == true ? profile.name! : context.l10n.t.anonymousUser,
+              profile.name?.isNotEmpty == true
+                  ? profile.name!
+                  : context.l10n.t.anonymousUser,
               style: context.textTheme.titleLarge,
             ),
             context.spacing.vGapSm,
             Text(
               profile.email?.isNotEmpty == true ? profile.email! : '',
-              style: context.textTheme.bodyMedium!.copyWith(color: context.colors.textSecondary),
+              style: context.textTheme.bodyMedium!.copyWith(
+                color: context.colors.textSecondary,
+              ),
             ),
             context.spacing.vGapLg,
-            TextButton.icon(
+            AppPrimaryButton(
+              label: context.l10n.t.changePhoto,
               onPressed: onChangePhoto,
-              icon: const Icon(Icons.edit_outlined, size: 18),
-              label: Text(context.l10n.t.changePhoto),
+              isLoading: isUploading,
             ),
             const Spacer(),
           ],
