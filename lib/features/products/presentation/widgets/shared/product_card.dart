@@ -14,6 +14,7 @@ class ProductCard extends StatelessWidget {
     var gestureDetector = GestureDetector(
       onTap: onTap,
       child: Hero(
+        
         tag: product.id.toString(),
         child: Material(
           type: MaterialType.transparency,

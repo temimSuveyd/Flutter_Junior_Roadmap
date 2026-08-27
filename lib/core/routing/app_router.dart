@@ -63,15 +63,32 @@ final class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.productDetails,
-          builder: (context, state) {
+          pageBuilder: (context, state) {
             final productId = state.extra is int ? state.extra as int : null;
 
-            return BlocProvider(
-              create: (_) => ProductDetailsBloc(
-                getIt<ProductRepository>(),
-                productId: productId,
-              )..add(ProductDetailsRequested()),
-              child: const ProductDetailsPage(),
+            return CustomTransitionPage(
+              key: state.pageKey,
+              transitionDuration: const Duration(milliseconds: 250),
+              child: BlocProvider(
+                create: (_) => ProductDetailsBloc(
+                  getIt<ProductRepository>(),
+                  productId: productId,
+                )..add(ProductDetailsRequested()),
+                child: const ProductDetailsPage(),
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    const begin = Offset(1, 0);
+                    const end = Offset.zero;
+                    final tween = Tween(
+                      begin: begin,
+                      end: end,
+                    ).chain(CurveTween(curve: Curves.easeInOut));
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
             );
           },
         ),
