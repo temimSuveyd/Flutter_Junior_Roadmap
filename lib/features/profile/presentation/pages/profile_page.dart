@@ -205,7 +205,6 @@ class _ProfileContent extends StatelessWidget {
               child: AppPrimaryButton(
                 label: context.l10n.t.logout,
                 onPressed: onLogout,
-                isLoading: isUploading,
               ),
             ),
             const Spacer(),

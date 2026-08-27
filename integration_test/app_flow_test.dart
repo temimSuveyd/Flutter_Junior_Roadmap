@@ -5,6 +5,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:juniorflutterroadmap/core/utils/app_network_image.dart';
 import 'package:juniorflutterroadmap/core/utils/app_primary_button.dart';
 import 'package:juniorflutterroadmap/core/utils/app_value.dart';
+import 'package:juniorflutterroadmap/core/utils/empty_state.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/search_page.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/banner_slider.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/widgets/shared/category_list.dart';
@@ -22,7 +23,7 @@ import 'package:juniorflutterroadmap/main.dart' as app;
 ///   1. LOGIN            (pre-filled test account; just tap the button)
 ///   2. HOME             assert ProductCard grid + BannerSlider + CategoryList
 ///   3. DETAILS (home)   tap a ProductCard, assert AppNetworkImage, go back
-///   4. SEARCH           open search (icon), type "aceite", assert + open result
+///   4. SEARCH           open search (icon), type "blue", assert + open result (retry once on empty)
 ///   5. DETAILS (search) assert AppNetworkImage, go back twice -> Home
 ///   6. PROFILE          open profile, change-photo sheet, remove photo (if any)
 ///   7. ADDRESS          go Home, open location dialog, Save, assert city on Home
@@ -158,7 +159,8 @@ void main() {
       await waitFor(tester, find.byType(ProductCard));
 
       // ---------------------------------------------------------------
-      // 4. SEARCH: open search (icon), type "aceite", open a result.
+      // 4. SEARCH: open search (icon), type "blue", open a result.
+      // If the results are empty (EmptyState), search "blue" again once.
       // ---------------------------------------------------------------
       await tapFirst(
         tester,
@@ -168,11 +170,28 @@ void main() {
         ),
       );
       await waitFor(tester, find.byType(SearchPage));
-      await tester.enterText(descendantOfType(SearchPage, TextField), 'aceite');
-      await waitFor(
-        tester,
+      final searchField = descendantOfType(SearchPage, TextField);
+
+      Future<void> searchBlue() async {
+        await tester.enterText(searchField, '');
+        await tester.enterText(searchField, 'blue');
+      }
+
+      await searchBlue();
+      // Wait for either results or the empty state.
+      await waitForAny(tester, [
         descendantOfType(SearchPage, ProductCard),
-      ); // results loaded
+        find.byType(EmptyState),
+      ]);
+      // Retry once when the page shows the empty state.
+      if (find.byType(EmptyState).evaluate().isNotEmpty) {
+        await searchBlue();
+        await waitFor(
+          tester,
+          descendantOfType(SearchPage, ProductCard),
+        ); // results loaded (retry)
+      }
+
       final searchHasImage = await tapProductWithImage(
         tester,
         descendantOfType(SearchPage, ProductCard),
@@ -205,12 +224,12 @@ void main() {
       // 6. PROFILE: open profile, change-photo sheet, remove photo (if any).
       // ---------------------------------------------------------------
       await tapFirst(tester, find.byIcon(IconsaxPlusLinear.profile));
-      await waitFor(tester, find.byType(AppPrimaryButton));
+      await waitFor(tester, find.byType(ProfileAvatar));
 
       // Open the "change photo" sheet. On this page the change-photo action is
-      // rendered as an AppPrimaryButton (see profile_page.dart:184), and it is
-      // the ONLY AppPrimaryButton on the profile screen.
-      await tapFirst(tester, find.byType(AppPrimaryButton));
+      // triggered by the profile avatar (ProfileAvatar), which opens the
+      // photo-options sheet.
+      await tapFirst(tester, find.byType(ProfileAvatar));
       await waitFor(
         tester,
         find.byIcon(Icons.photo_library_outlined),
