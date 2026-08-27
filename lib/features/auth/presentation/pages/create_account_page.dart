@@ -215,7 +215,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     showPassword
                                         ? Icons.visibility_off_outlined
                                         : Icons.visibility_outlined,
-                                    color: context.textSecondary,
+                                    color: context.colors.textSecondary,
                                   ),
                                 ),
                               ),
@@ -237,7 +237,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     showConfirmPassword
                                         ? Icons.visibility_off_outlined
                                         : Icons.visibility_outlined,
-                                    color: context.textSecondary,
+                                    color: context.colors.textSecondary,
                                   ),
                                 ),
                               ),

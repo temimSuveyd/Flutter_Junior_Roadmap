@@ -17,7 +17,6 @@ class ProductDetailsPage extends StatelessWidget {
 
 class _ProductDetailsView extends StatelessWidget {
   const _ProductDetailsView();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +36,13 @@ class _ProductDetailsView extends StatelessWidget {
         child: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
           builder: (context, state) {
             return switch (state) {
-              ProductDetailsInitial() =>  LoadingState(
+              ProductDetailsInitial() => LoadingState(
                 message: context.t.loadingProductDetails,
               ),
               ProductDetailsLoading() => LoadingState(
                 message: context.t.loadingProductDetails,
               ),
+
               ProductDetailsError() => ErrorState(
                 message: state.message == 'product_not_found'
                     ? context.t.productNotFound
@@ -51,6 +51,7 @@ class _ProductDetailsView extends StatelessWidget {
                   ProductDetailsRequested(),
                 ),
               ),
+
               ProductDetailsLoaded() =>
                 context.responsive.isMobile
                     ? ProductDetailsMobileBody(product: state.product)

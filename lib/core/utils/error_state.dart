@@ -19,14 +19,14 @@ class ErrorState extends StatelessWidget {
             Icon(
               IconsaxPlusLinear.warning_2,
               size: 64,
-              color: context.error,
+              color: context.colors.error,
             ),
             context.vGapMd,
             Text(
               message,
               textAlign: TextAlign.center,
               style: context.bodyMedium.copyWith(
-                color: context.textSecondary,
+                color: context.colors.textSecondary,
               ),
             ),
             if (onRetry != null) ...[
@@ -34,7 +34,7 @@ class ErrorState extends StatelessWidget {
               FilledButton.tonalIcon(
                 onPressed: onRetry,
                 style: FilledButton.styleFrom(
-                  backgroundColor: context.primary,
+                  backgroundColor: context.colors.primary,
                   foregroundColor: Colors.white,
                 ),
                 icon: const Icon(IconsaxPlusLinear.refresh),

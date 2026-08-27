@@ -40,8 +40,25 @@
   "removePhotoConfirm": "هل أنت متأكد أنك تريد حذف صورة ملفك الشخصي؟",
   "cancel": "إلغاء",
   "remove": "حذف",
+  "logout" : "تسجيل الخروج",
   "changePhoto": "تغيير الصورة",
   "anonymousUser": "مستخدم مجهول",
   "permissionDenied": "تم رفض الإذن. يرجى تمكينه من إعدادات الجهاز.",
-  "noImageSelected": "لم يتم اختيار صورة"
+  "noImageSelected": "لم يتم اختيار صورة",
+
+  "addressTitle": "العنوان",
+  "cityLabel": "المدينة",
+  "addressLabel": "العنوان",
+  "saveAddress": "حفظ العنوان",
+  "useMyLocation": "استخدام موقعي",
+  "locationError": "تعذر تحديد موقعك",
+  "locationPermissionDenied": "تم رفض إذن الموقع. يرجى تمكينه من إعدادات الجهاز.",
+
+  "productDetails": "تفاصيل المنتج",
+  "loadingProductDetails": "جاري تحميل تفاصيل المنتج...",
+  "productNotFound": "المنتج غير موجود",
+
+  "searchHint": "ابحث عن منتج",
+  "all": "الكل",
+  "emptyList": "لا توجد عناصر لعرضها"
 }

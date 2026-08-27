@@ -78,11 +78,11 @@ class CategoryChip extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isSelected ? context.primary : context.surface,
+              color: isSelected ? context.colors.primary : context.colors.surface,
               border: Border.all(
                 color: isSelected
-                    ? context.primary
-                    : context.border.withValues(alpha: 0.6),
+                    ? context.colors.primary
+                    : context.colors.border.withValues(alpha: 0.6),
               ),
             ),
             child: hasImage
@@ -97,7 +97,7 @@ class CategoryChip extends StatelessWidget {
                     IconsaxPlusLinear.category,
                     size: 24,
                     color:
-                        isSelected ? context.surface : context.textSecondary,
+                        isSelected ? context.colors.surface : context.colors.textSecondary,
                   ),
           ),
           const SizedBox(height: 6),
@@ -107,7 +107,7 @@ class CategoryChip extends StatelessWidget {
               label,
               style: context.labelSmall.copyWith(
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? context.primary : context.textSecondary,
+                color: isSelected ? context.colors.primary : context.colors.textSecondary,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

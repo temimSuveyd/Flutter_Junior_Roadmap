@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/common/helpers/helpers.dart';
+import '../../../../core/di/injection.dart';
+import '../../../../core/storage/auth_token_manager.dart';
 import '../../../../core/storage/user_profile_data.dart';
 import '../../../../core/utils/app_primary_button.dart';
 import '../../../../core/utils/error_state.dart';
@@ -65,6 +70,16 @@ class _ProfilePageState extends State<ProfilePage> {
     if (confirmed == true && mounted) {
       context.read<ProfileBloc>().add(AvatarRemoved());
     }
+  }
+
+  /// Clears all local storage and navigates back to the sign-in screen.
+  Future<void> _onLogout() async {
+    await getIt<AuthTokenManager>().clearTokens();
+    await getIt<SharedPreferences>().clear();
+    if (Hive.isBoxOpen('products_cache')) {
+      await Hive.box('products_cache').clear();
+    }
+    if (mounted) context.go(AppRoutes.signIn);
   }
 
   /// Bottom sheet to pick the image source (camera / gallery / remove).
@@ -130,10 +145,12 @@ class _ProfilePageState extends State<ProfilePage> {
             profile: profile,
             isUploading: true,
             onChangePhoto: _onChangePhoto,
+            onLogout: _onLogout,
           ),
           ProfileLoaded(:final profile) => _ProfileContent(
             profile: profile,
             onChangePhoto: _onChangePhoto,
+            onLogout: _onLogout,
           ),
         };
       },
@@ -147,11 +164,13 @@ class _ProfileContent extends StatelessWidget {
     required this.profile,
     this.isUploading = false,
     required this.onChangePhoto,
+    required this.onLogout,
   });
 
   final UserProfileData profile;
   final bool isUploading;
   final VoidCallback onChangePhoto;
+  final VoidCallback onLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -181,10 +200,13 @@ class _ProfileContent extends StatelessWidget {
               ),
             ),
             context.spacing.vGapLg,
-            AppPrimaryButton(
-              label: context.l10n.t.changePhoto,
-              onPressed: onChangePhoto,
-              isLoading: isUploading,
+            SizedBox(
+              height: 45,
+              child: AppPrimaryButton(
+                label: context.l10n.t.logout,
+                onPressed: onLogout,
+                isLoading: isUploading,
+              ),
             ),
             const Spacer(),
           ],

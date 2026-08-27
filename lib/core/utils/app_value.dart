@@ -22,13 +22,13 @@ class AppValue extends StatelessWidget {
         Row(
           children: [
             if (icon != null) ...[
-              Icon(icon, size: 14, color: context.textSecondary),
+              Icon(icon, size: 14, color: context.colors.textSecondary),
               const SizedBox(width: 6),
             ],
             Text(
               label.toUpperCase(),
               style: context.labelSmall.copyWith(
-                color: context.textSecondary,
+                color: context.colors.textSecondary,
                 letterSpacing: 0.6,
               ),
             ),
@@ -37,7 +37,7 @@ class AppValue extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           value.isNotEmpty ? value : '-',
-          style: context.bodyMedium.copyWith(color: context.textPrimary),
+          style: context.bodyMedium.copyWith(color: context.colors.textPrimary),
         ),
         const SizedBox(height: 14),
       ],

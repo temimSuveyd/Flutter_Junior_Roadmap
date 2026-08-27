@@ -15,9 +15,17 @@ class ProductDetailsMobileBody extends StatelessWidget {
       padding: context.spacing.insetMd,
       child: Column(
         children: [
-          SizedBox(
-            height: 320,
-            child: ProductDetailsGallery(images: product.image.cast<String>()),
+          Hero(
+            tag: product.id.toString(),
+            child: Material(
+              type: MaterialType.transparency,
+              child: SizedBox(
+                height: 320,
+                child: ProductDetailsGallery(
+                  images: product.image.cast<String>(),
+                ),
+              ),
+            ),
           ),
           context.spacing.vGapLg,
           ProductDetailsInfo(product: product),

@@ -42,7 +42,7 @@ class BannerSlider extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 child: Container(
                   color: product.thumbnailImage == null
-                      ? context.surface
+                      ? context.colors.surface
                       : null,
                   child: Stack(
                     fit: StackFit.expand,

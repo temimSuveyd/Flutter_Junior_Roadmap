@@ -14,14 +14,14 @@ class LoadingState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(color: context.primary),
+            CircularProgressIndicator(color: context.colors.primary),
             if (message != null) ...[
               context.vGapMd,
               Text(
                 message!,
                 textAlign: TextAlign.center,
                 style: context.bodyMedium.copyWith(
-                  color: context.textSecondary,
+                  color: context.colors.textSecondary,
                 ),
               ),
             ],

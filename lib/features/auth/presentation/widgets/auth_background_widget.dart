@@ -29,7 +29,7 @@ class AuthBackgroundWidget extends StatelessWidget {
                     width: double.infinity,
                     height: availableHeight * 0.4,
                     decoration: BoxDecoration(
-                      color: context.background.withValues(alpha: 0.3),
+                      color: context.colors.background.withValues(alpha: 0.3),
                       image: const DecorationImage(
                         image: AssetImage(
                           'assets/images/auth_background_image.png',
@@ -63,7 +63,7 @@ class AuthBackgroundWidget extends StatelessWidget {
                   width: double.infinity,
                   height: availableHeight * 0.8,
                   decoration: BoxDecoration(
-                    color: context.background,
+                    color: context.colors.background,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(100),
                     ),

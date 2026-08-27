@@ -47,11 +47,11 @@ class AuthTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hintColor = hintStyleColor ?? context.textSecondary;
-    final textColor = textStyleColor ?? context.textPrimary;
-    final activeColor = iconColor ?? context.primary;
-    final borderColor = this.borderColor ?? context.primary;
-    final focusedColor = focusedBorderColor ?? context.primary;
+    final hintColor = hintStyleColor ?? context.colors.textSecondary;
+    final textColor = textStyleColor ?? context.colors.textPrimary;
+    final activeColor = iconColor ?? context.colors.primary;
+    final borderColor = this.borderColor ?? context.colors.primary;
+    final focusedColor = focusedBorderColor ?? context.colors.primary;
 
     return TextFormField(
     

@@ -82,8 +82,8 @@ class _MainNavigationBarState extends State<_MainNavigationBar> {
     }
     final selectedIndex = _pendingIndex ?? actualIndex;
     return NavigationBar(
-      backgroundColor: context.background,
-      indicatorColor: context.primary.withValues(alpha: 0.5),
+      backgroundColor: context.colors.background,
+      indicatorColor: context.colors.primary.withValues(alpha: 0.5),
       selectedIndex: selectedIndex,
       onDestinationSelected: (index) => _onDestinationSelected(context, index),
       destinations: [

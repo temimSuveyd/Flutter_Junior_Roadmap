@@ -14,7 +14,7 @@ class HomeSearchBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
-          color: context.surface,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
@@ -25,12 +25,12 @@ class HomeSearchBar extends StatelessWidget {
               context.t.search,
               style: TextStyle(
                 fontSize: 12,
-                color: context.textSecondary,
+                color: context.colors.textSecondary,
               ),
             ),
             const Spacer(),
             VerticalDivider(
-              color: context.border,
+              color: context.colors.border,
               thickness: 0.6,
               width: 20,
               indent: 2,

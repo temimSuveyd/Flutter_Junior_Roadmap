@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
@@ -42,7 +43,23 @@ final class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.search,
-          builder: (context, state) => const SearchPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const SearchPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(0, 1);
+                  const end = Offset.zero;
+                  final tween = Tween(
+                    begin: begin,
+                    end: end,
+                  ).chain(CurveTween(curve: Curves.easeInOut));
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+          ),
         ),
         GoRoute(
           path: AppRoutes.productDetails,

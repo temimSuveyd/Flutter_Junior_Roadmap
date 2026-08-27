@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/utils/animation_extensions.dart';
 import 'package:juniorflutterroadmap/core/utils/app_primary_button.dart';
 import 'package:juniorflutterroadmap/core/utils/app_validators.dart';
 import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_request_dto.dart';
@@ -65,7 +66,8 @@ class _SignInPageState extends State<SignInPage> {
 
   void _onPasswordChanged(String value) {
     setState(() {
-      passwordIsAccepted = AppValidators.validatePassword(context, value) == null;
+      passwordIsAccepted =
+          AppValidators.validatePassword(context, value) == null;
     });
   }
 
@@ -149,11 +151,14 @@ class _SignInPageState extends State<SignInPage> {
                                 prefixIcon: IconsaxPlusLinear.password_check,
                                 suffixIcon: IconButton(
                                   onPressed: _togglePassword,
-                                  icon: Icon(
-                                    showPassword
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                    color: context.textSecondary,
+                                  icon: AnimatedSwitcher(
+                                    duration: AppDurations.normal,
+                                    child: Icon(
+                                      showPassword
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      color: context.colors.textSecondary,
+                                    ),
                                   ),
                                 ),
                               ),

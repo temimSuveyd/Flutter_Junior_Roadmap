@@ -23,17 +23,6 @@ extension AppContextX on BuildContext {
   ContextL10n get l10n => ContextL10n.of(this);
   ContextAssets get assets => ContextAssets.of(this);
 
-  // ── Direct color getters ──
-  Color get primary => colors.primary;
-  Color get background => colors.background;
-  Color get surface => colors.surface;
-  Color get textPrimary => colors.textPrimary;
-  Color get textSecondary => colors.textSecondary;
-  Color get border => colors.border;
-  Color get success => colors.success;
-  Color get warning => colors.warning;
-  Color get error => colors.error;
-
   // ── Direct typography getters ──
   TextStyle get displayLarge => typography.displayLarge;
   TextStyle get displayMedium => typography.displayMedium;
@@ -68,20 +57,20 @@ extension AppContextX on BuildContext {
   double get spaceXxxxl => spacing.spaceXxxxl;
   double get spaceXxxxxl => spacing.spaceXxxxxl;
   double get spaceHuge => spacing.spaceHuge;
-  EdgeInsets get insetXs => spacing.insetXs;
-  EdgeInsets get insetSm => spacing.insetSm;
-  EdgeInsets get insetMd => spacing.insetMd;
-  EdgeInsets get insetLg => spacing.insetLg;
-  EdgeInsets get insetXl => spacing.insetXl;
-  EdgeInsets get insetXxl => spacing.insetXxl;
-  EdgeInsets get horizontalSm => spacing.horizontalSm;
-  EdgeInsets get horizontalMd => spacing.horizontalMd;
-  EdgeInsets get horizontalLg => spacing.horizontalLg;
-  EdgeInsets get horizontalXl => spacing.horizontalXl;
-  EdgeInsets get verticalSm => spacing.verticalSm;
-  EdgeInsets get verticalMd => spacing.verticalMd;
-  EdgeInsets get verticalLg => spacing.verticalLg;
-  EdgeInsets get verticalXl => spacing.verticalXl;
+  EdgeInsetsDirectional get insetXs => spacing.insetXs;
+  EdgeInsetsDirectional get insetSm => spacing.insetSm;
+  EdgeInsetsDirectional get insetMd => spacing.insetMd;
+  EdgeInsetsDirectional get insetLg => spacing.insetLg;
+  EdgeInsetsDirectional get insetXl => spacing.insetXl;
+  EdgeInsetsDirectional get insetXxl => spacing.insetXxl;
+  EdgeInsetsDirectional get horizontalSm => spacing.horizontalSm;
+  EdgeInsetsDirectional get horizontalMd => spacing.horizontalMd;
+  EdgeInsetsDirectional get horizontalLg => spacing.horizontalLg;
+  EdgeInsetsDirectional get horizontalXl => spacing.horizontalXl;
+  EdgeInsetsDirectional get verticalSm => spacing.verticalSm;
+  EdgeInsetsDirectional get verticalMd => spacing.verticalMd;
+  EdgeInsetsDirectional get verticalLg => spacing.verticalLg;
+  EdgeInsetsDirectional get verticalXl => spacing.verticalXl;
   SizedBox get hGapXs => spacing.hGapXs;
   SizedBox get hGapSm => spacing.hGapSm;
   SizedBox get hGapMd => spacing.hGapMd;
@@ -167,22 +156,30 @@ class ContextSpacing {
   double get spaceXxxxxl => AppSpacing.xxxxxl;
   double get spaceHuge => AppSpacing.huge;
 
-  EdgeInsets get insetXs => AppSpacing.insetXs;
-  EdgeInsets get insetSm => AppSpacing.insetSm;
-  EdgeInsets get insetMd => AppSpacing.insetMd;
-  EdgeInsets get insetLg => AppSpacing.insetLg;
-  EdgeInsets get insetXl => AppSpacing.insetXl;
-  EdgeInsets get insetXxl => AppSpacing.insetXxl;
+  EdgeInsetsDirectional get insetXs => const EdgeInsetsDirectional.all(AppSpacing.xs);
+  EdgeInsetsDirectional get insetSm => const EdgeInsetsDirectional.all(AppSpacing.sm);
+  EdgeInsetsDirectional get insetMd => const EdgeInsetsDirectional.all(AppSpacing.md);
+  EdgeInsetsDirectional get insetLg => const EdgeInsetsDirectional.all(AppSpacing.lg);
+  EdgeInsetsDirectional get insetXl => const EdgeInsetsDirectional.all(AppSpacing.xl);
+  EdgeInsetsDirectional get insetXxl => const EdgeInsetsDirectional.all(AppSpacing.xxl);
 
-  EdgeInsets get horizontalSm => AppSpacing.horizontalSm;
-  EdgeInsets get horizontalMd => AppSpacing.horizontalMd;
-  EdgeInsets get horizontalLg => AppSpacing.horizontalLg;
-  EdgeInsets get horizontalXl => AppSpacing.horizontalXl;
+  EdgeInsetsDirectional get horizontalSm =>
+      const EdgeInsetsDirectional.only(start: AppSpacing.sm, end: AppSpacing.sm);
+  EdgeInsetsDirectional get horizontalMd =>
+      const EdgeInsetsDirectional.only(start: AppSpacing.md, end: AppSpacing.md);
+  EdgeInsetsDirectional get horizontalLg =>
+      const EdgeInsetsDirectional.only(start: AppSpacing.lg, end: AppSpacing.lg);
+  EdgeInsetsDirectional get horizontalXl =>
+      const EdgeInsetsDirectional.only(start: AppSpacing.xl, end: AppSpacing.xl);
 
-  EdgeInsets get verticalSm => AppSpacing.verticalSm;
-  EdgeInsets get verticalMd => AppSpacing.verticalMd;
-  EdgeInsets get verticalLg => AppSpacing.verticalLg;
-  EdgeInsets get verticalXl => AppSpacing.verticalXl;
+  EdgeInsetsDirectional get verticalSm =>
+      const EdgeInsetsDirectional.only(top: AppSpacing.sm, bottom: AppSpacing.sm);
+  EdgeInsetsDirectional get verticalMd =>
+      const EdgeInsetsDirectional.only(top: AppSpacing.md, bottom: AppSpacing.md);
+  EdgeInsetsDirectional get verticalLg =>
+      const EdgeInsetsDirectional.only(top: AppSpacing.lg, bottom: AppSpacing.lg);
+  EdgeInsetsDirectional get verticalXl =>
+      const EdgeInsetsDirectional.only(top: AppSpacing.xl, bottom: AppSpacing.xl);
 
   SizedBox get hGapXs => const SizedBox(width: AppSpacing.xs);
   SizedBox get hGapSm => const SizedBox(width: AppSpacing.sm);

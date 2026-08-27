@@ -14,7 +14,7 @@ class CreateAccountButton extends StatelessWidget {
         Text(
           context.t.dontHaveAccount,
           style: context.bodySmall.copyWith(
-            color: context.textSecondary,
+            color: context.colors.textSecondary,
             fontWeight: FontWeight.w300,
           ),
         ),
@@ -23,7 +23,7 @@ class CreateAccountButton extends StatelessWidget {
           child: Text(
             context.t.createAccount,
             style: context.labelSmall.copyWith(
-              color: context.primary,
+              color: context.colors.primary,
               fontWeight: FontWeight.w500,
             ),
           ),

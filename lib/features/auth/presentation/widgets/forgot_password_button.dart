@@ -15,7 +15,7 @@ class ForgotPasswordButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             context.t.forgotPassword,
-            style: context.labelMedium.copyWith(color: context.primary),
+            style: context.labelMedium.copyWith(color: context.colors.primary),
           ),
         ),
       ],

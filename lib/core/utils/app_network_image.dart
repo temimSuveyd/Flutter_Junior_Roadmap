@@ -14,7 +14,7 @@ class AppNetworkImage extends StatelessWidget {
   final BoxFit fit;
   final double? width;
   final double? height;
-  final BorderRadius? borderRadius;
+  final BorderRadiusGeometry? borderRadius;
 
   @override
   Widget build(BuildContext context) {

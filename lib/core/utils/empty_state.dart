@@ -19,14 +19,14 @@ class EmptyState extends StatelessWidget {
             Icon(
               IconsaxPlusLinear.box,
               size: 64,
-              color: context.textSecondary,
+              color: context.colors.textSecondary,
             ),
             context.vGapMd,
             Text(
               message,
               textAlign: TextAlign.center,
               style: context.bodyMedium.copyWith(
-                color: context.textSecondary,
+                color: context.colors.textSecondary,
               ),
             ),
             if (action != null) ...[

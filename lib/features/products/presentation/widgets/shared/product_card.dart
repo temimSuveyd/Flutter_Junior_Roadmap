@@ -11,119 +11,127 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    var gestureDetector = GestureDetector(
       onTap: onTap,
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: context.surface,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: AppNetworkImage(
-                      url: product.thumbnailImage!,
-                      width: double.infinity,
-                    ),
-                  ),
+      child: Hero(
+        tag: product.id.toString(),
+        child: Material(
+          type: MaterialType.transparency,
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: context.colors.surface,
                 ),
-
-                Padding(
-                  padding: EdgeInsets.all(context.spacing.spaceMd),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 10),
-
-                      Text(
-                        product.title,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: context.textPrimary,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: AppNetworkImage(
+                          url: product.thumbnailImage!,
+                          width: double.infinity,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 5),
-                      Row(
+                    ),
+          
+                    Padding(
+                      padding: EdgeInsets.all(context.spacing.spaceMd),
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: Text(
-                              '${product.price}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: context.textPrimary,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                          const SizedBox(height: 10),
+          
+                          Text(
+                            product.title,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: context.colors.textPrimary,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          ...List.generate(
-                            3,
-                            (colorIndex) => Container(
-                              margin: const EdgeInsetsDirectional.only(end: 1),
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: colorIndex == 0
-                                      ? context.textPrimary
-                                      : Colors.transparent,
-                                  width: 0.5,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Container(
-                                width: colorIndex == 0 ? 12 : 15,
-                                height: colorIndex == 0 ? 12 : 15,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: [
-                                    Colors.red,
-                                    Colors.amber,
-                                    Colors.blue,
-                                    Colors.green,
-                                  ][colorIndex],
+                          const SizedBox(height: 5),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  '${product.price}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: context.colors.textPrimary,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
+                              ...List.generate(
+                                3,
+                                (colorIndex) => Container(
+                                  margin: const EdgeInsetsDirectional.only(
+                                    end: 1,
+                                  ),
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: colorIndex == 0
+                                          ? context.colors.textPrimary
+                                          : Colors.transparent,
+                                      width: 0.5,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Container(
+                                    width: colorIndex == 0 ? 12 : 15,
+                                    height: colorIndex == 0 ? 12 : 15,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: [
+                                        Colors.red,
+                                        Colors.amber,
+                                        Colors.blue,
+                                        Colors.green,
+                                      ][colorIndex],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+              PositionedDirectional(
+                top: 0,
+                end: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: context.colors.primary,
+                    borderRadius: BorderRadiusDirectional.only(
+                      topEnd: context.radius.md.topLeft,
+                      bottomStart: context.radius.sm.bottomRight,
+                    ),
+                  ),
+                  child: const Icon(
+                    IconsaxPlusLinear.heart,
+                    size: 18,
+                    color: Colors.white,
                   ),
                 ),
-              ],
-            ),
-          ),
-          PositionedDirectional(
-            top: 0,
-            end: 0,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: context.primary,
-                borderRadius: const BorderRadiusDirectional.only(
-                  topStart: Radius.circular(20),
-                  // bottomEnd: Radius.circular(20),
-              
-                ),
               ),
-              child: const Icon(
-                IconsaxPlusLinear.heart,
-                size: 18,
-                color: Colors.white,
-              ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
+    return gestureDetector;
   }
 }

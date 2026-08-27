@@ -47,6 +47,8 @@ class _SearchPageViewState extends State<_SearchPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
+    backgroundColor: context.colors.background,
         leading: IconButton(
           icon: Icon(Icons.adaptive.arrow_back),
           onPressed: () => context.pop(),

@@ -40,8 +40,25 @@
   "removePhotoConfirm": "Are you sure you want to remove your profile photo?",
   "cancel": "Cancel",
   "remove": "Remove",
+  "logout" : "log out",
   "changePhoto": "Change photo",
   "anonymousUser": "Anonymous User",
   "permissionDenied": "Permission denied. Enable it in device settings.",
-  "noImageSelected": "No image selected"
+  "noImageSelected": "No image selected",
+
+  "addressTitle": "Address",
+  "cityLabel": "City",
+  "addressLabel": "Address",
+  "saveAddress": "Save address",
+  "useMyLocation": "Use my location",
+  "locationError": "Couldn't get your location",
+  "locationPermissionDenied": "Location permission denied. Enable it in device settings.",
+
+  "productDetails": "Product Details",
+  "loadingProductDetails": "Loading product details...",
+  "productNotFound": "Product not found",
+
+  "searchHint": "Search for a product",
+  "all": "All",
+  "emptyList": "No items to show"
 }

@@ -17,12 +17,15 @@ class ProductDetailsTabletBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-         
-            child: ProductDetailsGallery(images: product.image.cast<String>()),
+            child: Hero(
+              tag: product.id.toString(),
+              child: ProductDetailsGallery(
+                images: product.image.cast<String>(),
+              ),
+            ),
           ),
           context.spacing.hGapXl,
           Expanded(
-       
             child: SingleChildScrollView(
               child: ProductDetailsInfo(product: product),
             ),

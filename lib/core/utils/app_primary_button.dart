@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/utils/animation_extensions.dart';
 
 class AppPrimaryButton extends StatelessWidget {
   const AppPrimaryButton({
@@ -21,29 +22,30 @@ class AppPrimaryButton extends StatelessWidget {
       children: [
         Expanded(
           child: MaterialButton(
-            onPressed: isLoading ? null : onPressed,
+            onPressed: isLoading ? () {} : onPressed,
             elevation: 0,
             shape: OutlineInputBorder(
-              borderRadius: context.radiusFull,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
               borderSide: BorderSide.none,
             ),
-            color: hasError ? context.error : context.primary,
+            color: hasError ? context.colors.error : context.colors.primary,
             height: 55,
-            child: isLoading
-                ?  SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(
-                      color: context.primary,
-                      strokeWidth: 2,
+            child: AnimatedSwitcher(
+              duration: AppDurations.normal,
+              child: isLoading
+                  ? SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        color: context.colors.surface,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Text(
+                      label,
+                      style: context.buttonLarge.copyWith(color: Colors.white),
                     ),
-                  )
-                : Text(
-                    label,
-                    style: context.buttonLarge.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
+            ),
           ),
         ),
       ],
