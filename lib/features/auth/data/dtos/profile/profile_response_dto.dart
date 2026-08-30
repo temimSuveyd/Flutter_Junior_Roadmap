@@ -1,11 +1,5 @@
 class ProfileResponseDto {
-
-  ProfileResponseDto({
-    required this.id,
-    this.name,
-    this.email,
-    this.avatar,
-  });
+  ProfileResponseDto({required this.id, this.name, this.email, this.avatar});
 
   factory ProfileResponseDto.fromJson(Map<String, dynamic> json) {
     return ProfileResponseDto(

@@ -30,11 +30,10 @@ final class AppConstants {
 final class AppImages {
   AppImages._();
 
-  static const String authBackgroundImage = 'assets/images/auth_background_image.png';
-  static const String emptyImageIcon= 'assets/icons/empty_image_icon.png';
-
+  static const String authBackgroundImage =
+      'assets/images/auth_background_image.png';
+  static const String emptyImageIcon = 'assets/icons/empty_image_icon.png';
 }
-
 
 /// Navigation routes between app screens.
 final class AppRoutes {

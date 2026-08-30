@@ -11,16 +11,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-
   AuthBloc(this._authRepository) : super(AuthInitial()) {
-    on<SignInRequested>(
-      transformer: droppable(),
-      _onLoginRequested,
-    );
-    on<SignUpRequested>(
-      transformer: droppable(),
-      _onRegisterRequested,
-    );
+    on<SignInRequested>(transformer: droppable(), _onLoginRequested);
+    on<SignUpRequested>(transformer: droppable(), _onRegisterRequested);
   }
   final AuthRepository _authRepository;
   final CancelToken _cancelToken = CancelToken();

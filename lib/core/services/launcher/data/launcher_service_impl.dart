@@ -29,9 +29,7 @@ class LauncherServiceImpl implements LauncherService {
   }) async {
     final cleanPhone = phoneNumber.replaceAll(RegExp(r'\D'), '');
     final encodedMessage = Uri.encodeComponent(message);
-    final uri = Uri.parse(
-      'https://wa.me/$cleanPhone?text=$encodedMessage',
-    );
+    final uri = Uri.parse('https://wa.me/$cleanPhone?text=$encodedMessage');
     if (await canLaunchUrl(uri)) {
       return launchUrl(uri, mode: LaunchMode.externalApplication);
     }

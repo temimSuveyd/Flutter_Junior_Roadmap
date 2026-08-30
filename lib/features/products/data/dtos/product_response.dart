@@ -8,13 +8,16 @@ class ProductResponse {
     required this.category,
   });
 
-  factory ProductResponse.fromJson(Map<String, dynamic> json) => ProductResponse(
+  factory ProductResponse.fromJson(Map<String, dynamic> json) =>
+      ProductResponse(
         image: json['images'],
         title: json['title'],
         description: json['description'],
         price: (json['price'] as num).toDouble(),
         id: json['id'] as int,
-        category: (json['category'] as Map<String, dynamic>?)?['name'] as String? ?? '',
+        category:
+            (json['category'] as Map<String, dynamic>?)?['name'] as String? ??
+            '',
       );
   final List<dynamic> image;
   final String title;

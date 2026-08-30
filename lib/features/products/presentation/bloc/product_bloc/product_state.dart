@@ -2,10 +2,7 @@ part of 'product_bloc.dart';
 
 @immutable
 sealed class ProductState {
-  const ProductState({
-    this.categories = const [],
-    this.selectedCategoryId,
-  });
+  const ProductState({this.categories = const [], this.selectedCategoryId});
   final List<CategoryModel> categories;
   final int? selectedCategoryId;
 }
@@ -13,18 +10,25 @@ sealed class ProductState {
 final class ProductInitial extends ProductState {
   const ProductInitial({super.categories, super.selectedCategoryId});
 }
+
 final class ProductLoading extends ProductState {
   const ProductLoading({super.categories, super.selectedCategoryId});
 }
+
 final class ProductError extends ProductState {
-  const ProductError(this.message, {super.categories, super.selectedCategoryId});
+  const ProductError(
+    this.message, {
+    super.categories,
+    super.selectedCategoryId,
+  });
   final String message;
 }
+
 final class ProductEmpty extends ProductState {
   const ProductEmpty({super.categories, super.selectedCategoryId});
 }
-final class ProductLoaded extends ProductState {
 
+final class ProductLoaded extends ProductState {
   const ProductLoaded(
     this.products, {
     this.hasReachedMax = false,

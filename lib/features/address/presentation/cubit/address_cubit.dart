@@ -8,7 +8,7 @@ import '../../../../core/storage/address_store.dart';
 
 class AddressCubit extends Cubit<AddressState> {
   AddressCubit(this._locationService, this._addressStore)
-      : super(const AddressState()) {
+    : super(const AddressState()) {
     _loadSaved();
   }
 
@@ -36,10 +36,7 @@ class AddressCubit extends Cubit<AddressState> {
   }
 
   Future<void> saveAddress(String city, String fullAddress) async {
-    final address = Address(
-      city: city.trim(),
-      fullAddress: fullAddress.trim(),
-    );
+    final address = Address(city: city.trim(), fullAddress: fullAddress.trim());
     await _addressStore.save(address);
     emit(state.copyWith(savedAddress: address, detected: address));
   }
@@ -47,7 +44,6 @@ class AddressCubit extends Cubit<AddressState> {
 
 @immutable
 final class AddressState extends Equatable {
-
   const AddressState({
     this.savedAddress,
     this.detected,

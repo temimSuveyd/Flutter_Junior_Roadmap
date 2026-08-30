@@ -70,8 +70,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
       final userId = await _requireUserId();
       await _profileService.updateAvatar(userId: userId, avatarUrl: avatarUrl);
 
-      final current =
-          await _userProfileStore.read() ?? const UserProfileData();
+      final current = await _userProfileStore.read() ?? const UserProfileData();
       final updated = current.copyWith(avatarUrl: avatarUrl);
       await _userProfileStore.save(updated);
       return updated;
@@ -84,8 +83,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
       final userId = await _requireUserId();
       await _profileService.removeAvatar(userId: userId);
 
-      final current =
-          await _userProfileStore.read() ?? const UserProfileData();
+      final current = await _userProfileStore.read() ?? const UserProfileData();
       final updated = current.copyWith(clearAvatarUrl: true);
       await _userProfileStore.save(updated);
       return updated;

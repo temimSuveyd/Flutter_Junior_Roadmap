@@ -13,7 +13,9 @@ void main() {
     });
 
     test('returns Error when the future throws', () async {
-      final result = await runCatching<int>(() async => throw Exception('boom'));
+      final result = await runCatching<int>(
+        () async => throw Exception('boom'),
+      );
 
       expect(result, isA<Error<int>>());
       expect((result as Error<int>).error, isA<Failure>());

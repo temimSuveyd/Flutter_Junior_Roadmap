@@ -1,8 +1,7 @@
 import 'dart:async';
 
 class SessionExpiredController {
-  final StreamController<void> _controller =
-      StreamController<void>.broadcast();
+  final StreamController<void> _controller = StreamController<void>.broadcast();
 
   Stream<void> get onSessionExpired => _controller.stream;
 

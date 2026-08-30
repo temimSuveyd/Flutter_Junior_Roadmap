@@ -53,7 +53,9 @@ class _ProductDetailsGalleryState extends State<ProductDetailsGallery> {
                 height: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: i == _current ? context.colors.primary : context.colors.border,
+                  color: i == _current
+                      ? context.colors.primary
+                      : context.colors.border,
                 ),
               ),
             ),
@@ -70,16 +72,16 @@ class _GalleryPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: context.colors.surface,
-          borderRadius: context.radius.lg,
-        ),
-        child: Center(
-          child: Icon(
-            Icons.image_outlined,
-            size: 48,
-            color: context.colors.textSecondary,
-          ),
-        ),
-      );
+    decoration: BoxDecoration(
+      color: context.colors.surface,
+      borderRadius: context.radius.lg,
+    ),
+    child: Center(
+      child: Icon(
+        Icons.image_outlined,
+        size: 48,
+        color: context.colors.textSecondary,
+      ),
+    ),
+  );
 }

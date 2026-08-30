@@ -9,10 +9,8 @@ import 'interceptors/retry_interceptor.dart';
 import 'interceptors/token_refresh_interceptor.dart';
 
 class DioClient {
-
   DioClient(
-    this._tokenManager, 
-    {
+    this._tokenManager, {
     AuthTokenManager? tokenManager,
     RefreshTokenProvider Function()? refreshTokenProvider,
   }) {

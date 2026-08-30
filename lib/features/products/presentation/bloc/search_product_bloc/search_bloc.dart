@@ -11,7 +11,6 @@ part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchProductState> {
-
   SearchBloc(this._productRepository) : super(SearchInitial()) {
     on<Search>(
       _onProductsSearch,
@@ -19,8 +18,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchProductState> {
     );
   }
   final ProductRepository _productRepository;
-
-
 
   // ignore: avoid_types_as_parameter_names
   EventTransformer<SearchEvent> debounceAndRestartable<SearchEvent>(

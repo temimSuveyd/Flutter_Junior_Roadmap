@@ -1,4 +1,9 @@
-const List<String> _serverMessageKeys = ['error_message', 'message', 'detail', 'msg'];
+const List<String> _serverMessageKeys = [
+  'error_message',
+  'message',
+  'detail',
+  'msg',
+];
 
 String extractServerErrorMessage(Object? data) {
   if (data is String) {
@@ -52,7 +57,6 @@ String _extractHtmlTitle(String html) {
 }
 
 class Failure implements Exception {
-
   Failure(this.message, {this.statusCode});
   final String message;
   final int? statusCode;

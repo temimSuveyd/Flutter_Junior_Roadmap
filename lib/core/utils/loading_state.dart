@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 class LoadingState extends StatelessWidget {
-
   const LoadingState({super.key, this.message});
   final String? message;
 

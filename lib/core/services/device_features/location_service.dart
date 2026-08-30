@@ -14,25 +14,25 @@ class LocationException implements Exception {
 }
 
 /// Resolves the current device position.
-typedef GetCurrentPosition = Future<Position> Function({
-  LocationAccuracy desiredAccuracy,
-  Duration? timeLimit,
-});
+typedef GetCurrentPosition =
+    Future<Position> Function({
+      LocationAccuracy desiredAccuracy,
+      Duration? timeLimit,
+    });
 
 /// Resolves placemarks for the given coordinates.
-typedef GetPlacemarks = Future<List<Placemark>> Function(
-  double latitude,
-  double longitude,
-);
+typedef GetPlacemarks =
+    Future<List<Placemark>> Function(double latitude, double longitude);
 
 class LocationServiceImpl implements LocationService {
   LocationServiceImpl(
     this._permissionService, {
     GetCurrentPosition? getCurrentPosition,
     GetPlacemarks? placemarkFromCoordinates,
-  })  : _getCurrentPosition = getCurrentPosition ?? Geolocator.getCurrentPosition,
-        _placemarkFromCoordinates =
-            placemarkFromCoordinates ?? _defaultPlacemarkFromCoordinates;
+  }) : _getCurrentPosition =
+           getCurrentPosition ?? Geolocator.getCurrentPosition,
+       _placemarkFromCoordinates =
+           placemarkFromCoordinates ?? _defaultPlacemarkFromCoordinates;
 
   final PermissionService _permissionService;
   final GetCurrentPosition _getCurrentPosition;
@@ -41,8 +41,7 @@ class LocationServiceImpl implements LocationService {
   static Future<List<Placemark>> _defaultPlacemarkFromCoordinates(
     double latitude,
     double longitude,
-  ) =>
-      placemarkFromCoordinates(latitude, longitude);
+  ) => placemarkFromCoordinates(latitude, longitude);
 
   @override
   Future<Address> getCurrentAddress() async {

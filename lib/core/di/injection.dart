@@ -42,7 +42,7 @@ Future<void> setupLocator() async {
   Hive.registerAdapter(ProductHiveModelAdapter());
   final productBox = await Hive.openBox('products_cache');
 
-  // 1. Firebase 
+  // 1. Firebase
   getIt.registerLazySingleton<FirebaseInitializer>(() => FirebaseInitializer());
 
   // 2. FireBase Notification
@@ -50,7 +50,9 @@ Future<void> setupLocator() async {
     () => FlutterLocalNotificationsPlugin(),
   );
   getIt.registerLazySingleton<LocalNotificationService>(
-    () => FlutterLocalNotificationsService(getIt<FlutterLocalNotificationsPlugin>()),
+    () => FlutterLocalNotificationsService(
+      getIt<FlutterLocalNotificationsPlugin>(),
+    ),
   );
   getIt.registerLazySingleton<NotificationService>(
     () => FirebaseNotificationService(
@@ -145,5 +147,4 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<GoRouter>(
     () => AppRouter.create(getIt<AuthTokenManager>()),
   );
-
 }

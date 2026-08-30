@@ -34,7 +34,6 @@ class ProfileServiceImpl extends ProfileService {
     return dto.avatarUrl;
   }
 
-
   @override
   Future<void> updateAvatar({
     required int userId,

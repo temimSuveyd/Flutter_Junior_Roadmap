@@ -29,10 +29,7 @@ void main() {
     });
 
     test('keeps the id but is not a product deep-link when type differs', () {
-      final payload = NotificationPayload.fromJson({
-        'type': 'promo',
-        'id': 7,
-      });
+      final payload = NotificationPayload.fromJson({'type': 'promo', 'id': 7});
 
       // id is parsed, but the deep-link guard (type != 'product') ignores it.
       expect(payload.type, 'promo');

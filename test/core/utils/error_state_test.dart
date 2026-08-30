@@ -6,14 +6,16 @@ import 'package:juniorflutterroadmap/core/utils/error_state.dart';
 /// Minimal app wrapper so widgets can use the app's localizations and
 /// design-system context extensions (colors, spacing, ...).
 Widget buildTestApp(Widget child) => MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: child),
-    );
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: Scaffold(body: child),
+);
 
 /// Widget test for the reusable error state (message + retry button).
 void main() {
-  testWidgets('shows the message and triggers onRetry when tapped', (tester) async {
+  testWidgets('shows the message and triggers onRetry when tapped', (
+    tester,
+  ) async {
     var retryTapped = false;
 
     await tester.pumpWidget(

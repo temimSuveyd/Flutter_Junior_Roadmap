@@ -4,10 +4,7 @@ import 'package:juniorflutterroadmap/features/auth/data/dtos/sign_in/sign_in_req
 /// Tests that the sign-in request sends the right API keys.
 void main() {
   test('toJson sends email and password', () {
-    final dto = SignInRequestDto(
-      userName: 'me@x.com',
-      password: 'secret',
-    );
+    final dto = SignInRequestDto(userName: 'me@x.com', password: 'secret');
 
     final json = dto.toJson();
 

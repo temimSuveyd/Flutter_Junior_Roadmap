@@ -25,7 +25,7 @@ class RemoteProductServicesImpl extends RemoteProductServices {
       ApiEndpoints.getProducts,
       queryParameters: queryParameters,
     );
-    
+
     return response.data as List<dynamic>;
   }
 
@@ -45,8 +45,7 @@ class RemoteProductServicesImpl extends RemoteProductServices {
 
   @override
   Future<Map<String, dynamic>> getProductById(int id) async {
-    final response =
-        await _dioClient.get(ApiEndpoints.getProductById(id));
+    final response = await _dioClient.get(ApiEndpoints.getProductById(id));
     return response.data as Map<String, dynamic>;
   }
 

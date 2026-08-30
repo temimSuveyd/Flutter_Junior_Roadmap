@@ -39,9 +39,9 @@ class CategoryList extends StatelessWidget {
               return CategoryChip(
                 category: category,
                 isSelected: isSelected,
-                onTap: () => context
-                    .read<ProductBloc>()
-                    .add(CategorySelected(category?.id)),
+                onTap: () => context.read<ProductBloc>().add(
+                  CategorySelected(category?.id),
+                ),
               );
             },
           ),
@@ -78,7 +78,9 @@ class CategoryChip extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isSelected ? context.colors.primary : context.colors.surface,
+              color: isSelected
+                  ? context.colors.primary
+                  : context.colors.surface,
               border: Border.all(
                 color: isSelected
                     ? context.colors.primary
@@ -96,8 +98,9 @@ class CategoryChip extends StatelessWidget {
                 : Icon(
                     IconsaxPlusLinear.category,
                     size: 24,
-                    color:
-                        isSelected ? context.colors.surface : context.colors.textSecondary,
+                    color: isSelected
+                        ? context.colors.surface
+                        : context.colors.textSecondary,
                   ),
           ),
           const SizedBox(height: 6),
@@ -107,7 +110,9 @@ class CategoryChip extends StatelessWidget {
               label,
               style: context.labelSmall.copyWith(
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? context.colors.primary : context.colors.textSecondary,
+                color: isSelected
+                    ? context.colors.primary
+                    : context.colors.textSecondary,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

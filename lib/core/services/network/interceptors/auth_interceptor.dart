@@ -7,10 +7,7 @@ class AuthInterceptor extends Interceptor {
   final AuthTokenManager _tokenManager;
 
   @override
-  void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final String? token = _tokenManager.getAccessTokenSync();
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';

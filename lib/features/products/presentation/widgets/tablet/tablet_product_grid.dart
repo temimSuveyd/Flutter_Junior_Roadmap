@@ -3,7 +3,6 @@ import 'package:juniorflutterroadmap/features/products/data/models/product_model
 import '../shared/product_card.dart';
 
 class TabletProductGrid extends StatelessWidget {
-
   const TabletProductGrid({super.key, required this.products});
   final List<ProductModel> products;
 
@@ -17,9 +16,7 @@ class TabletProductGrid extends StatelessWidget {
         mainAxisSpacing: 20,
       ),
       itemCount: products.length,
-      itemBuilder: (context, index) => ProductCard(product: products[index],
-      
-      ),
+      itemBuilder: (context, index) => ProductCard(product: products[index]),
     );
   }
 }

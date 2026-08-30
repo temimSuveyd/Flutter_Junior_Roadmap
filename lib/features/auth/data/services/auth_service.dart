@@ -25,7 +25,6 @@ abstract class AuthService {
 }
 
 class AuthServiceImpl extends AuthService {
-
   AuthServiceImpl(this._client);
   final DioClient _client;
 

@@ -55,14 +55,14 @@ extension AnimatedWidgetExtensions on Widget {
     Curve? switchInCurve,
     Curve? switchOutCurve,
     Widget Function(Widget, Animation<double>)? transitionBuilder,
-  }) =>
-      AnimatedSwitcher(
-        key: key,
-        duration: duration ?? AppDurations.normal,
-        switchInCurve: switchInCurve ?? AppDurations.curve,
-        switchOutCurve: switchOutCurve ?? AppDurations.curve,
-        transitionBuilder: transitionBuilder ??
-            (child, animation) => FadeTransition(opacity: animation, child: child),
-        child: this,
-      );
+  }) => AnimatedSwitcher(
+    key: key,
+    duration: duration ?? AppDurations.normal,
+    switchInCurve: switchInCurve ?? AppDurations.curve,
+    switchOutCurve: switchOutCurve ?? AppDurations.curve,
+    transitionBuilder:
+        transitionBuilder ??
+        (child, animation) => FadeTransition(opacity: animation, child: child),
+    child: this,
+  );
 }

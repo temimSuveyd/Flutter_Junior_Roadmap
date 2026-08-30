@@ -43,24 +43,30 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     switch (result) {
       case Success(:final data):
         if (data.isEmpty) {
-          emit(ProductEmpty(
-            categories: categories,
-            selectedCategoryId: currentCategoryId,
-          ));
+          emit(
+            ProductEmpty(
+              categories: categories,
+              selectedCategoryId: currentCategoryId,
+            ),
+          );
         } else {
-          emit(ProductLoaded(
-            data,
-            hasReachedMax: data.length < _limit,
-            categories: categories,
-            selectedCategoryId: currentCategoryId,
-          ));
+          emit(
+            ProductLoaded(
+              data,
+              hasReachedMax: data.length < _limit,
+              categories: categories,
+              selectedCategoryId: currentCategoryId,
+            ),
+          );
         }
       case Error(:final error):
-        emit(ProductError(
-          error.message,
-          categories: categories,
-          selectedCategoryId: currentCategoryId,
-        ));
+        emit(
+          ProductError(
+            error.message,
+            categories: categories,
+            selectedCategoryId: currentCategoryId,
+          ),
+        );
     }
   }
 
@@ -76,24 +82,30 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     switch (result) {
       case Success(:final data):
         if (data.isEmpty) {
-          emit(ProductEmpty(
-            categories: currentCategories,
-            selectedCategoryId: event.categoryId,
-          ));
+          emit(
+            ProductEmpty(
+              categories: currentCategories,
+              selectedCategoryId: event.categoryId,
+            ),
+          );
         } else {
-          emit(ProductLoaded(
-            data,
-            hasReachedMax: true,
-            categories: currentCategories,
-            selectedCategoryId: event.categoryId,
-          ));
+          emit(
+            ProductLoaded(
+              data,
+              hasReachedMax: true,
+              categories: currentCategories,
+              selectedCategoryId: event.categoryId,
+            ),
+          );
         }
       case Error(:final error):
-        emit(ProductError(
-          error.message,
-          categories: currentCategories,
-          selectedCategoryId: event.categoryId,
-        ));
+        emit(
+          ProductError(
+            error.message,
+            categories: currentCategories,
+            selectedCategoryId: event.categoryId,
+          ),
+        );
     }
   }
 
@@ -105,39 +117,37 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     switch (result) {
       case Success(:final data):
         final current = state;
-        emit(
-          switch (current) {
+        emit(switch (current) {
+          ProductLoaded(
+            :final products,
+            :final hasReachedMax,
+            :final isLoadingMore,
+          ) =>
             ProductLoaded(
-              :final products,
-              :final hasReachedMax,
-              :final isLoadingMore,
-            ) =>
-              ProductLoaded(
-                products,
-                hasReachedMax: hasReachedMax,
-                isLoadingMore: isLoadingMore,
-                categories: data,
-                selectedCategoryId: current.selectedCategoryId,
-              ),
-            ProductInitial() => ProductInitial(
-                categories: data,
-                selectedCategoryId: current.selectedCategoryId,
-              ),
-            ProductLoading() => ProductLoading(
-                categories: data,
-                selectedCategoryId: current.selectedCategoryId,
-              ),
-            ProductEmpty() => ProductEmpty(
-                categories: data,
-                selectedCategoryId: current.selectedCategoryId,
-              ),
-            ProductError(:final message) => ProductError(
-                message,
-                categories: data,
-                selectedCategoryId: current.selectedCategoryId,
-              ),
-          },
-        );
+              products,
+              hasReachedMax: hasReachedMax,
+              isLoadingMore: isLoadingMore,
+              categories: data,
+              selectedCategoryId: current.selectedCategoryId,
+            ),
+          ProductInitial() => ProductInitial(
+            categories: data,
+            selectedCategoryId: current.selectedCategoryId,
+          ),
+          ProductLoading() => ProductLoading(
+            categories: data,
+            selectedCategoryId: current.selectedCategoryId,
+          ),
+          ProductEmpty() => ProductEmpty(
+            categories: data,
+            selectedCategoryId: current.selectedCategoryId,
+          ),
+          ProductError(:final message) => ProductError(
+            message,
+            categories: data,
+            selectedCategoryId: current.selectedCategoryId,
+          ),
+        });
       case Error():
         break;
     }
@@ -170,12 +180,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     switch (result) {
       case Success(:final data):
         final merged = [...current.products, ...data];
-        emit(ProductLoaded(
-          merged,
-          hasReachedMax: data.length < _limit,
-          categories: current.categories,
-          selectedCategoryId: current.selectedCategoryId,
-        ));
+        emit(
+          ProductLoaded(
+            merged,
+            hasReachedMax: data.length < _limit,
+            categories: current.categories,
+            selectedCategoryId: current.selectedCategoryId,
+          ),
+        );
       case Error():
         emit(
           ProductLoaded(

@@ -22,7 +22,9 @@ class FlutterLocalNotificationsService implements LocalNotificationService {
   static const _channelName = 'High Importance Notifications';
 
   @override
-  void setOnNotificationTapped(void Function(Map<String, dynamic>? data) onTap) {
+  void setOnNotificationTapped(
+    void Function(Map<String, dynamic>? data) onTap,
+  ) {
     _onTap = onTap;
   }
 

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class Address extends Equatable {
-
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
       city: (json['city'] as String?) ?? '',
@@ -20,10 +19,7 @@ class Address extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'city': city,
-        'fullAddress': fullAddress,
-      };
+  Map<String, dynamic> toJson() => {'city': city, 'fullAddress': fullAddress};
 
   @override
   List<Object?> get props => [city, fullAddress];

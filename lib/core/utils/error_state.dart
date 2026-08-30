@@ -3,7 +3,6 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 class ErrorState extends StatelessWidget {
-
   const ErrorState({super.key, required this.message, this.onRetry});
   final String message;
   final VoidCallback? onRetry;

@@ -68,8 +68,9 @@ class ProductRepositoryImpl extends ProductRepository with NetworkInfo {
   @override
   Future<Result<List<ProductModel>>> getProductsByCategory(int categoryId) {
     return runCatching(() async {
-      final remoteProducts =
-          await _remoteProductServices.getProductsByCategory(categoryId);
+      final remoteProducts = await _remoteProductServices.getProductsByCategory(
+        categoryId,
+      );
       final products = <ProductModel>[];
       for (final item in remoteProducts) {
         products.add(

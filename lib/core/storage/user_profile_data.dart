@@ -1,5 +1,4 @@
 class UserProfileData {
-
   const UserProfileData({this.id, this.name, this.email, this.avatarUrl});
 
   factory UserProfileData.fromJson(Map<String, dynamic> json) {
@@ -31,9 +30,9 @@ class UserProfileData {
   }
 
   Map<String, dynamic> toJson() => {
-        if (id != null) 'id': id,
-        if (name != null) 'name': name,
-        if (email != null) 'email': email,
-        if (avatarUrl != null) 'avatarUrl': avatarUrl,
-      };
+    if (id != null) 'id': id,
+    if (name != null) 'name': name,
+    if (email != null) 'email': email,
+    if (avatarUrl != null) 'avatarUrl': avatarUrl,
+  };
 }

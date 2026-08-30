@@ -10,10 +10,7 @@ abstract class AuthTokenManager {
   /// Synchronous access to the refresh token from the in-memory cache.
   String? getRefreshTokenSync();
 
-  Future<void> saveTokens({
-    required String accessToken,
-    String? refreshToken,
-  });
+  Future<void> saveTokens({required String accessToken, String? refreshToken});
   Future<void> clearTokens();
 
   /// Hydrates the in-memory cache from persistent storage. Call once at startup.

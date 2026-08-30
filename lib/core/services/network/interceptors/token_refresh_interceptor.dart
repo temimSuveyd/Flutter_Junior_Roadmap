@@ -7,9 +7,9 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
     required AuthTokenManager tokenManager,
     required RefreshTokenProvider Function() refreshTokenProvider,
     required Dio dio,
-  })  : _tokenManager = tokenManager,
-        _refreshTokenProvider = refreshTokenProvider,
-        _dio = dio {
+  }) : _tokenManager = tokenManager,
+       _refreshTokenProvider = refreshTokenProvider,
+       _dio = dio {
     _refreshDio = Dio(_dio.options);
   }
 
@@ -27,12 +27,9 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-
-
-    
     final isRefreshRequest =
         err.requestOptions.extra[RefreshTokenProvider.isRefreshRequestKey] ==
-            true;
+        true;
     final alreadyRefreshed = err.requestOptions.extra[_refreshedKey] == true;
 
     if (err.response?.statusCode != 401 ||

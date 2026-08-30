@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../../core/common/helpers/helpers.dart';
 
 class ProductListFooter extends StatelessWidget {
-
   const ProductListFooter({
     super.key,
     required this.isLoadingMore,

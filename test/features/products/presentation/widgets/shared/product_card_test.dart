@@ -7,10 +7,10 @@ import 'package:juniorflutterroadmap/features/products/presentation/widgets/shar
 /// Minimal app wrapper so widgets can use the app's localizations and
 /// design-system context extensions (colors, spacing, ...).
 Widget buildTestApp(Widget child) => MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: child),
-    );
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: Scaffold(body: child),
+);
 
 /// Widget test for the product card (renders data + handles tap).
 void main() {
@@ -28,10 +28,7 @@ void main() {
 
     await tester.pumpWidget(
       buildTestApp(
-        ProductCard(
-          product: product,
-          onTap: () => cardTapped = true,
-        ),
+        ProductCard(product: product, onTap: () => cardTapped = true),
       ),
     );
 

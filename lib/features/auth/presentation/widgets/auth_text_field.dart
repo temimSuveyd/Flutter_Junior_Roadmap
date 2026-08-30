@@ -54,7 +54,6 @@ class AuthTextField extends StatelessWidget {
     final focusedColor = focusedBorderColor ?? context.colors.primary;
 
     return TextFormField(
-    
       controller: controller,
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,

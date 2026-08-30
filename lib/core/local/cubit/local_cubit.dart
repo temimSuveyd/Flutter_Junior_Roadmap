@@ -7,8 +7,7 @@ part 'local_state.dart';
 
 /// Cubit responsible for managing the app's current locale.
 class LocaleCubit extends Cubit<LocaleState> {
-  LocaleCubit(this._repository)
-      : super(const LocaleState()) {
+  LocaleCubit(this._repository) : super(const LocaleState()) {
     _loadSavedLocale();
   }
 

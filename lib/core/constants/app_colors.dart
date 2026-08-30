@@ -44,4 +44,3 @@ final class DarkColors {
   static const Color warning = Color(0xFFFBBF24);
   static const Color error = Color(0xFFF87171);
 }
-

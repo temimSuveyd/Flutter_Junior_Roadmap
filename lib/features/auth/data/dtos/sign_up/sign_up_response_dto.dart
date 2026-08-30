@@ -1,11 +1,5 @@
 class SignUpResponseDto {
-
-  SignUpResponseDto({
-    required this.id,
-    this.name,
-    this.email,
-    this.avatar,
-  });
+  SignUpResponseDto({required this.id, this.name, this.email, this.avatar});
 
   factory SignUpResponseDto.fromJson(Map<String, dynamic> json) {
     return SignUpResponseDto(

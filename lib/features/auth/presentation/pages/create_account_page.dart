@@ -50,14 +50,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     if (context.read<AuthBloc>().state is AuthLoading) return;
     if (_formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
-            SignUpRequested(
-              SignUpRequestDto(
-                name: _nameController.text.trim(),
-                email: _emailController.text.trim(),
-                password: _passwordController.text.trim(),
-              ),
-            ),
-          );
+        SignUpRequested(
+          SignUpRequestDto(
+            name: _nameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+          ),
+        ),
+      );
     }
   }
 
@@ -87,7 +87,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   void _onPasswordChanged(String value) {
     setState(() {
-      passwordIsAccepted = AppValidators.validatePassword(context, value) == null;
+      passwordIsAccepted =
+          AppValidators.validatePassword(context, value) == null;
     });
   }
 
@@ -140,14 +141,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message)));
-        }          if (state is AuthSignUpSuccess) {
+        }
+        if (state is AuthSignUpSuccess) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(
-            SnackBar(
-              content: Text(context.t.accountCreated),
-            ),
-          );
+          ).showSnackBar(SnackBar(content: Text(context.t.accountCreated)));
           context.go(AppRoutes.signIn);
         }
       },
@@ -190,7 +188,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 isAccepted: emailIsAccepted,
                                 onChanged: _onEmailChanged,
                                 onFieldSubmitted: _onEmailSubmitted,
-                                validator: (v) => AppValidators.validateEmail(context, v),
+                                validator: (v) =>
+                                    AppValidators.validateEmail(context, v),
                                 focusNode: _emailFocus,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
@@ -202,7 +201,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 isAccepted: passwordIsAccepted,
                                 onChanged: _onPasswordChanged,
                                 onFieldSubmitted: _onPasswordSubmitted,
-                                validator: (v) => AppValidators.validatePassword(context, v),
+                                validator: (v) =>
+                                    AppValidators.validatePassword(context, v),
                                 focusNode: _passwordFocus,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.next,

@@ -1,5 +1,4 @@
 class CategoryResponse {
-
   factory CategoryResponse.fromJson(Map<String, dynamic> json) {
     return CategoryResponse(
       id: (json['id'] as num?)?.toInt() ?? 0,

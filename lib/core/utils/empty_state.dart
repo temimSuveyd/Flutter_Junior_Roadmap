@@ -3,7 +3,6 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 
 class EmptyState extends StatelessWidget {
-
   const EmptyState({super.key, required this.message, this.action});
   final String message;
   final Widget? action;
@@ -29,10 +28,7 @@ class EmptyState extends StatelessWidget {
                 color: context.colors.textSecondary,
               ),
             ),
-            if (action != null) ...[
-              context.vGapLg,
-              action!,
-            ],
+            if (action != null) ...[context.vGapLg, action!],
           ],
         ),
       ),

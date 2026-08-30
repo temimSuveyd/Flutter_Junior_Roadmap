@@ -23,10 +23,8 @@ class App extends StatelessWidget {
         BlocProvider(create: (_) => ThemeCubit(getIt<SharedPreferences>())),
         BlocProvider(create: (_) => LocaleCubit(getIt<LocaleRepository>())),
         BlocProvider(
-          create: (_) => AddressCubit(
-            getIt<LocationService>(),
-            getIt<AddressStore>(),
-          ),
+          create: (_) =>
+              AddressCubit(getIt<LocationService>(), getIt<AddressStore>()),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(

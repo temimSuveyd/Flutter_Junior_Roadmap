@@ -1,5 +1,4 @@
 class SignInResponseDto {
-
   SignInResponseDto({required this.accessToken, required this.refreshToken});
 
   factory SignInResponseDto.fromJson(Map<String, dynamic> json) {

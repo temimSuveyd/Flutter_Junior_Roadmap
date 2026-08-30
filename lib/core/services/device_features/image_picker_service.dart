@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:image_picker/image_picker.dart';
 
 import 'permission_service.dart';
@@ -13,15 +12,15 @@ abstract class ImagePickerService {
 
 class ImagePickerServiceImpl implements ImagePickerService {
   ImagePickerServiceImpl(this._permissionService, [ImagePicker? picker])
-      : _picker = picker ?? ImagePicker();
+    : _picker = picker ?? ImagePicker();
 
   final PermissionService _permissionService;
   final ImagePicker _picker;
 
   @override
   Future<File?> pickImageFromCamera() async {
-    final hasPermission =
-        await _permissionService.checkAndRequestCameraPermission();
+    final hasPermission = await _permissionService
+        .checkAndRequestCameraPermission();
     if (!hasPermission) return null;
 
     return _pick(source: ImageSource.camera);
@@ -29,8 +28,8 @@ class ImagePickerServiceImpl implements ImagePickerService {
 
   @override
   Future<File?> pickImageFromGallery() async {
-    final hasPermission =
-        await _permissionService.checkAndRequestPhotoPermission();
+    final hasPermission = await _permissionService
+        .checkAndRequestPhotoPermission();
     if (!hasPermission) return null;
 
     return _pick(source: ImageSource.gallery);

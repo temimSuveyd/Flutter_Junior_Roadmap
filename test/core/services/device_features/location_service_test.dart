@@ -12,17 +12,17 @@ class MockLocationService extends Mock implements LocationService {}
 class MockPermissionService extends Mock implements PermissionService {}
 
 Position _fakePosition(double latitude, double longitude) => Position(
-      latitude: latitude,
-      longitude: longitude,
-      timestamp: DateTime.now(),
-      accuracy: 0,
-      altitude: 0,
-      altitudeAccuracy: 0,
-      heading: 0,
-      headingAccuracy: 0,
-      speed: 0,
-      speedAccuracy: 0,
-    );
+  latitude: latitude,
+  longitude: longitude,
+  timestamp: DateTime.now(),
+  accuracy: 0,
+  altitude: 0,
+  altitudeAccuracy: 0,
+  heading: 0,
+  headingAccuracy: 0,
+  speed: 0,
+  speedAccuracy: 0,
+);
 
 void main() {
   group('LocationServiceImpl', () {
@@ -35,8 +35,9 @@ void main() {
     });
 
     test('throws locationPermissionDenied when permission is denied', () async {
-      when(() => permission.checkAndRequestLocationPermission())
-          .thenAnswer((_) async => false);
+      when(
+        () => permission.checkAndRequestLocationPermission(),
+      ).thenAnswer((_) async => false);
 
       expect(
         () => service.getCurrentAddress(),
@@ -51,8 +52,9 @@ void main() {
     });
 
     test('throws locationError when getCurrentPosition fails', () async {
-      when(() => permission.checkAndRequestLocationPermission())
-          .thenAnswer((_) async => true);
+      when(
+        () => permission.checkAndRequestLocationPermission(),
+      ).thenAnswer((_) async => true);
       service = LocationServiceImpl(
         permission,
         getCurrentPosition:
@@ -73,15 +75,16 @@ void main() {
     });
 
     test('throws locationError when no placemarks are returned', () async {
-      when(() => permission.checkAndRequestLocationPermission())
-          .thenAnswer((_) async => true);
+      when(
+        () => permission.checkAndRequestLocationPermission(),
+      ).thenAnswer((_) async => true);
       service = LocationServiceImpl(
         permission,
         getCurrentPosition:
             ({LocationAccuracy? desiredAccuracy, Duration? timeLimit}) async =>
                 _fakePosition(36.2, 37.1),
-        placemarkFromCoordinates:
-            (double latitude, double longitude) async => <Placemark>[],
+        placemarkFromCoordinates: (double latitude, double longitude) async =>
+            <Placemark>[],
       );
 
       expect(
@@ -97,23 +100,24 @@ void main() {
     });
 
     test('returns Address with city and fullAddress on success', () async {
-      when(() => permission.checkAndRequestLocationPermission())
-          .thenAnswer((_) async => true);
+      when(
+        () => permission.checkAndRequestLocationPermission(),
+      ).thenAnswer((_) async => true);
       service = LocationServiceImpl(
         permission,
         getCurrentPosition:
             ({LocationAccuracy? desiredAccuracy, Duration? timeLimit}) async =>
                 _fakePosition(36.2, 37.1),
-        placemarkFromCoordinates:
-            (double latitude, double longitude) async => const [
-                  Placemark(
-                    street: 'St 10',
-                    subLocality: 'District',
-                    locality: 'Halep',
-                    postalCode: '12345',
-                    country: 'Syria',
-                  ),
-                ],
+        placemarkFromCoordinates: (double latitude, double longitude) async =>
+            const [
+              Placemark(
+                street: 'St 10',
+                subLocality: 'District',
+                locality: 'Halep',
+                postalCode: '12345',
+                country: 'Syria',
+              ),
+            ],
       );
 
       final address = await service.getCurrentAddress();

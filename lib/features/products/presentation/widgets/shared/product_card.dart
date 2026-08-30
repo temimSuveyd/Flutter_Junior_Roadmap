@@ -14,7 +14,6 @@ class ProductCard extends StatelessWidget {
     var gestureDetector = GestureDetector(
       onTap: onTap,
       child: Hero(
-        
         tag: product.id.toString(),
         child: Material(
           type: MaterialType.transparency,
@@ -37,13 +36,13 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
-          
+
                     Padding(
                       padding: EdgeInsets.all(context.spacing.spaceMd),
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
-          
+
                           Text(
                             product.title,
                             style: TextStyle(

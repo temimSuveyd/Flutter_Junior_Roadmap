@@ -41,6 +41,9 @@ jobs:
       # ==========================================
 
       # E. Task 1: Format Check
+      - name: Auto Format Code
+        run: dart format .
+
       - name: Check code formatting
         run: dart format --output=none --set-exit-if-changed .
 

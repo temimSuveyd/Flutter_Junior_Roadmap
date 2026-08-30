@@ -45,59 +45,72 @@ void main() {
       service = ImagePickerServiceImpl(permission, picker);
     });
 
-    test('camera: returns null and never opens picker when permission denied',
-        () async {
-      when(() => permission.checkAndRequestCameraPermission())
-          .thenAnswer((_) async => false);
+    test(
+      'camera: returns null and never opens picker when permission denied',
+      () async {
+        when(
+          () => permission.checkAndRequestCameraPermission(),
+        ).thenAnswer((_) async => false);
 
-      final result = await service.pickImageFromCamera();
+        final result = await service.pickImageFromCamera();
 
-      expect(result, isNull);
-      expect(picker.pickCallCount, 0);
-    });
+        expect(result, isNull);
+        expect(picker.pickCallCount, 0);
+      },
+    );
 
-    test('gallery: returns null and never opens picker when permission denied',
-        () async {
-      when(() => permission.checkAndRequestPhotoPermission())
-          .thenAnswer((_) async => false);
+    test(
+      'gallery: returns null and never opens picker when permission denied',
+      () async {
+        when(
+          () => permission.checkAndRequestPhotoPermission(),
+        ).thenAnswer((_) async => false);
 
-      final result = await service.pickImageFromGallery();
+        final result = await service.pickImageFromGallery();
 
-      expect(result, isNull);
-      expect(picker.pickCallCount, 0);
-    });
+        expect(result, isNull);
+        expect(picker.pickCallCount, 0);
+      },
+    );
 
-    test('camera: returns a File when permission granted and an image is picked',
-        () async {
-      when(() => permission.checkAndRequestCameraPermission())
-          .thenAnswer((_) async => true);
-      picker.picked = XFile('fake_photo.jpg');
+    test(
+      'camera: returns a File when permission granted and an image is picked',
+      () async {
+        when(
+          () => permission.checkAndRequestCameraPermission(),
+        ).thenAnswer((_) async => true);
+        picker.picked = XFile('fake_photo.jpg');
 
-      final result = await service.pickImageFromCamera();
+        final result = await service.pickImageFromCamera();
 
-      expect(result, isNotNull);
-      expect(result!.path, 'fake_photo.jpg');
-      expect(picker.pickCallCount, 1);
-    });
+        expect(result, isNotNull);
+        expect(result!.path, 'fake_photo.jpg');
+        expect(picker.pickCallCount, 1);
+      },
+    );
 
-    test('gallery: returns null when permission granted but user cancels',
-        () async {
-      when(() => permission.checkAndRequestPhotoPermission())
-          .thenAnswer((_) async => true);
-      picker.picked = null;
+    test(
+      'gallery: returns null when permission granted but user cancels',
+      () async {
+        when(
+          () => permission.checkAndRequestPhotoPermission(),
+        ).thenAnswer((_) async => true);
+        picker.picked = null;
 
-      final result = await service.pickImageFromGallery();
+        final result = await service.pickImageFromGallery();
 
-      expect(result, isNull);
-      expect(picker.pickCallCount, 1);
-    });
+        expect(result, isNull);
+        expect(picker.pickCallCount, 1);
+      },
+    );
   });
 
   group('MockImagePickerService (reusable mock)', () {
     test('can be stubbed to return a picked file', () async {
       final mock = MockImagePickerService();
-      when(() => mock.pickImageFromGallery())
-          .thenAnswer((_) async => File('picked.png'));
+      when(
+        () => mock.pickImageFromGallery(),
+      ).thenAnswer((_) async => File('picked.png'));
 
       final result = await mock.pickImageFromGallery();
 

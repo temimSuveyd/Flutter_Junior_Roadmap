@@ -111,7 +111,6 @@ extension AppContextX on BuildContext {
 
 /// Colors helper with lazy caching
 class ContextColors {
-
   factory ContextColors.of(BuildContext context) =>
       _instances.putIfAbsent(context, () => ContextColors._(context));
   const ContextColors._(this.context);
@@ -137,7 +136,6 @@ class ContextColors {
 
 /// Spacing helper with lazy caching
 class ContextSpacing {
-
   factory ContextSpacing.of(BuildContext context) =>
       _instances.putIfAbsent(context, () => ContextSpacing._(context));
   const ContextSpacing._(this.context);
@@ -156,30 +154,52 @@ class ContextSpacing {
   double get spaceXxxxxl => AppSpacing.xxxxxl;
   double get spaceHuge => AppSpacing.huge;
 
-  EdgeInsetsDirectional get insetXs => const EdgeInsetsDirectional.all(AppSpacing.xs);
-  EdgeInsetsDirectional get insetSm => const EdgeInsetsDirectional.all(AppSpacing.sm);
-  EdgeInsetsDirectional get insetMd => const EdgeInsetsDirectional.all(AppSpacing.md);
-  EdgeInsetsDirectional get insetLg => const EdgeInsetsDirectional.all(AppSpacing.lg);
-  EdgeInsetsDirectional get insetXl => const EdgeInsetsDirectional.all(AppSpacing.xl);
-  EdgeInsetsDirectional get insetXxl => const EdgeInsetsDirectional.all(AppSpacing.xxl);
+  EdgeInsetsDirectional get insetXs =>
+      const EdgeInsetsDirectional.all(AppSpacing.xs);
+  EdgeInsetsDirectional get insetSm =>
+      const EdgeInsetsDirectional.all(AppSpacing.sm);
+  EdgeInsetsDirectional get insetMd =>
+      const EdgeInsetsDirectional.all(AppSpacing.md);
+  EdgeInsetsDirectional get insetLg =>
+      const EdgeInsetsDirectional.all(AppSpacing.lg);
+  EdgeInsetsDirectional get insetXl =>
+      const EdgeInsetsDirectional.all(AppSpacing.xl);
+  EdgeInsetsDirectional get insetXxl =>
+      const EdgeInsetsDirectional.all(AppSpacing.xxl);
 
-  EdgeInsetsDirectional get horizontalSm =>
-      const EdgeInsetsDirectional.only(start: AppSpacing.sm, end: AppSpacing.sm);
-  EdgeInsetsDirectional get horizontalMd =>
-      const EdgeInsetsDirectional.only(start: AppSpacing.md, end: AppSpacing.md);
-  EdgeInsetsDirectional get horizontalLg =>
-      const EdgeInsetsDirectional.only(start: AppSpacing.lg, end: AppSpacing.lg);
-  EdgeInsetsDirectional get horizontalXl =>
-      const EdgeInsetsDirectional.only(start: AppSpacing.xl, end: AppSpacing.xl);
+  EdgeInsetsDirectional get horizontalSm => const EdgeInsetsDirectional.only(
+    start: AppSpacing.sm,
+    end: AppSpacing.sm,
+  );
+  EdgeInsetsDirectional get horizontalMd => const EdgeInsetsDirectional.only(
+    start: AppSpacing.md,
+    end: AppSpacing.md,
+  );
+  EdgeInsetsDirectional get horizontalLg => const EdgeInsetsDirectional.only(
+    start: AppSpacing.lg,
+    end: AppSpacing.lg,
+  );
+  EdgeInsetsDirectional get horizontalXl => const EdgeInsetsDirectional.only(
+    start: AppSpacing.xl,
+    end: AppSpacing.xl,
+  );
 
-  EdgeInsetsDirectional get verticalSm =>
-      const EdgeInsetsDirectional.only(top: AppSpacing.sm, bottom: AppSpacing.sm);
-  EdgeInsetsDirectional get verticalMd =>
-      const EdgeInsetsDirectional.only(top: AppSpacing.md, bottom: AppSpacing.md);
-  EdgeInsetsDirectional get verticalLg =>
-      const EdgeInsetsDirectional.only(top: AppSpacing.lg, bottom: AppSpacing.lg);
-  EdgeInsetsDirectional get verticalXl =>
-      const EdgeInsetsDirectional.only(top: AppSpacing.xl, bottom: AppSpacing.xl);
+  EdgeInsetsDirectional get verticalSm => const EdgeInsetsDirectional.only(
+    top: AppSpacing.sm,
+    bottom: AppSpacing.sm,
+  );
+  EdgeInsetsDirectional get verticalMd => const EdgeInsetsDirectional.only(
+    top: AppSpacing.md,
+    bottom: AppSpacing.md,
+  );
+  EdgeInsetsDirectional get verticalLg => const EdgeInsetsDirectional.only(
+    top: AppSpacing.lg,
+    bottom: AppSpacing.lg,
+  );
+  EdgeInsetsDirectional get verticalXl => const EdgeInsetsDirectional.only(
+    top: AppSpacing.xl,
+    bottom: AppSpacing.xl,
+  );
 
   SizedBox get hGapXs => const SizedBox(width: AppSpacing.xs);
   SizedBox get hGapSm => const SizedBox(width: AppSpacing.sm);
@@ -198,7 +218,6 @@ class ContextSpacing {
 
 /// Radius helper with lazy caching
 class ContextRadius {
-
   factory ContextRadius.of(BuildContext context) =>
       _instances.putIfAbsent(context, () => ContextRadius._(context));
   const ContextRadius._(this.context);
@@ -226,7 +245,6 @@ class ContextRadius {
 
 /// Typography helper with lazy caching
 class ContextTypography {
-
   factory ContextTypography.of(BuildContext context) =>
       _instances.putIfAbsent(context, () => ContextTypography._(context));
   const ContextTypography._(this.context);
@@ -266,7 +284,6 @@ class ContextTypography {
 
 /// Responsive helper with lazy caching
 class ContextResponsive {
-
   factory ContextResponsive.of(BuildContext context) =>
       _instances.putIfAbsent(context, () => ContextResponsive._(context));
   const ContextResponsive._(this.context);
@@ -287,7 +304,6 @@ class ContextResponsive {
 
 /// L10n helper with lazy caching
 class ContextL10n {
-
   factory ContextL10n.of(BuildContext context) =>
       _instances.putIfAbsent(context, () => ContextL10n._(context));
   const ContextL10n._(this.context);
@@ -310,7 +326,6 @@ class ContextL10n {
 
 /// Assets helper with lazy caching
 class ContextAssets {
-
   factory ContextAssets.of(BuildContext context) =>
       _instances.putIfAbsent(context, () => ContextAssets._(context));
   const ContextAssets._(this.context);

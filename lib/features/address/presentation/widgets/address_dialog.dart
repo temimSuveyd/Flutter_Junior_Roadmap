@@ -61,35 +61,29 @@ class _AddressDialogContentState extends State<_AddressDialogContent> {
                 child: Center(child: CircularProgressIndicator()),
               )
             : state.error != null
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(_errorText(context, state.error)),
-                      const SizedBox(height: 16),
-                      AppPrimaryButton(
-                        label: t.useMyLocation,
-                        onPressed: _retry,
-                      ),
-                    ],
-                  )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppValue(
-                        label: t.cityLabel,
-                        value: state.detected?.city ?? '',
-                      ),
-                      AppValue(
-                        label: t.addressLabel,
-                        value: state.detected?.fullAddress ?? '',
-                      ),
-                      AppPrimaryButton(
-                        label: t.saveAddress,
-                        onPressed: _onSave,
-                      ),
-                    ],
-                  );
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(_errorText(context, state.error)),
+                  const SizedBox(height: 16),
+                  AppPrimaryButton(label: t.useMyLocation, onPressed: _retry),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppValue(
+                    label: t.cityLabel,
+                    value: state.detected?.city ?? '',
+                  ),
+                  AppValue(
+                    label: t.addressLabel,
+                    value: state.detected?.fullAddress ?? '',
+                  ),
+                  AppPrimaryButton(label: t.saveAddress, onPressed: _onSave),
+                ],
+              );
 
         return AlertDialog(
           title: Text(t.addressTitle),
