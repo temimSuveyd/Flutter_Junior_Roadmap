@@ -1,6 +1,10 @@
 class ApiEndpoints {
   // Base URL
   static const String baseUrl = 'https://api.escuelajs.co/api/v1';
+  static const String devBaseUrl = 'https://api.escuelajs.co/api/v1';
+  static const String stagBaseUrl = 'https://api.escuelajs.co/api/v1';
+
+
 
   // Timeout
   static const Duration connectTimeout = Duration(seconds: 10);
