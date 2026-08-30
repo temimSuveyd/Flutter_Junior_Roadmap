@@ -73,6 +73,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home => 'Home';
 
   @override
+  String get favorites => 'Favorites';
+
+  @override
   String get profile => 'Profile';
 
   @override
@@ -83,6 +86,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noProducts => 'No products available';
+
+  @override
+  String get noFavorites => 'No favorites yet';
 
   @override
   String get loadingProfile => 'Loading profile...';

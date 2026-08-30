@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/core/utils/app_network_image.dart';
+import 'package:juniorflutterroadmap/features/favorites/presentation/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
@@ -11,7 +13,11 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var gestureDetector = GestureDetector(
+    final isFavorite = context.select<FavoriteBloc, bool>(
+      (bloc) => bloc.state.favoriteIds.contains(product.id),
+    );
+
+    return GestureDetector(
       onTap: onTap,
       child: Hero(
         tag: product.id.toString(),
@@ -36,13 +42,11 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     Padding(
                       padding: EdgeInsets.all(context.spacing.spaceMd),
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
-
                           Text(
                             product.title,
                             style: TextStyle(
@@ -111,19 +115,31 @@ class ProductCard extends StatelessWidget {
               PositionedDirectional(
                 top: 0,
                 end: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: context.colors.primary,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topEnd: context.radius.md.topLeft,
-                      bottomStart: context.radius.sm.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    context.read<FavoriteBloc>().add(
+                      FavoriteToggled(product),
+                    );
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isFavorite
+                          ? context.colors.primary
+                          : context.colors.primary.withValues(alpha: 0.7),
+                      borderRadius: BorderRadiusDirectional.only(
+                        topEnd: context.radius.md.topLeft,
+                        bottomStart: context.radius.sm.bottomRight,
+                      ),
                     ),
-                  ),
-                  child: const Icon(
-                    IconsaxPlusLinear.heart,
-                    size: 18,
-                    color: Colors.white,
+                    child: Icon(
+                      isFavorite
+                          ? IconsaxPlusBold.heart
+                          : IconsaxPlusLinear.heart,
+                      size: 18,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -132,6 +148,5 @@ class ProductCard extends StatelessWidget {
         ),
       ),
     );
-    return gestureDetector;
   }
 }

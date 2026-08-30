@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/core/utils/error_state.dart';
+import 'package:juniorflutterroadmap/features/favorites/presentation/bloc/favorite_bloc/favorite_bloc.dart';
+import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
 import '../../../../core/utils/loading_state.dart';
 import '../widgets/mobile/product_details_mobile_body.dart';
@@ -31,6 +34,9 @@ class _ProductDetailsView extends StatelessWidget {
           context.l10n.t.productDetails,
           style: context.typography.titleMedium,
         ),
+        actions: [
+          _FavoriteButton(),
+        ],
       ),
       body: SafeArea(
         child: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
@@ -58,6 +64,38 @@ class _ProductDetailsView extends StatelessWidget {
                     : ProductDetailsTabletBody(product: state.product),
             };
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _FavoriteButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final product = context.select<ProductDetailsBloc, ProductModel?>(
+      (bloc) {
+        final state = bloc.state;
+        return state is ProductDetailsLoaded ? state.product : null;
+      },
+    );
+
+    if (product == null) return const SizedBox.shrink();
+
+    final isFavorite = context.select<FavoriteBloc, bool>(
+      (bloc) => bloc.state.favoriteIds.contains(product.id),
+    );
+
+    return IconButton(
+      onPressed: () {
+        context.read<FavoriteBloc>().add(FavoriteToggled(product));
+      },
+      icon: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: Icon(
+          isFavorite ? IconsaxPlusBold.heart : IconsaxPlusLinear.heart,
+          key: ValueKey(isFavorite),
+          color: isFavorite ? context.colors.primary : context.colors.textSecondary,
         ),
       ),
     );

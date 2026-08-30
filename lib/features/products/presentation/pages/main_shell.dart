@@ -41,6 +41,12 @@ final List<_NavTab> _tabs = [
     label: (context) => context.t.home,
   ),
   _NavTab(
+    route: AppRoutes.favorites,
+    icon: IconsaxPlusLinear.heart,
+    selectedIcon: IconsaxPlusBold.heart,
+    label: (context) => context.t.favorites,
+  ),
+  _NavTab(
     route: AppRoutes.profile,
     icon: IconsaxPlusLinear.profile,
     selectedIcon: IconsaxPlusBold.profile,

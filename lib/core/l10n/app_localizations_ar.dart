@@ -72,6 +72,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get home => 'الرئيسية';
 
   @override
+  String get favorites => 'المفضلة';
+
+  @override
   String get profile => 'الملف الشخصي';
 
   @override
@@ -82,6 +85,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noProducts => 'لا توجد منتجات متاحة';
+
+  @override
+  String get noFavorites => 'لا توجد منتجات مفضلة بعد';
 
   @override
   String get loadingProfile => 'جاري تحميل الملف الشخصي...';

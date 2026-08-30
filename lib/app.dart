@@ -10,6 +10,8 @@ import 'package:juniorflutterroadmap/core/storage/address_store.dart';
 import 'package:juniorflutterroadmap/core/theme/app_theme.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 import 'package:juniorflutterroadmap/features/address/presentation/cubit/address_cubit.dart';
+import 'package:juniorflutterroadmap/features/favorites/data/repositories/favorite_repository.dart';
+import 'package:juniorflutterroadmap/features/favorites/presentation/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'flavors.dart';
 
@@ -25,6 +27,11 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (_) =>
               AddressCubit(getIt<LocationService>(), getIt<AddressStore>()),
+        ),
+        BlocProvider(
+          create: (_) =>
+              FavoriteBloc(getIt<FavoriteRepository>())
+                ..add(FavoritesLoaded()),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(

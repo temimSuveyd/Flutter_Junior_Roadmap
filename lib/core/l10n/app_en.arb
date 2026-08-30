@@ -25,11 +25,13 @@
   "accountCreated": "Account created. Please sign in.",
 
   "home": "Home",
+  "favorites": "Favorites",
   "profile": "Profile",
   "search": "Search..",
 
   "loadingProducts": "Loading products...",
   "noProducts": "No products available",
+  "noFavorites": "No favorites yet",
   "loadingProfile": "Loading profile...",
 
   "retry": "Retry",

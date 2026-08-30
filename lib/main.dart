@@ -26,9 +26,13 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  F.appFlavor = Flavor.values.firstWhere(
-    (element) => element.name == appFlavor,
-  );
+  final flavorName = appFlavor;
+  F.appFlavor = flavorName != null
+      ? Flavor.values.firstWhere(
+          (element) => element.name == flavorName,
+          orElse: () => Flavor.dev,
+        )
+      : Flavor.dev;
 
   await initServices();
   runApp(const App());

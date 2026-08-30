@@ -5,6 +5,7 @@ import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
+import 'package:juniorflutterroadmap/features/favorites/presentation/pages/favorites_page.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/pages/home_page.dart';
@@ -103,6 +104,10 @@ final class AppRouter {
                       ..add(ProductsRequested()),
                 child: const HomePage(),
               ),
+            ),
+            GoRoute(
+              path: AppRoutes.favorites,
+              builder: (context, state) => const FavoritesPage(),
             ),
             GoRoute(
               path: AppRoutes.profile,
