@@ -9,7 +9,45 @@
       "client_info": {
         "mobilesdk_app_id": "1:1253344261:android:97161fb7f8f71e8f18886c",
         "android_client_info": {
-          "package_name": "com.example.e_commerce"
+          "package_name": "com.ecommerce.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1cyrGk8N6f_djjWhBw9691U_zWMXMdmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1253344261:android:97161fb7f8f71e8f18886c",
+        "android_client_info": {
+          "package_name": "com.ecommerce.staging"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1cyrGk8N6f_djjWhBw9691U_zWMXMdmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1253344261:android:97161fb7f8f71e8f18886c",
+        "android_client_info": {
+          "package_name": "com.ecommerce"
         }
       },
       "oauth_client": [],
