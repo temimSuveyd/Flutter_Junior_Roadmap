@@ -3,22 +3,22 @@ flavors:
     app:
       name: "App Dev"
     android:
-      applicationId: "com.ecommerce.dev"
+      applicationId: "com.elkood.ecommerce.dev"
     ios:
-      bundleId: "com.ecommerce.dev"
+      bundleId: "com.elkood.ecommerce.dev"
 
   staging:
     app:
       name: "App Staging"
     android:
-      applicationId: "com.ecommerce.staging"
+      applicationId: "com.elkood.ecommerce.staging"
     ios:
-      bundleId: "com.ecommerce.staging"
+      bundleId: "com.elkood.ecommerce.staging"
 
   production:
     app:
       name: "E-Commerce"
     android:
-      applicationId: "com.ecommerce"
+      applicationId: "com.elkood.ecommerce"
     ios:
-      bundleId: "com.ecommerce"
+      bundleId: "com.elkood.ecommerce"

@@ -23,7 +23,7 @@ apply(plugin = "com.google.gms.google-services")
 // END: FlutterFire Configuration
 
 android {
-    namespace = "com.example.e_commerce"
+    namespace = "com.elkood.ecommerce"
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
@@ -41,7 +41,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.e_commerce"
+        applicationId = "com.elkood.ecommerce"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
