@@ -49,3 +49,5 @@ app.*.map.json
 # Signing
 android/key.properties
 android/ecommerce-release-key.jks
+ecommerce-release-key.jks
+keystore_base64.txt
