@@ -25,7 +25,7 @@ pluginManagement {
 plugins {
     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
     id("com.android.application") version "8.11.1" apply false
-    id("org.jetbrains.kotlin.android") version "2.1.0" apply false
+    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
 }
 
 include(":app")
@@ -50,8 +50,8 @@ gradle.projectsLoaded {
                         because("Force AGP 8.11.1 for all subprojects to avoid version conflicts")
                     }
                     if (requested.group == "org.jetbrains.kotlin") {
-                        useVersion("2.1.0")
-                        because("Force Kotlin 2.1.0 for all subprojects to avoid version conflicts")
+                        useVersion("2.2.20")
+                        because("Force Kotlin 2.2.20 for all subprojects to avoid version conflicts")
                     }
                 }
             }
