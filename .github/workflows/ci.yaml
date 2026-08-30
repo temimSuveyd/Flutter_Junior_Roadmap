@@ -1,0 +1,82 @@
+name: Flutter CI Pipeline
+
+# 1. TRIGGER: When will this pipeline run?
+on:
+  push:
+    branches: [ main, develop ] # When code is pushed to main or develop branch
+  pull_request:
+    branches: [ main, develop ] # When a pull request is opened to these branches
+
+# 2. JOBS: Steps to run on the virtual machine
+jobs:
+  compliance_check:
+    # Virtual OS that GitHub will spin up for us
+    runs-on: ubuntu-latest
+
+    steps:
+      # A. Downloads repository code to the virtual machine
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # B. Installs Java on the virtual machine (required for Android builds and analysis)
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # C. Installs Flutter SDK on the virtual machine
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.7' # You can specify your company's Flutter version here
+          channel: 'stable'
+
+      # D. Installs project dependencies (flutter pub get)
+      - name: Install dependencies
+        run: flutter pub get
+
+      # ==========================================
+      # TASKS REQUESTED BY THE COMPANY
+      # ==========================================
+
+      # E. Task 1: Format Check
+      - name: Check code formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      # F. Task 2: Static Code Analysis
+      - name: Analyze code quality
+        run: flutter analyze
+
+      # G. Task 3: Run Tests
+      - name: Run unit tests
+        run: flutter test
+
+
+      # ==========================================
+      # CD (CONTINUOUS DEPLOYMENT) steps
+      # ==========================================
+      # These steps will only work if the above CI steps (Format, Analyze, Test) are passed successfully.
+      - name: Decode Keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/ecommerce-release-key.jks
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.STORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=../ecommerce-release-key.jks" >> android/key.properties
+
+      - name: Build Staging APK
+        run: flutter build apk --flavor staging
+
+      - name: Build Production App Bundle
+        run: flutter build appbundle --flavor production
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-outputs
+          path: |
+            build/app/outputs/flutter-apk/app-staging-release.apk
+            build/app/outputs/bundle/productionRelease/app-production-release.aab
