@@ -21,16 +21,7 @@ class FavoriteRepositoryImpl extends FavoriteRepository {
   List<ProductModel> getFavorites() {
     return _localService
         .getFavorites()
-        .map(
-          (item) => ProductModel(
-            image: item.image,
-            title: item.title,
-            description: item.description,
-            price: item.price,
-            id: item.id,
-            category: item.category,
-          ),
-        )
+        .map((item) => ProductModel.fromJson(item.toJson()))
         .toList();
   }
 
@@ -43,14 +34,7 @@ class FavoriteRepositoryImpl extends FavoriteRepository {
       await _localService.removeFavorite(product.id);
     } else {
       await _localService.addFavorite(
-        ProductHiveModel(
-          image: product.image.cast<String>(),
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          id: product.id,
-          category: product.category,
-        ),
+        ProductHiveModel.fromJson(product.toJson()),
       );
     }
   }

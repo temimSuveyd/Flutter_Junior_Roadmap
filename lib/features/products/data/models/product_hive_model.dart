@@ -22,12 +22,31 @@ class ProductHiveModel {
     );
   }
 
+  factory ProductHiveModel.fromJson(Map<String, dynamic> json) =>
+      ProductHiveModel(
+        image: (json['image'] as List<dynamic>?)?.cast<String>() ?? [],
+        title: json['title'] as String? ?? '',
+        description: json['description'] as String? ?? '',
+        price: (json['price'] as num?)?.toDouble() ?? 0.0,
+        id: json['id'] as int? ?? 0,
+        category: json['category'] as String? ?? '',
+      );
+
   final List<String> image;
   final String title;
   final String description;
   final double price;
   final int id;
   final String category;
+
+  Map<String, dynamic> toJson() => {
+        'image': image,
+        'title': title,
+        'description': description,
+        'price': price,
+        'id': id,
+        'category': category,
+      };
 }
 
 class ProductHiveModelAdapter extends TypeAdapter<ProductHiveModel> {

@@ -51,6 +51,9 @@ android {
     }
 
     signingConfigs {
+        getByName("debug") {
+            // Uses default debug keystore (~/.android/debug.keystore)
+        }
         create("release") {
             keyAlias = keystoreProperties.getProperty("keyAlias")
             keyPassword = keystoreProperties.getProperty("keyPassword")
@@ -60,6 +63,9 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
