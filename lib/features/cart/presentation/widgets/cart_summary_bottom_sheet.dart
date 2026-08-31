@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/features/cart/presentation/bloc/cart_bloc/cart_bloc.dart';
+import 'package:juniorflutterroadmap/features/cart/presentation/widgets/summary_row.dart';
 
 class CartSummaryBottomSheet extends StatelessWidget {
   const CartSummaryBottomSheet({super.key, required this.total});
@@ -58,12 +59,12 @@ class CartSummaryBottomSheet extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    _SummaryRow(
+                    SummaryRow(
                       label: context.t.subtotal,
                       value: '\$${total.toStringAsFixed(2)}',
                     ),
                     SizedBox(height: context.spacing.spaceSm),
-                    _SummaryRow(
+                    SummaryRow(
                       label: context.t.shipping,
                       value: context.t.free,
                     ),
@@ -71,7 +72,7 @@ class CartSummaryBottomSheet extends StatelessWidget {
                       color: context.colors.border,
                       height: context.spacing.spaceMd,
                     ),
-                    _SummaryRow(
+                    SummaryRow(
                       label: context.t.total,
                       value: '\$${total.toStringAsFixed(2)}',
                       isBold: true,
@@ -133,46 +134,6 @@ class CartSummaryBottomSheet extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-}
-
-class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({
-    required this.label,
-    required this.value,
-    this.isBold = false,
-  });
-
-  final String label;
-  final String value;
-  final bool isBold;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: (isBold
-                  ? context.typography.titleMedium
-                  : context.typography.bodyMedium)
-              .copyWith(
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-        Text(
-          value,
-          style: (isBold
-                  ? context.typography.titleMedium
-                  : context.typography.bodyMedium)
-              .copyWith(
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            color: isBold ? context.colors.primary : null,
-          ),
-        ),
-      ],
     );
   }
 }
