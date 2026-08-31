@@ -40,15 +40,26 @@ import '../services/notifications/notification_service.dart';
 
 final GetIt getIt = GetIt.instance;
 
+/// Safely open a Hive box. If the data is incompatible (e.g. format changed
+/// after an adapter refactor), delete the corrupted box and recreate it.
+Future<Box> _safeOpenBox(String name) async {
+  try {
+    return await Hive.openBox(name);
+  } catch (_) {
+    await Hive.deleteBoxFromDisk(name);
+    return await Hive.openBox(name);
+  }
+}
+
 /// Service locator that registers all dependencies.
 Future<void> setupLocator() async {
   // 0. Hive
   await Hive.initFlutter();
   Hive.registerAdapter(ProductModelAdapter());
   Hive.registerAdapter(CartItemModelAdapter());
-  final productBox = await Hive.openBox('products_cache');
-  final favoritesBox = await Hive.openBox('favorites');
-  final cartBox = await Hive.openBox('cart');
+  final productBox = await _safeOpenBox('products_cache');
+  final favoritesBox = await _safeOpenBox('favorites');
+  final cartBox = await _safeOpenBox('cart');
 
   // 1. Firebase
   getIt.registerLazySingleton<FirebaseInitializer>(() => FirebaseInitializer());
