@@ -21,11 +21,15 @@ class MobileProductGrid extends StatelessWidget {
       itemBuilder: (context, index) {
         final int id = products[index].id;
         final ProductModel product = products[index];
-        return ProductCard(
-          product: product,
-          onTap: () {
-            context.push(AppRoutes.productDetails, extra: id);
-          },
+        final String heroTag = 'home_$id';
+        return Hero(
+          tag: heroTag,
+          child: ProductCard(
+            product: product,
+            onTap: () {
+              context.push(AppRoutes.productDetails, extra: {'id' : id, 'hero_tag' : heroTag });
+            },
+          ),
         );
       },
     );

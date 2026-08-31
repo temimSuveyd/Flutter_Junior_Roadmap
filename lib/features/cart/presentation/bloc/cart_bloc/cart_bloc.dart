@@ -16,11 +16,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartQuantityIncreased>(_onQuantityIncreased);
     on<CartQuantityDecreased>(_onQuantityDecreased);
     on<CartCleared>(_onCartCleared);
-    on<CheckoutRequested>(
-      _onCheckoutRequested,
-      // Ödeme sırasında birden fazla kez tetiklenmesini engelle
-      transformer: droppable(),
-    );
+    on<CheckoutRequested>(_onCheckoutRequested, transformer: droppable());
   }
 
   final CartRepository _repository;
@@ -98,6 +94,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     // Fake 1s payment delay
     await Future.delayed(const Duration(seconds: 1));
     await _repository.clearCart();
-    emit(const CartPaymentSuccess());
+    emit(const CartEmpty());
   }
 }

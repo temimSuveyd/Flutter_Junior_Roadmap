@@ -6,9 +6,9 @@ import '../shared/product_details_gallery.dart';
 import '../shared/product_details_info.dart';
 
 class ProductDetailsMobileBody extends StatelessWidget {
-  const ProductDetailsMobileBody({super.key, required this.product});
+  const ProductDetailsMobileBody({super.key, required this.product, required this.heroTag});
   final ProductModel product;
-
+final String heroTag ;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -16,7 +16,7 @@ class ProductDetailsMobileBody extends StatelessWidget {
       child: Column(
         children: [
           Hero(
-            tag: product.id.toString(),
+            tag: heroTag,
             child: Material(
               type: MaterialType.transparency,
               child: SizedBox(

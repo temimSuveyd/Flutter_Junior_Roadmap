@@ -15,17 +15,16 @@ class CartSummaryBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(context.spacing.spaceLg),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
+      decoration: BoxDecoration(
+        color: context.colors.background,
+
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppSpacing.radiusXxl),
         ),
       ),
       child: BlocConsumer<CartBloc, CartState>(
         listener: (context, state) {
-          if (state is CartPaymentSuccess) {
-            context.pop();
-          }
+          context.pop();
         },
         builder: (context, state) {
           final isProcessing = state is CartProcessing;
@@ -35,11 +34,11 @@ class CartSummaryBottomSheet extends StatelessWidget {
             children: [
               // Handle Bar
               Container(
-                width: 40,
-                height: 4,
+                width: context.spacing.spaceXl,
+                height: context.spacing.spaceXs,
                 decoration: BoxDecoration(
                   color: context.colors.border,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: context.radius.xs,
                 ),
               ),
               SizedBox(height: context.spacing.spaceLg),
@@ -94,9 +93,10 @@ class CartSummaryBottomSheet extends StatelessWidget {
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: context.colors.primary,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor:
-                        context.colors.primary.withValues(alpha: 0.5),
+                    foregroundColor: context.colors.background,
+                    disabledBackgroundColor: context.colors.primary.withValues(
+                      alpha: 0.5,
+                    ),
                     padding: EdgeInsets.symmetric(
                       vertical: context.spacing.spaceMd,
                     ),
@@ -105,26 +105,26 @@ class CartSummaryBottomSheet extends StatelessWidget {
                     ),
                   ),
                   child: isProcessing
-                      ? const SizedBox(
+                      ?  SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: Colors.white,
+                            color: context.colors.background,
                           ),
                         )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                             Icon(
                               IconsaxPlusLinear.card,
-                              color: Colors.white,
+                              color: context.colors.background,
                             ),
                             SizedBox(width: context.spacing.spaceSm),
                             Text(
                               context.t.payNow,
                               style: context.typography.titleMedium.copyWith(
-                                color: Colors.white,
+                                color: context.colors.background,
                               ),
                             ),
                           ],

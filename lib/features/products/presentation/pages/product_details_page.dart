@@ -13,14 +13,16 @@ import '../widgets/mobile/product_details_mobile_body.dart';
 import '../widgets/tablet/product_details_tablet_body.dart';
 
 class ProductDetailsPage extends StatelessWidget {
-  const ProductDetailsPage({super.key});
-
+  const ProductDetailsPage({super.key, required this.heroTag});
+final String heroTag ; 
   @override
-  Widget build(BuildContext context) => const _ProductDetailsView();
+  Widget build(BuildContext context) =>  _ProductDetailsView(heroTag);
 }
 
 class _ProductDetailsView extends StatelessWidget {
-  const _ProductDetailsView();
+  const _ProductDetailsView(this.heroTag);
+final String heroTag ; 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,8 +55,8 @@ class _ProductDetailsView extends StatelessWidget {
 
               ProductDetailsLoaded() =>
                 context.responsive.isMobile
-                    ? ProductDetailsMobileBody(product: state.product)
-                    : ProductDetailsTabletBody(product: state.product),
+                    ? ProductDetailsMobileBody(product: state.product,heroTag: heroTag,)
+                    : ProductDetailsTabletBody(product: state.product,heroTag: heroTag,),
             };
           },
         ),

@@ -53,7 +53,6 @@ final class AppRouter {
                   const begin = Offset(0, 1);
                   const end = Offset.zero;
                   final tween = Tween(
-                    
                     begin: begin,
                     end: end,
                   ).chain(CurveTween(curve: Curves.easeInOut));
@@ -67,7 +66,9 @@ final class AppRouter {
         GoRoute(
           path: AppRoutes.productDetails,
           pageBuilder: (context, state) {
-            final productId = state.extra is int ? state.extra as int : null;
+            final extra = state.extra as Map<String, dynamic>;
+            final int productId = extra['id'];
+            final String heroTag = extra['hero_tag'];
 
             return CustomTransitionPage(
               key: state.pageKey,
@@ -77,7 +78,7 @@ final class AppRouter {
                   getIt<ProductRepository>(),
                   productId: productId,
                 )..add(ProductDetailsRequested()),
-                child: const ProductDetailsPage(),
+                child: ProductDetailsPage(heroTag: heroTag),
               ),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {

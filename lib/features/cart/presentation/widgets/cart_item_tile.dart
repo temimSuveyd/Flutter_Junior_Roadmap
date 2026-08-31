@@ -25,9 +25,9 @@ class CartItemTile extends StatelessWidget {
           color: context.colors.error,
           borderRadius: context.radius.md,
         ),
-        child: const Icon(
+        child: Icon(
           IconsaxPlusBold.trash,
-          color: Colors.white,
+          color: context.colors.background,
         ),
       ),
       onDismissed: (_) {

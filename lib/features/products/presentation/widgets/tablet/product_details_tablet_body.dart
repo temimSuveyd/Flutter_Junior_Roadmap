@@ -6,9 +6,9 @@ import '../shared/product_details_gallery.dart';
 import '../shared/product_details_info.dart';
 
 class ProductDetailsTabletBody extends StatelessWidget {
-  const ProductDetailsTabletBody({super.key, required this.product});
+  const ProductDetailsTabletBody({super.key, required this.product, required this.heroTag});
   final ProductModel product;
-
+final String heroTag ;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -18,9 +18,11 @@ class ProductDetailsTabletBody extends StatelessWidget {
         children: [
           Expanded(
             child: Hero(
-              tag: product.id.toString(),
-              child: ProductDetailsGallery(
-                images: product.image.cast<String>(),
+              tag: heroTag, 
+              child: Material(
+                child: ProductDetailsGallery(
+                  images: product.image.cast<String>(),
+                ),
               ),
             ),
           ),

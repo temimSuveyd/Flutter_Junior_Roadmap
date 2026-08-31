@@ -54,7 +54,7 @@ class CartSummary extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.colors.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: context.colors.background,
                   padding: EdgeInsets.symmetric(
                     vertical: context.spacing.spaceMd,
                   ),
@@ -65,7 +65,7 @@ class CartSummary extends StatelessWidget {
                 child: Text(
                   context.t.showDetails,
                   style: context.typography.titleMedium.copyWith(
-                    color: Colors.white,
+                    color: context.colors.background,
                   ),
                 ),
               ),
