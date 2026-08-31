@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/utils/app_app_bar.dart';
 import 'package:juniorflutterroadmap/core/utils/empty_state.dart';
 import 'package:juniorflutterroadmap/features/cart/data/models/cart_item_model.dart';
 import 'package:juniorflutterroadmap/features/cart/presentation/bloc/cart_bloc/cart_bloc.dart';
@@ -13,11 +14,9 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          context.t.cart,
-          style: context.typography.titleLarge,
-        ),
+      appBar: AppAppBar(
+        title: context.t.cart,
+        showBackButton: false,
       ),
       body: BlocConsumer<CartBloc, CartState>(
         listener: (context, state) {

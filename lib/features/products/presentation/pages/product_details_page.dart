@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
+import 'package:juniorflutterroadmap/core/utils/app_app_bar.dart';
 import 'package:juniorflutterroadmap/core/utils/error_state.dart';
 import 'package:juniorflutterroadmap/features/cart/presentation/bloc/cart_bloc/cart_bloc.dart';
 import 'package:juniorflutterroadmap/features/favorites/presentation/bloc/favorite_bloc/favorite_bloc.dart';
@@ -24,17 +24,8 @@ class _ProductDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: context.colors.background,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.adaptive.arrow_back),
-          onPressed: () => context.pop(),
-        ),
-        title: Text(
-          context.l10n.t.productDetails,
-          style: context.typography.titleMedium,
-        ),
+      appBar: AppAppBar(
+        title: context.t.productDetails,
         actions: [
           _AddToCartButton(),
           _FavoriteButton(),

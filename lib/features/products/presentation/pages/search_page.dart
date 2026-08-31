@@ -48,6 +48,7 @@ class _SearchPageViewState extends State<_SearchPageView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: context.colors.background,
+        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.adaptive.arrow_back),
           onPressed: () => context.pop(),
@@ -56,16 +57,26 @@ class _SearchPageViewState extends State<_SearchPageView> {
           controller: _queryController,
           autofocus: true,
           onChanged: _search,
+          style: context.typography.bodyLarge,
           decoration: InputDecoration(
-            hintText: context.l10n.t.search,
+            hintText: context.t.search,
+            hintStyle: context.typography.bodyLarge.copyWith(
+              color: context.colors.textSecondary,
+            ),
             border: InputBorder.none,
-            prefixIcon: const Icon(IconsaxPlusLinear.search_normal_1),
+            prefixIcon: Icon(
+              IconsaxPlusLinear.search_normal_1,
+              color: context.colors.textSecondary,
+            ),
           ),
         ),
         actions: [
           if (_queryController.text.isNotEmpty)
             IconButton(
-              icon: const Icon(Icons.close),
+              icon: Icon(
+                Icons.close,
+                color: context.colors.textSecondary,
+              ),
               onPressed: () {
                 _queryController.clear();
                 _search('');
