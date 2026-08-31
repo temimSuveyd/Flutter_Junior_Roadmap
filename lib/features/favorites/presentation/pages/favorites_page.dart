@@ -68,11 +68,15 @@ class _FavoritesGrid extends StatelessWidget {
       itemCount: favorites.length,
       itemBuilder: (context, index) {
         final product = favorites[index];
-        return ProductCard(
-          product: product,
-          onTap: () => context.push(
-            AppRoutes.productDetails,
-            extra: product.id,
+        final String heroTag = 'favorites_${product.id}';
+        return Hero(
+          tag: heroTag,
+          child: ProductCard(
+            product: product,
+            onTap: () => context.push(
+              AppRoutes.productDetails,
+              extra: {'id': product.id, 'hero_tag': heroTag},
+            ),
           ),
         );
       },

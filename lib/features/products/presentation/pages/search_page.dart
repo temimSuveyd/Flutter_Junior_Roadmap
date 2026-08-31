@@ -111,11 +111,15 @@ class _SearchPageViewState extends State<_SearchPageView> {
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
-                      return ProductCard(
-                        product: product,
-                        onTap: () => context.push(
-                          AppRoutes.productDetails,
-                          extra: product.id,
+                      final String heroTag = 'search_${product.id}';
+                      return Hero(
+                        tag: heroTag,
+                        child: ProductCard(
+                          product: product,
+                          onTap: () => context.push(
+                            AppRoutes.productDetails,
+                            extra: {'id': product.id, 'hero_tag': heroTag},
+                          ),
                         ),
                       );
                     },
