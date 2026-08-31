@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/features/cart/presentation/bloc/cart_bloc/cart_bloc.dart';
@@ -23,7 +24,7 @@ class CartSummaryBottomSheet extends StatelessWidget {
       child: BlocConsumer<CartBloc, CartState>(
         listener: (context, state) {
           if (state is CartPaymentSuccess) {
-            Navigator.of(context).pop();
+            context.pop();
           }
         },
         builder: (context, state) {
