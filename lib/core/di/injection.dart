@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -41,14 +44,35 @@ import '../services/notifications/notification_service.dart';
 final GetIt getIt = GetIt.instance;
 
 /// Safely open a Hive box. If the data is incompatible (e.g. format changed
-/// after an adapter refactor), delete the corrupted box and recreate it.
+/// after an adapter refactor), delete the box files and recreate it.
 Future<Box> _safeOpenBox(String name) async {
   try {
     return await Hive.openBox(name);
   } catch (_) {
-    await Hive.deleteBoxFromDisk(name);
+    await _forceDeleteBox(name);
     return await Hive.openBox(name);
   }
+}
+
+/// Delete Hive box files directly from disk, bypassing
+/// [Hive.deleteBoxFromDisk] which can fail when lock files are missing.
+Future<void> _forceDeleteBox(String name) async {
+  // First try the normal Hive API
+  try {
+    await Hive.deleteBoxFromDisk(name);
+    return;
+  } catch (_) {}
+
+  // Fallback: manually delete .hive and .lock files.
+  try {
+    final dir = await getApplicationDocumentsDirectory();
+    for (final ext in ['.hive', '.lock']) {
+      final file = File('${dir.path}/$name$ext');
+      if (await file.exists()) {
+        await file.delete();
+      }
+    }
+  } catch (_) {}
 }
 
 /// Service locator that registers all dependencies.
