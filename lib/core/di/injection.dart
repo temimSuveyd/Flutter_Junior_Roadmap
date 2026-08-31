@@ -17,6 +17,9 @@ import 'package:juniorflutterroadmap/core/storage/shared_prefs_fcm_token_manager
 import 'package:juniorflutterroadmap/core/storage/user_profile_store.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
+import 'package:juniorflutterroadmap/features/cart/data/models/cart_item_model.dart';
+import 'package:juniorflutterroadmap/features/cart/data/repositories/cart_repository.dart';
+import 'package:juniorflutterroadmap/features/cart/data/services/cart_local_service.dart';
 import 'package:juniorflutterroadmap/features/favorites/data/repositories/favorite_repository.dart';
 import 'package:juniorflutterroadmap/features/favorites/data/services/favorite_local_service.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_hive_model.dart';
@@ -42,8 +45,10 @@ Future<void> setupLocator() async {
   // 0. Hive
   await Hive.initFlutter();
   Hive.registerAdapter(ProductHiveModelAdapter());
+  Hive.registerAdapter(CartItemModelAdapter());
   final productBox = await Hive.openBox('products_cache');
   final favoritesBox = await Hive.openBox('favorites');
+  final cartBox = await Hive.openBox('cart');
 
   // 1. Firebase
   getIt.registerLazySingleton<FirebaseInitializer>(() => FirebaseInitializer());
@@ -123,6 +128,14 @@ Future<void> setupLocator() async {
   );
   getIt.registerLazySingleton<FavoriteRepository>(
     () => FavoriteRepositoryImpl(getIt<FavoriteLocalService>()),
+  );
+
+  // ── Cart ──
+  getIt.registerLazySingleton<CartLocalService>(
+    () => CartLocalServiceImpl(cartBox),
+  );
+  getIt.registerLazySingleton<CartRepository>(
+    () => CartRepositoryImpl(getIt<CartLocalService>()),
   );
 
   // ── Repositories ──

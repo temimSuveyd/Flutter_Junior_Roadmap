@@ -76,6 +76,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favorites => 'Favorites';
 
   @override
+  String get cart => 'Cart';
+
+  @override
   String get profile => 'Profile';
 
   @override
@@ -89,6 +92,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noFavorites => 'No favorites yet';
+
+  @override
+  String get emptyCart => 'Your cart is empty';
+
+  @override
+  String get addedToCart => 'Added to cart';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get showDetails => 'Show Details';
+
+  @override
+  String get orderSummary => 'Order Summary';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get shipping => 'Shipping';
+
+  @override
+  String get free => 'Free';
+
+  @override
+  String get payNow => 'Pay Now';
+
+  @override
+  String get processingPayment => 'Processing payment...';
+
+  @override
+  String get paymentSuccess => 'Payment successful!';
 
   @override
   String get loadingProfile => 'Loading profile...';

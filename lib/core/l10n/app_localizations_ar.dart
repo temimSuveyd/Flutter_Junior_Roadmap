@@ -75,6 +75,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get favorites => 'المفضلة';
 
   @override
+  String get cart => 'السلة';
+
+  @override
   String get profile => 'الملف الشخصي';
 
   @override
@@ -88,6 +91,39 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noFavorites => 'لا توجد منتجات مفضلة بعد';
+
+  @override
+  String get emptyCart => 'سلتك فارغة';
+
+  @override
+  String get addedToCart => 'تمت الإضافة إلى السلة';
+
+  @override
+  String get total => 'الإجمالي';
+
+  @override
+  String get showDetails => 'عرض التفاصيل';
+
+  @override
+  String get orderSummary => 'ملخص الطلب';
+
+  @override
+  String get subtotal => 'المجموع الفرعي';
+
+  @override
+  String get shipping => 'الشحن';
+
+  @override
+  String get free => 'مجاني';
+
+  @override
+  String get payNow => 'ادفع الآن';
+
+  @override
+  String get processingPayment => 'جاري معالجة الدفع...';
+
+  @override
+  String get paymentSuccess => 'تم الدفع بنجاح!';
 
   @override
   String get loadingProfile => 'جاري تحميل الملف الشخصي...';

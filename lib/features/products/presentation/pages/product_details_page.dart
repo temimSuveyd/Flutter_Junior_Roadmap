@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:juniorflutterroadmap/core/common/helpers/helpers.dart';
 import 'package:juniorflutterroadmap/core/utils/error_state.dart';
+import 'package:juniorflutterroadmap/features/cart/presentation/bloc/cart_bloc/cart_bloc.dart';
 import 'package:juniorflutterroadmap/features/favorites/presentation/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
@@ -35,6 +36,7 @@ class _ProductDetailsView extends StatelessWidget {
           style: context.typography.titleMedium,
         ),
         actions: [
+          _AddToCartButton(),
           _FavoriteButton(),
         ],
       ),
@@ -65,6 +67,36 @@ class _ProductDetailsView extends StatelessWidget {
             };
           },
         ),
+      ),
+    );
+  }
+}
+
+class _AddToCartButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final product = context.select<ProductDetailsBloc, ProductModel?>(
+      (bloc) {
+        final state = bloc.state;
+        return state is ProductDetailsLoaded ? state.product : null;
+      },
+    );
+
+    if (product == null) return const SizedBox.shrink();
+
+    return IconButton(
+      onPressed: () {
+        context.read<CartBloc>().add(CartItemAdded(product));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.t.addedToCart),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      },
+      icon: Icon(
+        IconsaxPlusLinear.shopping_cart,
+        color: context.colors.textSecondary,
       ),
     );
   }

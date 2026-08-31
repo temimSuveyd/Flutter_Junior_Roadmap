@@ -47,6 +47,12 @@ final List<_NavTab> _tabs = [
     label: (context) => context.t.favorites,
   ),
   _NavTab(
+    route: AppRoutes.cart,
+    icon: IconsaxPlusLinear.shopping_cart,
+    selectedIcon: IconsaxPlusBold.shopping_cart,
+    label: (context) => context.t.cart,
+  ),
+  _NavTab(
     route: AppRoutes.profile,
     icon: IconsaxPlusLinear.profile,
     selectedIcon: IconsaxPlusBold.profile,

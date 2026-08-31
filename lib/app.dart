@@ -10,6 +10,8 @@ import 'package:juniorflutterroadmap/core/storage/address_store.dart';
 import 'package:juniorflutterroadmap/core/theme/app_theme.dart';
 import 'package:juniorflutterroadmap/core/theme/theme_cubit.dart';
 import 'package:juniorflutterroadmap/features/address/presentation/cubit/address_cubit.dart';
+import 'package:juniorflutterroadmap/features/cart/data/repositories/cart_repository.dart';
+import 'package:juniorflutterroadmap/features/cart/presentation/bloc/cart_bloc/cart_bloc.dart';
 import 'package:juniorflutterroadmap/features/favorites/data/repositories/favorite_repository.dart';
 import 'package:juniorflutterroadmap/features/favorites/presentation/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +34,11 @@ class App extends StatelessWidget {
           create: (_) =>
               FavoriteBloc(getIt<FavoriteRepository>())
                 ..add(FavoritesLoaded()),
+        ),
+        BlocProvider(
+          create: (_) =>
+              CartBloc(getIt<CartRepository>())
+                ..add(CartItemsLoaded()),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(

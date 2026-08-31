@@ -5,6 +5,7 @@ import 'package:juniorflutterroadmap/core/constants/app_constants.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/create_account_page.dart';
 import 'package:juniorflutterroadmap/features/auth/presentation/pages/sign_in_page.dart';
+import 'package:juniorflutterroadmap/features/cart/presentation/pages/cart_page.dart';
 import 'package:juniorflutterroadmap/features/favorites/presentation/pages/favorites_page.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/presentation/bloc/product_details_bloc/product_details_bloc.dart';
@@ -26,7 +27,7 @@ final class AppRouter {
 
   static GoRouter create(AuthTokenManager secureStorage) {
     return GoRouter(
-      initialLocation: AppRoutes.signIn,
+      initialLocation: AppRoutes.home,
       routes: [
         GoRoute(
           path: AppRoutes.signIn,
@@ -52,6 +53,7 @@ final class AppRouter {
                   const begin = Offset(0, 1);
                   const end = Offset.zero;
                   final tween = Tween(
+                    
                     begin: begin,
                     end: end,
                   ).chain(CurveTween(curve: Curves.easeInOut));
@@ -110,6 +112,10 @@ final class AppRouter {
               builder: (context, state) => const FavoritesPage(),
             ),
             GoRoute(
+              path: AppRoutes.cart,
+              builder: (context, state) => const CartPage(),
+            ),
+            GoRoute(
               path: AppRoutes.profile,
               builder: (context, state) => BlocProvider(
                 create: (context) => ProfileBloc(getIt<ProfileRepository>()),
@@ -119,21 +125,21 @@ final class AppRouter {
           ],
         ),
       ],
-      redirect: (context, state) async {
-        final token = await secureStorage.getAccessToken();
-        final isAuthenticated = token != null;
-        final isAuthRoute =
-            state.matchedLocation == AppRoutes.signIn ||
-            state.matchedLocation == AppRoutes.signup;
+      // redirect: (context, state) async {
+      //   final token = await secureStorage.getAccessToken();
+      //   final isAuthenticated = token != null;
+      //   final isAuthRoute =
+      //       state.matchedLocation == AppRoutes.signIn ||
+      //       state.matchedLocation == AppRoutes.signup;
 
-        if (!isAuthenticated && !isAuthRoute) {
-          return AppRoutes.signIn;
-        }
-        if (isAuthenticated && isAuthRoute) {
-          return AppRoutes.home;
-        }
-        return null;
-      },
+      //   if (!isAuthenticated && !isAuthRoute) {
+      //     return AppRoutes.signIn;
+      //   }
+      //   if (isAuthenticated && isAuthRoute) {
+      //     return AppRoutes.home;
+      //   }
+      //   return null;
+      // },
     );
   }
 }
