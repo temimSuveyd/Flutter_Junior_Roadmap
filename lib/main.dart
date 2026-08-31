@@ -13,10 +13,17 @@ Future<void> initServices() async {
   await setupLocator();
   await getIt<AuthTokenManager>().load();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+}
 
+/// Fire-and-forget: notification pipeline runs after the app is visible
+/// so any APNS delay on iOS never blocks the UI.
+void initNotifications() {
   final notificationService = getIt<NotificationService>();
   notificationService.setRouter(getIt<GoRouter>());
-  await notificationService.initializeNotificationPipeline();
+  notificationService.initializeNotificationPipeline().catchError((e) {
+    // Non-fatal: app works without push notifications.
+    debugPrint('Notification init failed: $e');
+  });
 }
 
 void main() async {
@@ -36,4 +43,5 @@ void main() async {
 
   await initServices();
   runApp(const App());
+  initNotifications();
 }
