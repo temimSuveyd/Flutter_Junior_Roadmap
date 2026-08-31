@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
-import 'package:juniorflutterroadmap/features/products/data/models/product_hive_model.dart';
+import 'package:juniorflutterroadmap/core/data/models/product_model.dart';
 
 abstract class FavoriteLocalService {
   Set<int> getFavoriteIds();
-  List<ProductHiveModel> getFavorites();
+  List<ProductModel> getFavorites();
   bool isFavorite(int productId);
-  Future<void> addFavorite(ProductHiveModel product);
+  Future<void> addFavorite(ProductModel product);
   Future<void> removeFavorite(int productId);
 }
 
@@ -21,7 +21,7 @@ class FavoriteLocalServiceImpl extends FavoriteLocalService {
       final products = _box.get(_favoritesKey) as List<dynamic>?;
       if (products == null) return {};
       return products
-          .cast<ProductHiveModel>()
+          .cast<ProductModel>()
           .map((p) => p.id)
           .toSet();
     } catch (_) {
@@ -30,11 +30,11 @@ class FavoriteLocalServiceImpl extends FavoriteLocalService {
   }
 
   @override
-  List<ProductHiveModel> getFavorites() {
+  List<ProductModel> getFavorites() {
     try {
       final products = _box.get(_favoritesKey) as List<dynamic>?;
       if (products == null) return [];
-      return products.cast<ProductHiveModel>();
+      return products.cast<ProductModel>();
     } catch (_) {
       return [];
     }
@@ -46,7 +46,7 @@ class FavoriteLocalServiceImpl extends FavoriteLocalService {
   }
 
   @override
-  Future<void> addFavorite(ProductHiveModel product) async {
+  Future<void> addFavorite(ProductModel product) async {
     final current = getFavorites();
     if (current.any((p) => p.id == product.id)) return;
     current.add(product);

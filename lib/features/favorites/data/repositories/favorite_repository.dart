@@ -1,6 +1,5 @@
+import 'package:juniorflutterroadmap/core/data/models/product_model.dart';
 import 'package:juniorflutterroadmap/features/favorites/data/services/favorite_local_service.dart';
-import 'package:juniorflutterroadmap/features/products/data/models/product_hive_model.dart';
-import 'package:juniorflutterroadmap/features/products/data/models/product_model.dart';
 
 abstract class FavoriteRepository {
   Set<int> getFavoriteIds();
@@ -18,12 +17,7 @@ class FavoriteRepositoryImpl extends FavoriteRepository {
   Set<int> getFavoriteIds() => _localService.getFavoriteIds();
 
   @override
-  List<ProductModel> getFavorites() {
-    return _localService
-        .getFavorites()
-        .map((item) => ProductModel.fromJson(item.toJson()))
-        .toList();
-  }
+  List<ProductModel> getFavorites() => _localService.getFavorites();
 
   @override
   bool isFavorite(int productId) => _localService.isFavorite(productId);
@@ -33,9 +27,7 @@ class FavoriteRepositoryImpl extends FavoriteRepository {
     if (_localService.isFavorite(product.id)) {
       await _localService.removeFavorite(product.id);
     } else {
-      await _localService.addFavorite(
-        ProductHiveModel.fromJson(product.toJson()),
-      );
+      await _localService.addFavorite(product);
     }
   }
 }

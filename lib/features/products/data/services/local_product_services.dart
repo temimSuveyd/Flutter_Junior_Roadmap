@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 import '../dtos/product_response.dart';
-import '../models/product_hive_model.dart';
 import '../models/product_model.dart';
 
 abstract class LocalProductServices {
@@ -17,29 +16,14 @@ class LocalProductServicesImpl extends LocalProductServices {
 
   @override
   Future<void> cacheProducts({required List<dynamic> products}) async {
-    final hiveModels = products
+    final models = products
         .map(
-          (item) => ProductHiveModel.fromResponse(
+          (item) => ProductModel.fromResponse(
             ProductResponse.fromJson(item as Map<String, dynamic>),
           ),
         )
         .toList();
-    await _box.put(_cacheKey, hiveModels);
-  }
-
-  List<ProductModel> _mapProducts(List<ProductHiveModel> productsList) {
-    return productsList
-        .map(
-          (item) => ProductModel(
-            image: item.image,
-            title: item.title,
-            description: item.description,
-            price: item.price,
-            id: item.id,
-            category: item.category,
-          ),
-        )
-        .toList();
+    await _box.put(_cacheKey, models);
   }
 
   @override
@@ -47,7 +31,7 @@ class LocalProductServicesImpl extends LocalProductServices {
     try {
       final cached = _box.get(_cacheKey) as List<dynamic>?;
       if (cached == null) return [];
-      return _mapProducts(cached.cast<ProductHiveModel>());
+      return cached.cast<ProductModel>();
     } catch (_) {
       return [];
     }

@@ -38,9 +38,7 @@ class CartRepositoryImpl extends CartRepository {
       );
     } else {
       await _localService.addItem(
-        CartItemModel.fromJson(
-          product.toJson()..['quantity'] = 1,
-        ),
+        CartItemModel.fromProduct(product),
       );
     }
   }

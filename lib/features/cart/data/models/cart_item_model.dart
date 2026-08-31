@@ -1,53 +1,48 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
+import 'package:juniorflutterroadmap/core/data/models/product_model.dart';
+
 
 class CartItemModel {
   CartItemModel({
-    required this.image,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.id,
-    required this.category,
+    required this.product,
     required this.quantity,
   });
 
+  factory CartItemModel.fromProduct(ProductModel product, {int quantity = 1}) {
+    return CartItemModel(product: product, quantity: quantity);
+  }
+
   factory CartItemModel.fromJson(Map<String, dynamic> json) => CartItemModel(
-        image: (json['image'] as List<dynamic>?)?.cast<String>() ?? [],
-        title: json['title'] as String? ?? '',
-        description: json['description'] as String? ?? '',
-        price: (json['price'] as num?)?.toDouble() ?? 0.0,
-        id: json['id'] as int? ?? 0,
-        category: json['category'] as String? ?? '',
+        product: ProductModel.fromJson(json),
         quantity: json['quantity'] as int? ?? 1,
       );
 
-  final List<String> image;
-  final String title;
-  final String description;
-  final double price;
-  final int id;
-  final String category;
+  final ProductModel product;
   final int quantity;
 
-  double get totalPrice => price * quantity;
+  // ── Convenience getters ──────────────────────────────────────────────
+
+  int get id => product.id;
+  String get title => product.title;
+  double get price => product.price;
+  List<dynamic> get image => product.image;
+  String get category => product.category;
+  String get description => product.description;
+  double get totalPrice => product.price * quantity;
+
+  // ── Immutability ─────────────────────────────────────────────────────
 
   CartItemModel copyWith({int? quantity}) => CartItemModel(
-        image: image,
-        title: title,
-        description: description,
-        price: price,
-        id: id,
-        category: category,
+        product: product,
         quantity: quantity ?? this.quantity,
       );
 
+  // ── Serialization ────────────────────────────────────────────────────
+
   Map<String, dynamic> toJson() => {
-        'image': image,
-        'title': title,
-        'description': description,
-        'price': price,
-        'id': id,
-        'category': category,
+        ...product.toJson(),
         'quantity': quantity,
       };
 }
@@ -58,38 +53,12 @@ class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
 
   @override
   CartItemModel read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return CartItemModel(
-      image: (fields[0] as List).cast<String>(),
-      title: fields[1] as String,
-      description: fields[2] as String,
-      price: fields[3] as double,
-      id: fields[4] is int ? fields[4] as int : int.tryParse(fields[4]?.toString() ?? '') ?? 0,
-      category: fields[5] as String,
-      quantity: fields[6] as int,
-    );
+    final json = jsonDecode(reader.read() as String) as Map<String, dynamic>;
+    return CartItemModel.fromJson(json);
   }
 
   @override
   void write(BinaryWriter writer, CartItemModel obj) {
-    writer
-      ..writeByte(7)
-      ..writeByte(0)
-      ..write(obj.image)
-      ..writeByte(1)
-      ..write(obj.title)
-      ..writeByte(2)
-      ..write(obj.description)
-      ..writeByte(3)
-      ..write(obj.price)
-      ..writeByte(4)
-      ..write(obj.id)
-      ..writeByte(5)
-      ..write(obj.category)
-      ..writeByte(6)
-      ..write(obj.quantity);
+    writer.write(jsonEncode(obj.toJson()));
   }
 }

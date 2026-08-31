@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:juniorflutterroadmap/features/products/data/dtos/product_response.dart';
-import 'package:juniorflutterroadmap/features/products/data/models/product_hive_model.dart';
+import 'package:juniorflutterroadmap/core/data/dtos/product_response.dart';
+import 'package:juniorflutterroadmap/core/data/models/product_model.dart';
 
 /// Tests that a product response is stored in the Hive cache model.
 void main() {
-  test('fromResponse converts the image list to List<String>', () {
+  test('fromResponse converts the image list', () {
     final response = ProductResponse(
       image: ['a.jpg', 'b.jpg'],
       title: 'Chair',
@@ -14,11 +14,11 @@ void main() {
       category: 'Furniture',
     );
 
-    final hive = ProductHiveModel.fromResponse(response);
+    final model = ProductModel.fromResponse(response);
 
-    expect(hive.image, isA<List<String>>());
-    expect(hive.image, ['a.jpg', 'b.jpg']);
-    expect(hive.title, 'Chair');
-    expect(hive.id, 3);
+    expect(model.image, ['a.jpg', 'b.jpg']);
+    expect(model.title, 'Chair');
+    expect(model.id, 3);
+    expect(model.category, 'Furniture');
   });
 }

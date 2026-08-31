@@ -39,6 +39,7 @@ dependencies:
   firebase_messaging: ^16.5.0
   flutter:
     sdk: flutter
+  flutter_adaptive_scaffold: ^0.3.3+1
   flutter_bloc: ^9.1.1
   flutter_flavorizr: ^2.5.0
   flutter_local_notifications: ^22.3.0

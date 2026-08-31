@@ -15,6 +15,7 @@ import 'package:juniorflutterroadmap/core/storage/shared_preferences_address_sto
 import 'package:juniorflutterroadmap/core/storage/shared_preferences_user_profile_store.dart';
 import 'package:juniorflutterroadmap/core/storage/shared_prefs_fcm_token_manager.dart';
 import 'package:juniorflutterroadmap/core/storage/user_profile_store.dart';
+import 'package:juniorflutterroadmap/core/data/models/product_model.dart';
 import 'package:juniorflutterroadmap/features/auth/data/repositories/auth_repository.dart';
 import 'package:juniorflutterroadmap/features/auth/data/services/auth_service.dart';
 import 'package:juniorflutterroadmap/features/cart/data/models/cart_item_model.dart';
@@ -22,7 +23,6 @@ import 'package:juniorflutterroadmap/features/cart/data/repositories/cart_reposi
 import 'package:juniorflutterroadmap/features/cart/data/services/cart_local_service.dart';
 import 'package:juniorflutterroadmap/features/favorites/data/repositories/favorite_repository.dart';
 import 'package:juniorflutterroadmap/features/favorites/data/services/favorite_local_service.dart';
-import 'package:juniorflutterroadmap/features/products/data/models/product_hive_model.dart';
 import 'package:juniorflutterroadmap/features/products/data/repositories/product_repositories.dart';
 import 'package:juniorflutterroadmap/features/products/data/services/local_product_services.dart';
 import 'package:juniorflutterroadmap/features/profile/data/repositories/profile_repository.dart';
@@ -44,7 +44,7 @@ final GetIt getIt = GetIt.instance;
 Future<void> setupLocator() async {
   // 0. Hive
   await Hive.initFlutter();
-  Hive.registerAdapter(ProductHiveModelAdapter());
+  Hive.registerAdapter(ProductModelAdapter());
   Hive.registerAdapter(CartItemModelAdapter());
   final productBox = await Hive.openBox('products_cache');
   final favoritesBox = await Hive.openBox('favorites');

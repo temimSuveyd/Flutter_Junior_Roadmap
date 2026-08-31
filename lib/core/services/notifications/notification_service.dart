@@ -30,42 +30,21 @@ class FirebaseNotificationService implements NotificationService {
     await _localNotifications.initialize();
     _localNotifications.setOnNotificationTapped(_navigateFromData);
 
-    // 1. Request notification permission from the OS (especially iOS and Android 13+).
+    // 1. Request notification permission (iOS + Android 13+).
     await _messaging.requestPermission();
 
-    // 2. On iOS, APNS token must be available before getToken() can succeed.
-    //    Wait up to ~3s with retries (each getAPNSToken call is itself guarded).
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      for (var i = 0; i < 15; i++) {
-        try {
-          final apnsToken = await _messaging.getAPNSToken();
-          if (apnsToken != null) break;
-        } catch (_) {
-          // APNS token not yet ready — continue waiting.
-        }
-        await Future.delayed(const Duration(milliseconds: 200));
-      }
-    }
+    // 2. Get FCM token with timeout.
+    //    On iOS, getToken() waits for APNS internally — we add a safety
+    //    timeout so the app never blocks indefinitely (e.g. simulator).
+    await _fetchTokenWithTimeout();
 
-    // 3. Get the device's unique token (FCM) and save it locally.
-    try {
-      final token = await _messaging.getToken();
-      if (token != null) {
-        await _fcmTokenManager.saveToken(token);
-        if (kDebugMode) print('Device FCM Token (saved): $token');
-      }
-    } catch (e) {
-      if (kDebugMode) print('Failed to get FCM token: $e');
-    }
-
-    // 4. Listen for token refreshes and save the new one.
+    // 3. Listen for token refreshes and save the new one.
     _messaging.onTokenRefresh.listen((String newToken) async {
       await _fcmTokenManager.saveToken(newToken);
       if (kDebugMode) print('FCM Token refreshed & saved: $newToken');
     });
 
-    // 5. Foreground notifications: show locally (no system tray in foreground)
-    //    and let the user tap to deep-link via setOnNotificationTapped.
+    // 4. Foreground notifications: show locally (no system tray in foreground)
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       final notification = message.notification;
       final title =
@@ -80,15 +59,32 @@ class FirebaseNotificationService implements NotificationService {
       );
     });
 
-    // 6. Background tap: app was opened from the system tray notification.
+    // 5. Background tap: app was opened from the system tray notification.
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       _navigateFromData(message.data);
     });
 
-    // 7. Terminated (app fully closed) tap: the message that launched the app.
+    // 6. Terminated (app fully closed) tap: the message that launched the app.
     final initialMessage = await _messaging.getInitialMessage();
     if (initialMessage != null) {
       _navigateFromData(initialMessage.data);
+    }
+  }
+
+  /// Fetches FCM token with a timeout so the app never blocks.
+  /// On iOS, [getToken] internally waits for the APNS token to arrive;
+  /// the timeout guards against simulator / rare edge cases.
+  Future<void> _fetchTokenWithTimeout() async {
+    try {
+      final token = await _messaging
+          .getToken()
+          .timeout(const Duration(seconds: 5));
+      if (token != null) {
+        await _fcmTokenManager.saveToken(token);
+        if (kDebugMode) print('Device FCM Token (saved): $token');
+      }
+    } catch (e) {
+      if (kDebugMode) print('FCM token fetch failed: $e');
     }
   }
 
